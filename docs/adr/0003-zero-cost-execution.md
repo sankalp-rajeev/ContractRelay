@@ -17,7 +17,7 @@ The scheduler reserves requests durably before calls, retains each attempt,
 serializes execution, disables SDK retries and recovers persisted responses after
 interruption. Completed final trials require `--resume` and are integrity-checked.
 Model transport and tiny-quota behavior are tested locally; live acceptance is
-pending an environment API key.
+passed with a configured free-tier development key on 2026-10-17.
 
 Deterministic install/check/test/demo paths require no API credentials. Secret
 values stay in the environment and must not appear in repository or run logs.

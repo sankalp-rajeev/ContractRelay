@@ -7,8 +7,8 @@ the backend contract changes. It proposes a bounded declarative `AdapterPlan`,
 executes trusted deterministic translation, and independently verifies the
 candidate before promotion. Insufficient evidence must result in rejection.
 
-**Status: Phase 1 complete; Phase 2 passes local tests, pending live Gemini
-acceptance.** Read-only verification/promotion, enforced evidence isolation,
+**Status: Phases 1 and 2 complete; Phase 3 is next.** Live Gemini generation,
+read-only verification/promotion, enforced evidence isolation,
 structured synthesis, and persisted quota/resume handling are implemented.
 MCP serving, composed/stateful workflows and the comparative benchmark remain
 planned. This is not yet the MVP, and no benchmark results have been measured.
@@ -135,7 +135,7 @@ and [pricing](https://ai.google.dev/gemini-api/docs/pricing) were checked on
 2026-10-17; actual project quotas must still be checked in AI Studio.
 Never commit `.env`, credentials, private traces or generated model run artifacts.
 
-To run the remaining Phase 2 live acceptance check, copy `.env.example` to `.env`
+To reproduce the passing Phase 2 live acceptance check, copy `.env.example` to `.env`
 and set `GEMINI_API_KEY` to a key from your free-tier Gemini project. Keep the
 development model selected, then run:
 
@@ -147,8 +147,9 @@ This generates one controlled synthetic weather plan through the quota scheduler
 independently verifies it, retains artifacts under `runs/development/`, and writes
 `reports/weather-live-verification.json`. Completed trials are skipped on resume.
 Final-model use is blocked in this command until later benchmark prerequisites
-are implemented. Tests use controlled transports; no live model result is claimed
-until this command actually passes.
+are implemented. The live development-model check passed on 2026-10-17, including
+promotion, separate sealed-fixture scoring and retained-response resume. This is
+not a comparative benchmark result. Ordinary tests still use controlled transports.
 
 Budgets and model IDs can be overridden with the documented environment names.
 Scheduling is sequential; the current implementation requires concurrency 1.
@@ -175,6 +176,5 @@ generated-code runtime. Unconstrained B2 baseline code will require a separate
 sandbox before it can execute.
 
 See [onboarding](docs/onboarding.md), [build milestones](docs/roadmap.md), and
-[architecture decisions](docs/adr/README.md). Phase 2's remaining acceptance check
-is live structured synthesis with a free-tier key. Phase 3 remains gated on that
-check; its next work is the real MCP proxy and stateful composition.
+[architecture decisions](docs/adr/README.md). Phase 2's local and live acceptance
+checks pass. Phase 3's next work is the real MCP proxy and stateful composition.

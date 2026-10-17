@@ -23,7 +23,7 @@ PRD section 23 defines the ten-package monorepo layout. Section 49.2 defines the
 API-free first milestone: install, lint, typecheck, primitive tests, ToolContract,
 hashing, Zod plans and deterministic interpretation. Phase 1 is complete.
 Phase 2 adds independent read-only gates, promotion and structured synthesis
-infrastructure; its live generation acceptance remains pending a Gemini key.
+infrastructure; its live generation, promotion and sealed-fixture acceptance pass.
 
 The CLI currently implements `status` and help. The PRD's snapshot/prepare/
 synthesize/verify/promote/serve/eval commands are explicitly future work.
@@ -49,7 +49,7 @@ synthesize/verify/promote/serve/eval commands are explicitly future work.
 Model configuration comes from the PRD snapshot, with validated environment
 overrides wired into the scheduler. Development uses `gemini-3.5-flash-lite`;
 final evaluation around `gemini-3.8-flash`. Model IDs and actual free quotas must
-be checked before the provider goes live. No live model calls have been made yet.
+be checked before model-backed runs. The controlled Phase 2 live check passed.
 
 The shared scheduler must persist each interaction, bound retries, respect
 per-model request/token budgets and the Pacific daily reset, and report
@@ -59,6 +59,6 @@ per-model request/token budgets and the Pacific daily reset, and report
 
 This is not the full MVP. Evidence loaders, process isolation, a read-only gate,
 promotion registry, provider and quota scheduler are locally tested. Live Gemini
-acceptance is still pending, so Phase 3 has not started. MCP proxying, ComposeCalls,
+acceptance now passes. Phase 3 will add MCP proxying and ComposeCalls;
 SQLite state oracles, a B2 hostile-code sandbox and an executed comparative
 benchmark remain planned in [roadmap.md](roadmap.md).
