@@ -57,7 +57,7 @@ packages/
   synthesizer/    provider-neutral interface; provider/scheduler planned
   verifier/       initial report types; gate engine planned
   runtime/        promotion identity types; registry/serving planned
-  mcp/            reserved for contract ingestion and compatibility proxy
+  mcp/            paginated contract ingestion; compatibility proxy planned
   traces/         initial trace types; validation/redaction/replay planned
   benchmark/      baseline/run identifiers; harness/sandbox/scoring planned
   cli/            development status/help commands
@@ -91,6 +91,8 @@ installed `contractrelay` executable.
 - JSON Schema checks at old-input, translated-input, backend-output and
   old-output boundaries. The interpreter never generates or evaluates code.
 - Candidate execution restricted by API naming to verification fixtures.
+- Paginated MCP tools/list snapshots; server safety hints remain untrusted.
+- Exact decimal scaling to safe integers, including dollars-to-cents conversion.
 
 Structural validation cannot establish semantic compatibility. An evidence
 reference is an audit pointer, not proof that the referenced statement is true.

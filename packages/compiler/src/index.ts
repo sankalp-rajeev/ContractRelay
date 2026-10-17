@@ -35,7 +35,22 @@ function object(value: unknown): Record<string, JsonValue> {
   return structuredClone(json);
 }
 
-function convert(value: JsonValue, to: 'string' | 'number' | 'integer' | 'boolean'): JsonValue {
+function scaledInteger(value: JsonValue, scale: number): number {
+  const text = typeof value === 'number' ? String(value) : typeof value === 'string' ? value : '';
+  const parts = /^(-?)(0|[1-9]\d*)(?:\.(\d+))?$/.exec(text);
+  if (!parts) throw new AdapterError('CONVERSION_FAILED', 'Expected a finite decimal for exact scaling');
+  const fraction = parts[3] ?? '';
+  const numerator = BigInt(`${parts[1]}${parts[2]}${fraction}`) * BigInt(scale);
+  const denominator = 10n ** BigInt(fraction.length);
+  const result = numerator / denominator;
+  if (numerator % denominator !== 0n || result > BigInt(Number.MAX_SAFE_INTEGER) || result < BigInt(Number.MIN_SAFE_INTEGER)) {
+    throw new AdapterError('CONVERSION_FAILED', 'Scaled value cannot be represented as a safe integer without rounding');
+  }
+  return Number(result);
+}
+
+function convert(value: JsonValue, to: 'string' | 'number' | 'integer' | 'boolean', scale?: number): JsonValue {
+  if (scale !== undefined) return scaledInteger(value, scale);
   if (to === 'string' && (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean')) {
     return String(value);
   }
@@ -68,7 +83,7 @@ function applyStep(args: Record<string, JsonValue>, step: InputStep): void {
   }
   if (!Object.hasOwn(args, step.arg)) return;
   const value = args[step.arg] as JsonValue;
-  if (step.op === 'ConvertType') args[step.arg] = convert(value, step.to);
+  if (step.op === 'ConvertType') args[step.arg] = convert(value, step.to, step.scale);
   if (step.op === 'MapEnum') {
     if (typeof value !== 'string' || !Object.hasOwn(step.mapping, value)) {
       throw new AdapterError('UNMAPPED_ENUM', `No declared enum mapping for ${step.arg}`);

@@ -8,6 +8,8 @@ Use `prd.md` sections 34, 42–45 and 49 for full acceptance criteria.
 - [x] ToolContract v1, canonical serialization and contract hashing.
 - [x] Primitive AdapterPlan schema and structural checks.
 - [x] Deterministic read-only candidate interpreter with schema boundaries.
+- [x] Paginated MCP tools/list ingestion with explicit safety metadata.
+- [x] Exact scaled integer conversion and seeded monetary property tests.
 - [x] API-free primitive fixtures, negative tests and local smoke demo.
 - [x] GitHub Actions definition, ignored secrets/runs, model/quota snapshot.
 

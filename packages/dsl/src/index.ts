@@ -13,7 +13,8 @@ export const inputStepSchema = z.discriminatedUnion('op', [
   z.object({ op: z.literal('RenameTool'), from: z.string().min(1), to: z.string().min(1), evidence }).strict(),
   z.object({ op: z.literal('RenameArg'), from: field, to: field, evidence }).strict(),
   z.object({ op: z.literal('AddConstantDefault'), arg: field, value: jsonValueSchema, evidence }).strict(),
-  z.object({ op: z.literal('ConvertType'), arg: field, to: z.enum(['string', 'number', 'integer', 'boolean']), evidence }).strict(),
+  z.object({ op: z.literal('ConvertType'), arg: field, to: z.enum(['string', 'number', 'integer', 'boolean']),
+    scale: z.number().int().positive().max(Number.MAX_SAFE_INTEGER).optional(), evidence }).strict(),
   z.object({ op: z.literal('MapEnum'), arg: field, mapping: z.record(field, z.string()), evidence }).strict()
 ]);
 
@@ -133,7 +134,10 @@ export function validatePlan(value: unknown, oldValue: unknown, newValue: unknow
       guaranteed.add(step.arg);
     } else {
       if (!fields.has(step.arg)) add('SOURCE_FIELD', at, `Unknown source field ${step.arg}`);
-      if (step.op === 'ConvertType') fields.set(step.arg, { type: step.to });
+      if (step.op === 'ConvertType') {
+        if (step.scale !== undefined && step.to !== 'integer') add('INVALID_SCALE', at, 'Scaling is supported only for exact integer output');
+        fields.set(step.arg, { type: step.to });
+      }
       if (step.op === 'MapEnum') {
         const source = record(fields.get(step.arg));
         if (source.type !== 'string') add('ENUM_TYPE', at, 'Enum mapping requires a string field');
