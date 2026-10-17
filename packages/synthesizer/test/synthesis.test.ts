@@ -4,14 +4,15 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { GeminiProvider, loadModelConfig, QuotaScheduler, ScheduledPlanSynthesizer, retryAfterMilliseconds } from '../src/index.js';
 import type { SynthesisEvidence } from '../src/index.js';
-import { planResponseJsonSchema } from '../src/synthesis.js';
+import { createPlanResponseJsonSchema } from '../src/synthesis.js';
 import { newContract, oldContract, plan } from '../../../fixtures/synthetic/weather/fixture.js';
 import { toolContractSchema } from '@contractrelay/contracts';
 
 const directories: string[] = [];
-afterEach(async () => { await Promise.all(directories.splice(0).map((dir) => rm(dir, { recursive: true, force: true }))); });
+afterEach(async () => { vi.unstubAllGlobals(); await Promise.all(directories.splice(0).map((dir) => rm(dir, { recursive: true, force: true }))); });
 const evidence: SynthesisEvidence = { dataClass: 'controlled-synthetic', oldContract: toolContractSchema.parse(oldContract),
   newContracts: [toolContractSchema.parse(newContract)], documents: ['tool', 'location', 'units', 'response'].map((section) => ({ id: `change.md#${section}`, text: 'Documented controlled change' })) };
+const planResponseJsonSchema = createPlanResponseJsonSchema(evidence);
 
 async function synthesize(response: unknown, input: unknown = evidence) {
   const dir = await mkdtemp(join(tmpdir(), 'contractrelay-synth-'));
@@ -54,8 +55,19 @@ describe('structured synthesis trust boundary', () => {
     expect(await provider.generate({ model: 'configured-test-model', prompt: 'synthetic', schema: planResponseJsonSchema, maxOutputTokens: 100, temperature: 0.2 }))
       .toEqual({ text: '{"candidate":{}}', inputTokens: 10, outputTokens: 25 });
     expect(generate).toHaveBeenCalledWith(expect.objectContaining({ config: expect.objectContaining({ responseMimeType: 'application/json',
-      responseJsonSchema: planResponseJsonSchema, httpOptions: { retryOptions: { attempts: 1 } } }) }));
+      responseJsonSchema: planResponseJsonSchema }) }));
     expect(() => new GeminiProvider('')).toThrow('MISSING_GEMINI_API_KEY');
+  });
+
+  it('preserves real SDK HTTP errors and makes exactly one transport call', async () => {
+    const fetch = vi.fn(async () => new Response(JSON.stringify({ error: { code: 429, status: 'RESOURCE_EXHAUSTED',
+      message: 'requestsPerDay quota exceeded', details: [{ '@type': 'type.googleapis.com/google.rpc.RetryInfo', retryDelay: '2s' }] } }),
+    { status: 429, headers: { 'Content-Type': 'application/json' } }));
+    vi.stubGlobal('fetch', fetch);
+    const provider = new GeminiProvider('test-only-placeholder');
+    await expect(provider.generate({ model: 'configured-test-model', prompt: 'synthetic', schema: planResponseJsonSchema, maxOutputTokens: 100, temperature: 0.2 }))
+      .rejects.toMatchObject({ code: 'RESOURCE_EXHAUSTED', dailyQuota: true, retryAfterMs: 2000 });
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
 
   it('loads explicit quotas, rejects invalid overrides, and forces final cache off', async () => {

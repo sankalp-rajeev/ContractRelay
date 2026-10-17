@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { canonicalJson } from '@contractrelay/contracts';
+import type { JsonSchema, JsonValue } from '@contractrelay/contracts';
 import { adapterPlanSchema, validatePlan } from '@contractrelay/dsl';
 import type { AdapterPlan } from '@contractrelay/dsl';
 import { synthesisEvidenceSchema } from './index.js';
@@ -13,25 +14,58 @@ const object = (properties: Record<string, unknown>, required = Object.keys(prop
   ({ type: 'object', properties, required, additionalProperties: false });
 const operation = (op: string, fields: Record<string, unknown>) => object({ op: { type: 'string', enum: [op] }, ...fields, evidence });
 
-/** API schema is deliberately bounded; the ordinary Zod/static validator is still authoritative. */
-export const planResponseJsonSchema = object({ candidate: { anyOf: [
+function properties(schema: JsonSchema | undefined): Record<string, JsonValue> {
+  const value = typeof schema === 'object' ? schema.properties : undefined;
+  return value !== null && typeof value === 'object' && !Array.isArray(value) ? value : {};
+}
+
+function outputPaths(schema: JsonSchema | undefined, prefix = '', depth = 0): string[] {
+  if (depth > 8) return [];
+  return Object.entries(properties(schema)).flatMap(([name, child]) => {
+    const path = prefix ? `${prefix}.${name}` : name;
+    const nested = child !== null && typeof child === 'object' && !Array.isArray(child) ? outputPaths(child, path, depth + 1) : [];
+    return nested.length ? nested : [path];
+  });
+}
+
+/** Ground object keys in contracts rather than unconstrained dictionary schemas. */
+export function createPlanResponseJsonSchema(input: SynthesisEvidence) {
+  const oldFields = Object.keys(properties(input.oldContract.inputSchema));
+  const newFields = [...new Set(input.newContracts.flatMap((contract) => Object.keys(properties(contract.inputSchema))))];
+  const oldOutputFields = Object.keys(properties(input.oldContract.outputSchema));
+  const newPaths = [...new Set(input.newContracts.flatMap((contract) => outputPaths(contract.outputSchema)))];
+  const enums = [...new Set(Object.values(properties(input.oldContract.inputSchema)).flatMap((schema) => {
+    const values = schema !== null && typeof schema === 'object' && !Array.isArray(schema) ? schema.enum : undefined;
+    return Array.isArray(values) ? values.filter((value): value is string => typeof value === 'string') : [];
+  }))];
+  const named = (values: string[]) => values.length ? { type: 'string', enum: values } : string;
+  const operations = [
+    operation('RenameTool', { from: named([input.oldContract.name]), to: named(input.newContracts.map((contract) => contract.name)) }),
+    operation('RenameArg', { from: named(oldFields), to: named(newFields) }),
+    operation('AddConstantDefault', { arg: named(newFields), value: { type: ['string', 'number', 'boolean', 'null'] } }),
+    object({ op: { type: 'string', enum: ['ConvertType'] }, arg: named(newFields),
+      to: { type: 'string', enum: ['string', 'number', 'integer', 'boolean'] }, scale: { type: 'integer', minimum: 1 }, evidence }, ['op', 'arg', 'to', 'evidence']),
+    ...(enums.length ? [operation('MapEnum', { arg: named(newFields), mapping: object(Object.fromEntries(enums.map((value) => [value, string]))) })] : [])
+  ];
+  const response = oldOutputFields.length && newPaths.length ? {
+    type: 'array', maxItems: 1, items: operation('ProjectResponse', {
+      mapping: object(Object.fromEntries(oldOutputFields.map((field) => [field, named(newPaths)])), [])
+    })
+  } : { type: 'array', maxItems: 0, items: string };
+  return object({ candidate: { anyOf: [
   object({
     version: { type: 'integer', enum: [1] }, source_tool: string,
     target: object({ kind: { type: 'string', enum: ['single'] }, tool: string }),
-    steps: { type: 'array', maxItems: 64, items: { anyOf: [
-      operation('RenameTool', { from: string, to: string }),
-      operation('RenameArg', { from: string, to: string }),
-      operation('AddConstantDefault', { arg: string, value: { anyOf: [{ type: 'string' }, { type: 'number' }, { type: 'boolean' }, { type: 'null' }] } }),
-      object({ op: { type: 'string', enum: ['ConvertType'] }, arg: string,
-        to: { type: 'string', enum: ['string', 'number', 'integer', 'boolean'] }, scale: { type: 'integer', minimum: 1 }, evidence }, ['op', 'arg', 'to', 'evidence']),
-      operation('MapEnum', { arg: string, mapping: { type: 'object', additionalProperties: string } })
-    ] } },
-    response: { type: 'array', maxItems: 1, items: operation('ProjectResponse', { mapping: { type: 'object', additionalProperties: string } }) },
+    steps: { type: 'array', maxItems: 16, items: { anyOf: operations } },
+    response,
     rationale: string
   }),
   object({ version: { type: 'integer', enum: [1] }, op: { type: 'string', enum: ['Reject'] },
     reason: string, missing_evidence: { type: 'array', items: string }, risk: string })
 ] } });
+}
+
+export const synthesisPromptVersion = 'single-call-v2';
 
 const envelopeSchema = z.object({ candidate: adapterPlanSchema }).strict();
 const instructions = `ContractRelay synthesis policy v1.
@@ -55,7 +89,7 @@ export class ScheduledPlanSynthesizer implements PlanSynthesizer {
     if (new Set(evidence.documents.map((doc) => doc.id)).size !== evidence.documents.length) throw new Error('Duplicate evidence document IDs');
     const prompt = `${instructions}\n\nSYNTHESIS_DATA_JSON\n${canonicalJson(evidence)}`;
     const result = await this.scheduler.run({ id: this.settings.jobId, mode: this.settings.mode,
-      request: { model: this.settings.model, prompt, schema: planResponseJsonSchema,
+      request: { model: this.settings.model, prompt, schema: createPlanResponseJsonSchema(evidence),
         maxOutputTokens: 4096, temperature: this.settings.temperature ?? 0.2 } }, (response) => {
       return parseSynthesisCandidate(response, evidence);
     }, { resume: this.settings.resume ?? false });

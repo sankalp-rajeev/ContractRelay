@@ -8,7 +8,7 @@ import { synthesisEvidenceSchema } from './index.js';
 import type { SynthesisEvidence } from './index.js';
 import type { QuotaScheduler } from './scheduler.js';
 import type { ScheduledPlanSynthesizer } from './synthesis.js';
-import { parseSynthesisCandidate, planResponseJsonSchema } from './synthesis.js';
+import { createPlanResponseJsonSchema, parseSynthesisCandidate } from './synthesis.js';
 
 export async function synthesizeIsolated(scheduler: QuotaScheduler, value: SynthesisEvidence,
   options: ConstructorParameters<typeof ScheduledPlanSynthesizer>[1]): Promise<AdapterPlan> {
@@ -22,7 +22,7 @@ export async function synthesizeIsolated(scheduler: QuotaScheduler, value: Synth
       const request = z.object({ resume: z.boolean(), job: z.object({ id: z.literal(settings.jobId), mode: z.literal(settings.mode),
         request: z.object({ model: z.literal(settings.model), prompt: z.string().max(1_000_000), schema: jsonValueSchema,
           maxOutputTokens: z.literal(4096), temperature: z.number().min(0).max(2) }).strict() }).strict() }).strict().parse(payload);
-      if (hashJson(request.job.request.schema) !== hashJson(planResponseJsonSchema)) throw new Error('Unexpected output schema');
+      if (hashJson(request.job.request.schema) !== hashJson(createPlanResponseJsonSchema(evidence))) throw new Error('Unexpected output schema');
       return scheduler.run(request.job, (response) => parseSynthesisCandidate(response, evidence), { resume: request.resume });
     });
   return adapterPlanSchema.parse(result);

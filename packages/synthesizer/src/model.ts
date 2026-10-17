@@ -30,6 +30,10 @@ export function normalizeModelError(error: unknown): ModelRequestError {
     return new ModelRequestError('RESOURCE_EXHAUSTED', retry ? Number(retry[1]) * 1000 : 0, daily);
   }
   if (error instanceof ApiError) return new ModelRequestError(`HTTP_${error.status}`);
+  if (error instanceof Error && error.cause && typeof error.cause === 'object' && 'code' in error.cause
+    && typeof error.cause.code === 'string' && /^[A-Z][A-Z0-9_]{0,48}$/.test(error.cause.code)) {
+    return new ModelRequestError(`NETWORK_${error.cause.code}`);
+  }
   return new ModelRequestError('PROVIDER_FAILED');
 }
 
@@ -39,8 +43,10 @@ export class GeminiProvider implements ModelProvider {
   private readonly generateContent: Generate;
   constructor(apiKey: string, generate?: Generate) {
     if (!apiKey.trim()) throw new ModelRequestError('MISSING_GEMINI_API_KEY');
+    // SDK 1.52's optional retry wrapper drops HTTP error bodies even at attempts=1.
+    // Omitting retryOptions selects its single-fetch path, preserving ApiError details.
     const client = generate ? undefined : new GoogleGenAI({ apiKey, vertexai: false,
-      httpOptions: { timeout: 60_000, retryOptions: { attempts: 1 } } });
+      httpOptions: { timeout: 60_000 } });
     this.generateContent = generate ?? ((request) => (client as GoogleGenAI).models.generateContent(request));
   }
 
@@ -48,8 +54,7 @@ export class GeminiProvider implements ModelProvider {
     try {
       const response = await this.generateContent({ model: request.model, contents: request.prompt,
         config: { responseMimeType: 'application/json', responseJsonSchema: request.schema,
-          maxOutputTokens: request.maxOutputTokens, temperature: request.temperature,
-          httpOptions: { retryOptions: { attempts: 1 } } } });
+          maxOutputTokens: request.maxOutputTokens, temperature: request.temperature } });
       if (!response.text) throw new ModelRequestError('EMPTY_MODEL_RESPONSE');
       return { text: response.text, inputTokens: response.usageMetadata?.promptTokenCount ?? 0,
         outputTokens: (response.usageMetadata?.candidatesTokenCount ?? 0) + (response.usageMetadata?.thoughtsTokenCount ?? 0) };

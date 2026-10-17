@@ -67,7 +67,11 @@ export async function runIsolatedTask(entry: string, payload: unknown,
         else if (message.type === 'request' && typeof message.id === 'number' && typeof message.method === 'string') {
           void onRequest(message.method, jsonValueSchema.parse(message.payload)).then((value) => {
             if (!settled) child.stdin.write(`${JSON.stringify({ type: 'response', id: message.id, ok: true, payload: jsonValueSchema.parse(value) })}\n`);
-          }).catch(() => { if (!settled) child.stdin.write(`${JSON.stringify({ type: 'response', id: message.id, ok: false, error: 'RPC_FAILED' })}\n`); });
+          }).catch((error: unknown) => {
+            const code = typeof error === 'object' && error !== null && 'code' in error && typeof error.code === 'string'
+              && /^[A-Z][A-Z0-9_]{0,63}$/.test(error.code) ? error.code : 'RPC_FAILED';
+            if (!settled) child.stdin.write(`${JSON.stringify({ type: 'response', id: message.id, ok: false, error: code })}\n`);
+          });
         } else settle(new Error('INVALID_WORKER_MESSAGE'));
       } catch { settle(new Error('INVALID_WORKER_MESSAGE')); }
     });

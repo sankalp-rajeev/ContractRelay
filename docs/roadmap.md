@@ -13,7 +13,7 @@ Use `prd.md` sections 34, 42–45 and 49 for full acceptance criteria.
 - [x] API-free primitive fixtures, negative tests and local smoke demo.
 - [x] GitHub Actions definition, ignored secrets/runs, model/quota snapshot.
 
-## Phase 2 — local checks pass; live acceptance pending
+## Phase 2 — complete
 
 - [x] Typed partition loaders and enforced sealed-evaluation access boundary.
 - [x] Actual synthesis/verifier worker permissions and direct-filesystem denial tests.
@@ -26,9 +26,9 @@ Use `prd.md` sections 34, 42–45 and 49 for full acceptance criteria.
 - [x] Structured AdapterPlan generation boundary using synthesis evidence only.
 - [x] Tiny-quota/resume, retained-attempt, final-cache and concurrency tests.
 - [x] API-free positive lifecycle and schema-valid semantic rejection demo.
-- [ ] Live Gemini synthesis acceptance (`pnpm synthesize:weather --resume`); API key needed.
+- [x] Live Gemini synthesis, promotion, sealed-fixture scoring and retained-response resume.
 
-## Phase 3 — not started; gated on Phase 2 acceptance
+## Phase 3 — next
 
 - [ ] Real MCP old-interface compatibility proxy (ingestion is complete).
 - [ ] Positive synthesized migration and send-vs-draft rejection demo.

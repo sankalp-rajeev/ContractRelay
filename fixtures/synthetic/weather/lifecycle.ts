@@ -6,6 +6,7 @@ import { verifyIsolated } from '../../../packages/verifier/src/isolated.js';
 import { PromotionRegistry } from '../../../packages/runtime/src/index.js';
 import { synthesisEvidenceSchema } from '../../../packages/synthesizer/src/index.js';
 import type { SynthesisEvidence } from '../../../packages/synthesizer/src/index.js';
+import { adapterPlanSchema } from '../../../packages/dsl/src/index.js';
 import { newContract, oldContract, plan, weatherGate, weatherInvoker } from './fixture.js';
 
 export const weatherSynthesisEvidence: SynthesisEvidence = {
@@ -19,8 +20,9 @@ export const weatherSynthesisEvidence: SynthesisEvidence = {
 };
 
 /** Controlled lifecycle demonstration; not a frozen benchmark or model-backed result. */
-export async function runWeatherLifecycle(directory: string) {
-  const identity = hashJson({ oldContract, newContract, plan, weatherGate });
+export async function runWeatherLifecycle(directory: string, candidate: unknown = plan) {
+  const activePlan = adapterPlanSchema.parse(candidate);
+  const identity = hashJson({ oldContract, newContract, plan: activePlan, weatherGate });
   const root = join(directory, identity);
   const caseDir = join(root, 'case');
   await writeOnceJson(join(caseDir, 'synthesis', 'evidence.json'), weatherSynthesisEvidence);
@@ -31,14 +33,14 @@ export async function runWeatherLifecycle(directory: string) {
   await freezeEvidenceCase(caseDir, 'weather-controlled-demo', false);
   const session = await openEvidenceCase(caseDir, join(root, 'decision'));
   const synthesis = synthesisEvidenceSchema.parse(await session.synthesis.read());
-  const verification = { oldContract: synthesis.oldContract, newContract: synthesis.newContracts[0], plan,
+  const verification = { oldContract: synthesis.oldContract, newContract: synthesis.newContracts[0], plan: activePlan,
     gateEvidence: await session.gate.read(), invoke: weatherInvoker };
   const report = await verifyIsolated(verification);
   const semanticRejection = await verifyIsolated({ ...verification, invoke: async () => ({ current: { temperature: 17.777, summary: 'Clear' } }) });
   if (report.verdict !== 'PROMOTED' || semanticRejection.verdict !== 'REJECTED') throw new Error('Controlled gate demonstration failed');
   const registry = new PromotionRegistry(join(root, 'registry'));
   const key = await registry.promote({ ...verification, report });
-  await session.commitDecision(plan, report, report.verdict);
+  await session.commitDecision(activePlan, report, report.verdict);
   const sealed = await (await session.openSealedEvaluation()).read() as { input: unknown; expected: unknown };
   const output = await registry.execute({ key, oldContract, newContract, input: sealed.input, invoke: weatherInvoker });
   if (hashJson(output) !== hashJson(sealed.expected)) throw new Error('Controlled sealed evaluation failed');

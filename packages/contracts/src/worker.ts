@@ -30,7 +30,10 @@ export function wireWorker(handler: (payload: unknown, rpc: WorkerRpc) => Promis
       const pending = waiting.get(message.id);
       waiting.delete(message.id);
       if (message.ok) pending?.resolve(message.payload);
-      else pending?.reject(new Error(message.error ?? 'RPC_FAILED'));
+      else {
+        const code = message.error && /^[A-Z][A-Z0-9_]{0,63}$/.test(message.error) ? message.error : 'RPC_FAILED';
+        pending?.reject(Object.assign(new Error(code), { code }));
+      }
     }
   });
 }

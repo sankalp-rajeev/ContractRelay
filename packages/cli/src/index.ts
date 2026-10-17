@@ -3,7 +3,7 @@ const command = process.argv[2] ?? '--help';
 if (command === 'status') {
   process.stdout.write(`${JSON.stringify({
     version: '0.1.0',
-    milestone: 'phase-2-local-green-live-acceptance-pending',
+    milestone: 'phase-2-complete',
     implemented: ['contract-schema', 'canonical-hashing', 'primitive-plan-schema', 'candidate-interpreter',
       'mcp-snapshot-ingestion', 'evidence-isolation', 'read-only-verifier', 'promotion-registry',
       'structured-gemini-provider', 'persistent-quota-scheduler'],
