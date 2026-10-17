@@ -32,7 +32,7 @@ export async function collectModelUsage(directory: string, model: string, mode: 
       }
     }
   };
-  await walk(join(directory, 'benchmark-v1'));
+  await walk(join(directory, 'benchmark-v2'));
   return { version: 1, model, mode, by_method: byMethod, resolved_model_versions: modelVersions,
     note: 'Requests are durably reserved before sending; crashes may leave reserved attempts without a response. Unknown token usage is not counted as zero consumption.' };
 }

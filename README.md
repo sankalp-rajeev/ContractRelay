@@ -7,12 +7,12 @@ the backend contract changes. It proposes a bounded declarative `AdapterPlan`,
 executes trusted deterministic translation, and independently verifies the
 candidate before promotion. Insufficient evidence must result in rejection.
 
-**Status: Phases 1–3 complete; usable MVP, benchmark in progress.** Live Gemini
+**Status: Phases 1–4 complete; final repeated trials pending.** Live Gemini
 generation, evidence-gated promotion, MCP stdio compatibility, bounded composed
 workflows and isolated SQLite state/side-effect checks pass acceptance tests.
 The 15-case benchmark, matched baseline runner and hostile-code sandbox are
-implemented. Development-model comparison is in progress; final repeated-trial
-results have not been measured.
+implemented. The full development comparison is complete, including preserved
+failures. Final repeated-trial results have not been measured.
 
 ## Quick start
 
@@ -200,6 +200,10 @@ inside the separate disposable Docker sandbox.
 
 See [the benchmark protocol](docs/benchmark.md) for `pnpm bench --api-free`, the
 development comparison, exact B2/B2-V pairing, evidence hashes and quota resume.
+The [development snapshot](benchmarks/results/development-v3.json) is a single
+Flash-Lite trial per stochastic case, including invalid artifacts and hidden
+failures. It is not the final comparison. See [the demo](docs/demo.md) and
+[related systems check](docs/related-work.md) for reproduction and claim boundaries.
 
 See [onboarding](docs/onboarding.md), [build milestones](docs/roadmap.md), and
 [architecture decisions](docs/adr/README.md). Phase 2's local and live acceptance

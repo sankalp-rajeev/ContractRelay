@@ -64,7 +64,7 @@ Both API-free refund and retained live-response demos pass. No final-model quota
 or comparative benchmark has been used. Phase 4 is next: freeze cases, sandbox
 arbitrary baseline code and execute matched development regressions.
 
-## Phase 4 — development regression in progress
+## Phase 4 — complete
 
 The matched B0/B1/B2/B2-V/B3 runner, evidence parity manifests, repeated-trial
 orchestration and count-first scoring are implemented. Real Docker acceptance
@@ -77,9 +77,24 @@ to the limit case is recorded in suite version 2: opaque records and an independ
 SQLite read observation replace a count-only oracle that could reward fabrication.
 Version 1 remains intact; the frozen prompts and heuristics are unchanged.
 
-The 12 development cases have completed all five methods. Genuine model failures
-are retained, including invalid redundant renames and hidden monetary/semantic
-errors. The wrapper reading mismatch is rejected by its same-artifact B2-V gate.
-The composed refund passes B0/B2/B2-V/B3. These are exploratory development
-observations, not final-model benchmark conclusions. Held-out scoring follows
-the frozen version 2 oracle and a passing local gate.
+The pilot completed all five methods, retaining invalid artifacts and hidden
+monetary/semantic errors. Three B3 provider HTTP 400 errors prevent that pilot
+from satisfying the phase exit. A generic serving-schema correction removes
+provider array bounds while retaining canonical DSL bounds; live schema
+acceptance now passes for the affected development families. Protocol version 2
+freezes this correction before suite version 3's three fresh held-out cases are
+authored. The revised regression completed all **75 case/method records** with
+**zero infrastructure failures**, retained request/token accounting and verified
+resume. Earlier pilots remain intact and are excluded from final claims.
+
+The versioned development snapshot includes three invalid B3 model artifacts and
+one B3 promotion falsified by the sealed stream-retrieval oracle. B0 has two hidden
+false successes; B2 has three, and its same-artifact gated variant rejects them.
+These are one-trial development observations, not final comparative conclusions.
+The gate's finite evidence does not establish full old-domain compatibility.
+
+Latest local gate: **133 tests in 28 files**, lint and typechecking pass. The real
+Docker sandbox acceptance passes, and the previous checkpoint's core and sandbox
+CI are green. Final evaluation requires three trials per stochastic case, retains
+failed trials, caps requests at 18 per Pacific day and fingerprints executable
+source/dependencies to prevent silently mixing implementations on resume.

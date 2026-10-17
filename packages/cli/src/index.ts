@@ -5,11 +5,12 @@ const command = process.argv[2] ?? '--help';
 if (command === 'status') {
   process.stdout.write(`${JSON.stringify({
     version: '0.1.0',
-    milestone: 'phase-3-complete-benchmark-in-progress',
+    milestone: 'phase-4-complete-final-trials-pending',
     implemented: ['contract-schema', 'canonical-hashing', 'primitive-plan-schema', 'candidate-interpreter',
       'mcp-snapshot-ingestion', 'evidence-isolation', 'read-only-verifier', 'promotion-registry',
       'structured-gemini-provider', 'persistent-quota-scheduler', 'mcp-compatibility-stdio',
-      'bounded-composition', 'sqlite-state-side-effect-gate'],
+      'bounded-composition', 'sqlite-state-side-effect-gate', 'frozen-controlled-suite', 'matched-baselines',
+      'docker-code-sandbox', 'resumable-comparison'],
     available_cli_commands: ['status', 'serve'],
     planned_cli_commands: ['snapshot', 'prepare', 'synthesize', 'verify', 'promote', 'eval']
   }, null, 2)}\n`);

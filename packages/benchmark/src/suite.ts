@@ -7,10 +7,10 @@ import { openEvidenceCase, evidenceManifestSchema } from '@contractrelay/contrac
 import { policyVersionSchema } from '@contractrelay/contracts/policy';
 import { synthesisEvidenceSchema } from '@contractrelay/synthesizer';
 import { gateEvidenceSchema } from '@contractrelay/verifier';
-import { fixtureSpecSchema } from './fixtures.js';
+import { fixtureSpecSchema } from './fixtures-v3.js';
 
 const digest = z.string().regex(/^[a-f0-9]{64}$/);
-export const suiteSchema = z.object({ version: z.union([z.literal(1), z.literal(2)]), case_count: z.literal(15), held_out_count: z.number().int().min(3),
+export const suiteSchema = z.object({ version: z.union([z.literal(1), z.literal(2), z.literal(3)]), case_count: z.literal(15), held_out_count: z.number().int().min(3),
   revision_reason: z.string().optional(),
   protocol_hash: digest, fixture_source_hash: digest, cases: z.array(z.object({ id: z.string().regex(/^[a-z0-9-]+$/),
     change_class: z.string(), held_out: z.boolean(), compatibility: z.enum(['compatible', 'incompatible', 'insufficient-evidence']),
@@ -21,10 +21,10 @@ export const taskSchema = z.object({ id: z.string().regex(/^[a-z0-9-]+$/), input
 export const sealedSchema = z.object({ version: z.literal(1), outcomes: z.array(z.object({ task_id: z.string(), output: jsonValueSchema, state: z.record(jsonValueSchema) }).strict()).min(1) }).strict();
 
 export async function loadSuite(root: string) {
-  const suite = suiteSchema.parse(await readJson(join(root, 'manifests/suite-v2.json')));
+  const suite = suiteSchema.parse(await readJson(join(root, 'manifests/suite-v3.json')));
   if (new Set(suite.cases.map((item) => item.id)).size !== 15 || suite.cases.filter((item) => item.held_out).length !== suite.held_out_count
     || suite.cases.some((item) => item.held_out && item.influenced_design)) throw new Error('INVALID_HELD_OUT_POLICY');
-  const protocol = await readJson(join(root, 'manifests/protocol-v1.json')) as Record<string, unknown>;
+  const protocol = await readJson(join(root, `manifests/protocol-v${suite.version === 3 ? 2 : 1}.json`)) as Record<string, unknown>;
   if (hashJson(protocol) !== suite.protocol_hash || protocol.frozen_before_held_out_authoring !== true) throw new Error('PROTOCOL_DRIFT');
   for (const [name, path] of [
     ['b1_source_hash', '../../benchmark/src/baselines.ts'], ['b3_source_hash', '../../synthesizer/src/synthesis.ts']
@@ -33,7 +33,8 @@ export async function loadSuite(root: string) {
   }
   const v1 = hashJson((await readFile(new URL('./fixtures.ts', import.meta.url), 'utf8')).replace(/\r\n/g, '\n'));
   const v2 = hashJson((await readFile(new URL('./fixtures-v2.ts', import.meta.url), 'utf8')).replace(/\r\n/g, '\n'));
-  if ((suite.version === 1 ? v1 : hashJson({ v1, v2 })) !== suite.fixture_source_hash) throw new Error('FIXTURE_SOURCE_DRIFT');
+  const v3 = hashJson((await readFile(new URL('./fixtures-v3.ts', import.meta.url), 'utf8')).replace(/\r\n/g, '\n'));
+  if ((suite.version === 1 ? v1 : suite.version === 2 ? hashJson({ v1, v2 }) : hashJson({ v1, v2, v3 })) !== suite.fixture_source_hash) throw new Error('FIXTURE_SOURCE_DRIFT');
   return { suite, hash: hashJson(suite) };
 }
 

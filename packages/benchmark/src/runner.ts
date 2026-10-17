@@ -11,14 +11,15 @@ import { assertPromotableReport } from '@contractrelay/verifier';
 import { ModelRequestError } from '@contractrelay/synthesizer';
 import type { QuotaScheduler } from '@contractrelay/synthesizer';
 import { synthesizeIsolated } from '@contractrelay/synthesizer/isolated';
-import { heuristicPlan, generateWrapper, replan, synthesisParity } from './baselines.js';
+import { heuristicPlan, generateWrapper, replan, synthesisParity, wrapperSchema } from './baselines.js';
 import type { WrapperArtifact } from './baselines.js';
-import { createFixtureV2 } from './fixtures-v2.js';
+import { createFixtureV3 } from './fixtures-v3.js';
 import { loadBenchmarkCase, loadSuite, sealedSchema } from './suite.js';
 import { trialResultSchema, summarize } from './metrics.js';
 import type { TrialResult } from './metrics.js';
 import type { DockerSandbox } from './sandbox.js';
 import type { BaselineId } from './index.js';
+import { executionFingerprint } from './fingerprint.js';
 
 export interface BenchmarkSettings { suiteRoot: string; runRoot: string; mode: 'dev' | 'final' | 'api-free'; model: string;
   trials: number; resume: boolean; scheduler?: QuotaScheduler; sandbox?: DockerSandbox; includeHeldOut?: boolean; methods?: BaselineId[]; caseIds?: string[] }
@@ -44,11 +45,13 @@ export async function runBenchmark(settings: BenchmarkSettings) {
   if ((methods.includes('b2') || methods.includes('b2v')) && !settings.sandbox) throw new Error('MISSING_DOCKER_SANDBOX');
   if (settings.mode === 'final') {
     if (settings.trials < 3 || !settings.includeHeldOut || settings.caseIds || methods.join(',') !== 'b0,b1,b2,b2v,b3') throw new Error('FINAL_PROTOCOL_INCOMPLETE');
-    const prerequisite = await readJson(join(settings.suiteRoot, 'manifests/development-acceptance.json')) as Record<string, unknown>;
-    if (prerequisite.suite_hash !== suiteHash || prerequisite.protocol_hash !== suite.protocol_hash || prerequisite.all_methods_completed !== true) throw new Error('FINAL_EVALUATION_NOT_READY');
+    const prerequisite = await readJson(join(settings.suiteRoot, `manifests/development-acceptance-v${suite.version}.json`)) as Record<string, unknown>;
+    if (prerequisite.suite_hash !== suiteHash || prerequisite.protocol_hash !== suite.protocol_hash
+      || prerequisite.all_methods_completed !== true || prerequisite.infrastructure_failures !== 0) throw new Error('FINAL_EVALUATION_NOT_READY');
   }
   const runIdentity = { version: 1, suite_hash: suiteHash, protocol_hash: suite.protocol_hash, mode: settings.mode, model: settings.model,
-    trials: settings.trials, methods, cases: settings.caseIds ?? 'all', include_held_out: settings.includeHeldOut ?? false, sandbox: settings.sandbox?.config ?? null };
+    trials: settings.trials, methods, cases: settings.caseIds ?? 'all', include_held_out: settings.includeHeldOut ?? false, sandbox: settings.sandbox?.config ?? null,
+    ...(settings.mode === 'final' ? { execution_fingerprint: await executionFingerprint() } : {}) };
   await writeOnceJson(join(settings.runRoot, 'run-manifest.json'), runIdentity);
   const results: TrialResult[] = [];
   let quotaBlocked = false;
@@ -60,6 +63,7 @@ export async function runBenchmark(settings: BenchmarkSettings) {
       for (let trial = 1; trial <= settings.trials; trial++) {
         let b2: WrapperArtifact | undefined;
         let b2Failed = false;
+        let b2ArtifactHash: string | undefined;
         for (const method of methods) {
           if (method === 'b1' && trial > 1) continue;
           if (interrupted) break outer;
@@ -72,13 +76,17 @@ export async function runBenchmark(settings: BenchmarkSettings) {
             if (!settings.resume || saved.suite_hash !== suiteHash || saved.mode !== settings.mode) throw new Error('EXISTING_RESULT_REQUIRES_MATCHED_RESUME');
             if (hashJson(await readJson(join(directory, 'candidate.json'))) !== saved.artifact_hash) throw new Error('RESULT_ARTIFACT_DRIFT');
             results.push(saved);
-            if (method === 'b2') { b2 = await readJson(join(directory, 'generated-wrapper.json')) as WrapperArtifact; b2Failed = saved.generation_failed; }
+            if (method === 'b2') {
+              b2 = wrapperSchema.parse(await readJson(join(directory, 'generated-wrapper.json'))); b2Failed = saved.generation_failed;
+              b2ArtifactHash = saved.artifact_hash;
+              if (hashJson(b2.decision === 'adapt' ? { kind: 'javascript-wrapper', code: b2.code } : rejectArtifact(b2.reason)) !== b2ArtifactHash) throw new Error('GENERATED_WRAPPER_DRIFT');
+            }
             continue;
           }
           const data = await loadBenchmarkCase(settings.suiteRoot, entry, directory);
           const parity = synthesisParity(data.evidence);
           await writeOnceJson(join(directory, 'parity.json'), parity);
-          const fixture = createFixtureV2(data.fixture, data.evidence.newContracts);
+          const fixture = createFixtureV3(data.fixture, data.evidence.newContracts);
           const observations: { task_id: string; output: JsonValue | null; state: JsonValue; failed: boolean; rejected: boolean }[] = [];
           let artifact: JsonValue = rejectArtifact('Generation did not complete');
           let accepted = false;
@@ -91,7 +99,7 @@ export async function runBenchmark(settings: BenchmarkSettings) {
           let report: JsonValue;
           let promoted: PromotionKey | undefined;
           const registry = new PromotionRegistry(join(directory, 'registry'));
-          const generationId = `benchmark-v1/${entry.id}/${method}/trial-${String(trial).padStart(3, '0')}`;
+          const generationId = `benchmark-v2/${entry.id}/${method}/trial-${String(trial).padStart(3, '0')}`;
           const invokeAdapter = async (input: JsonValue): Promise<JsonValue> => {
             if (method === 'b2' || method === 'b2v') {
               if (!b2 || b2.decision !== 'adapt') throw new Error('WRAPPER_REJECTED');
@@ -140,6 +148,7 @@ export async function runBenchmark(settings: BenchmarkSettings) {
               }
               if (!b2) throw new Error('MISSING_PAIRED_WRAPPER');
               artifact = b2.decision === 'adapt' ? { kind: 'javascript-wrapper', code: b2.code } : rejectArtifact(b2.reason);
+              if (method === 'b2v' && hashJson(artifact) !== b2ArtifactHash) throw new Error('PAIRED_WRAPPER_DRIFT');
               if (method === 'b2v' && b2Failed) throw new ModelRequestError('PAIRED_GENERATION_FAILED');
               explicitRejection = b2.decision === 'reject'; accepted = !explicitRejection;
             } else {
@@ -210,6 +219,7 @@ export async function runBenchmark(settings: BenchmarkSettings) {
               tasks_total: data.tasks.length, tasks_passed: passed, model_jobs: modelJobs, generation_failed: generationFailed,
               execution_failed: executionFailed, mode: settings.mode, error_code: errorCode });
             await writeOnceJson(join(directory, 'result.json'), result); results.push(result);
+            if (method === 'b2') b2ArtifactHash = result.artifact_hash;
             process.stdout.write(`${entry.id} ${method} trial=${trial} accepted=${accepted} hidden=${result.hidden_passed}\n`);
           } finally { fixture.close(); }
         }

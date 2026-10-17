@@ -87,6 +87,18 @@ function decodeComposedWire(value: unknown): unknown {
 
 /** Ground object keys in contracts rather than unconstrained dictionary schemas. */
 export function createPlanResponseJsonSchema(input: SynthesisEvidence) {
+  return removeServingArrayBounds(createResponseSchema(input));
+}
+
+/** Provider grammar complexity grows with nested bounded unions; host validators retain all bounds. */
+function removeServingArrayBounds(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(removeServingArrayBounds);
+  if (value !== null && typeof value === 'object') return Object.fromEntries(Object.entries(value)
+    .filter(([key]) => key !== 'minItems' && key !== 'maxItems').map(([key, child]) => [key, removeServingArrayBounds(child)]));
+  return value;
+}
+
+function createResponseSchema(input: SynthesisEvidence) {
   if (input.newContracts.length > 1) return composedResponseJsonSchema(input);
   const oldFields = Object.keys(properties(input.oldContract.inputSchema));
   const newFields = [...new Set(input.newContracts.flatMap((contract) => Object.keys(properties(contract.inputSchema))))];
@@ -144,7 +156,7 @@ export function createPlanResponseJsonSchema(input: SynthesisEvidence) {
 ] } });
 }
 
-export const synthesisPromptVersion = 'bounded-plan-v5';
+export const synthesisPromptVersion = 'bounded-plan-v6';
 
 const envelopeSchema = z.object({ candidate: jsonValueSchema }).strict();
 const instructions = `ContractRelay synthesis policy v5.

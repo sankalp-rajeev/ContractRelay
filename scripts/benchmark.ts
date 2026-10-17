@@ -18,11 +18,11 @@ try {
   const config = await loadModelConfig();
   const mode = values['api-free'] ? 'api-free' : config.mode;
   const trials = Number(values.trials ?? (mode === 'final' ? '3' : '1'));
-  const runRoot = values['run-dir'] ?? join(root, `runs/benchmark-v2-${mode}`);
+  const runRoot = values['run-dir'] ?? join(root, `runs/benchmark-v3-${mode}`);
   const sandboxConfig = await readJson(join(root, 'config/sandbox.json'));
   const suiteRoot = join(root, 'benchmarks');
   const { suite } = await loadSuite(suiteRoot);
-  const protocol = await readJson(join(suiteRoot, 'manifests/protocol-v1.json')) as Record<string, unknown>;
+  const protocol = await readJson(join(suiteRoot, 'manifests/protocol-v2.json')) as Record<string, unknown>;
   if (hashJson(sandboxConfig) !== protocol.sandbox_config_hash) throw new Error('SANDBOX_CONFIG_DRIFT');
   if (mode === 'final' && (config.budget.model !== protocol.final_model || config.budget.rpdSoft > 18)) throw new Error('FINAL_MODEL_OR_BUDGET_DRIFT');
   if (mode === 'dev' && config.budget.model !== protocol.development_model) throw new Error('DEVELOPMENT_MODEL_DRIFT');
@@ -43,13 +43,17 @@ try {
   if (mode !== 'api-free') await atomicWriteJson(join(runRoot, 'model-usage.json'), await collectModelUsage(join(root, mode === 'dev' ? 'runs/development' : 'runs/final'),
     config.budget.model, mode, suite.cases.filter((entry) => !entry.held_out || mode === 'final' || values['include-held-out']).map((entry) => entry.id)));
   if (mode === 'dev' && values['include-held-out'] && result.summary.complete && result.results.length === 75) {
-    await writeOnceJson(join(suiteRoot, 'manifests/development-acceptance.json'), { version: 1, suite_hash: hashJson(suite),
+    const infrastructureFailures = result.results.filter((run) => run.error_code !== null &&
+      /^(?:HTTP_|NETWORK_|DOCKER_|ISOLATED_WORKER|PROVIDER_FAILED|GENERATION_OR_GATE_FAILED)/.test(run.error_code)).length;
+    if (infrastructureFailures > 0) throw new Error('DEVELOPMENT_INFRASTRUCTURE_FAILURES_REMAIN');
+    await writeOnceJson(join(suiteRoot, `manifests/development-acceptance-v${suite.version}.json`), { version: 1, suite_hash: hashJson(suite),
       protocol_hash: suite.protocol_hash, all_methods_completed: true, model: config.budget.model, summary_hash: hashJson(result.summary),
+      infrastructure_failures: infrastructureFailures,
       generation_failures: result.results.filter((run) => run.generation_failed).length,
       note: 'Completed development regressions include refusals and failures; not final-model results.' });
   }
   process.stdout.write(`${JSON.stringify({ mode, complete: result.summary.complete, quota_blocked: result.summary.quota_blocked,
-    trials_recorded: result.results.length, summary_path: join(runRoot, 'summary.json') }, null, 2)}\n`);
+    trials_recorded: result.results.length, summary_path: join(runRoot, mode === 'dev' && values['include-held-out'] ? 'full-summary.json' : 'summary.json') }, null, 2)}\n`);
 } catch (error) {
   process.stderr.write(`${error instanceof Error ? error.message : 'BENCHMARK_FAILED'}\n`); process.exitCode = 1;
 }

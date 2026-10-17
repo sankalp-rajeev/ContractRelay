@@ -44,6 +44,10 @@ async function synthesize(response: unknown, input: unknown = evidence) {
 }
 
 describe('structured synthesis trust boundary', () => {
+  it('enforces host plan bounds even when provider array bounds are omitted', () => {
+    expect(JSON.stringify(planResponseJsonSchema)).not.toContain('maxItems');
+    expect(() => parseSynthesisCandidate({ candidate: { ...plan, steps: Array.from({ length: 65 }, () => plan.steps[0]) } }, evidence)).toThrow();
+  });
   it('decodes composed wire data into the bounded canonical plan with independent validation', () => {
     expect(parseSynthesisCandidate({ candidate: refundWire() }, refundEvidence)).toEqual(refundPlan);
   });

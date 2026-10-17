@@ -15,5 +15,5 @@ describe('local candidate, gate, promotion and sealed scoring lifecycle', () => 
       semantic_mismatch_verdict: 'REJECTED', sealed_opened_after_decision: true, sealed_fixture_passed: true });
     // Re-running uses the same immutable evidence/decision rather than overwriting it.
     expect(await runWeatherLifecycle(dir)).toMatchObject({ sealed_fixture_passed: true });
-  });
+  }, 15000); // Two full permissioned-process lifecycles, including immutable resume.
 });

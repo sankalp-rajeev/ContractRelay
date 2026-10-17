@@ -9,6 +9,7 @@ import config from '../../../config/sandbox.json' with { type: 'json' };
 import { QuotaScheduler } from '@contractrelay/synthesizer';
 import type { ModelRequest } from '@contractrelay/synthesizer';
 import type { JsonValue } from '@contractrelay/contracts';
+import { atomicWriteJson } from '@contractrelay/contracts/artifacts';
 
 const dirs: string[] = [];
 afterEach(async () => { await Promise.all(dirs.splice(0).map((dir) => rm(dir, { recursive: true, force: true }))); });
@@ -51,6 +52,10 @@ describe('matched comparison interruption and pairing (TC-020/021/023)', () => {
     expect(b2v.artifact_hash).toBe(b2.artifact_hash); expect(b2v.paired_b2_artifact_hash).toBe(b2.artifact_hash);
     expect(b2v.model_jobs).toEqual([]);
     expect((await runBenchmark(settings)).results).toEqual(resumed.results);
+    expect(generate).toHaveBeenCalledTimes(6);
+    await atomicWriteJson(join(root, 'run/01-tool-rename/b2/trial-001/generated-wrapper.json'),
+      { decision: 'adapt', code: 'tampered-wrapper-artifact', rationale: 'untrusted change' });
+    await expect(runBenchmark(settings)).rejects.toThrow('GENERATED_WRAPPER_DRIFT');
     expect(generate).toHaveBeenCalledTimes(6);
   }, 20000);
 });
