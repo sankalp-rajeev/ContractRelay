@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "source": "prd.md v1.3, account quota snapshot 2026-10-17; verify before model-backed runs",
+  "provider": "google",
+  "requiredExternalSpendUsd": 0,
+  "paidFallback": false,
+  "maxConcurrency": 1,
+  "dailyResetTimezone": "America/Los_Angeles",
+  "modes": {
+    "dev": {
+      "model": "gemini-3.5-flash-lite",
+      "rpm": 15,
+      "tpm": 250000,
+      "rpdHard": 500,
+      "rpdSoft": 450
+    },
+    "final": {
+      "model": "gemini-3.8-flash",
+      "rpm": 5,
+      "tpm": 250000,
+      "rpdHard": 20,
+      "rpdSoft": 18,
+      "responseCache": false,
+      "trialsPerCase": 3
+    }
+  }
+}

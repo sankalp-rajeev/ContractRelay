@@ -1,0 +1,27 @@
+{
+  "name": "contractrelay",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Evidence-gated compatibility runtime for evolving agent tools",
+  "type": "module",
+  "packageManager": "pnpm@10.20.0",
+  "engines": { "node": ">=22.12.0" },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:smoke": "vitest run packages/compiler/test/weather.test.ts",
+    "demo": "tsx scripts/demo.ts",
+    "cli": "tsx packages/cli/src/index.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/node": "^22.18.0",
+    "eslint": "^9.39.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.1",
+    "vitest": "^3.2.4"
+  }
+}

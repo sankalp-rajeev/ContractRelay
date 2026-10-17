@@ -1,0 +1,11 @@
+{
+  "name": "@contractrelay/dsl",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "dependencies": {
+    "@contractrelay/contracts": "workspace:*",
+    "zod": "^3.25.76"
+  }
+}

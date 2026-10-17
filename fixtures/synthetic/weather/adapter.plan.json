@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "source_tool": "get_weather",
+  "target": { "kind": "single", "tool": "fetch_forecast" },
+  "steps": [
+    { "op": "RenameTool", "from": "get_weather", "to": "fetch_forecast", "evidence": ["change.md#tool"] },
+    { "op": "RenameArg", "from": "city", "to": "location", "evidence": ["change.md#location"] },
+    { "op": "AddConstantDefault", "arg": "units", "value": "imperial", "evidence": ["change.md#units"] }
+  ],
+  "response": [
+    {
+      "op": "ProjectResponse",
+      "mapping": { "temperature": "current.temperature", "conditions": "current.summary" },
+      "evidence": ["change.md#response"]
+    }
+  ],
+  "rationale": "Hand-authored deterministic fixture. Preserve Fahrenheit and map the renamed input and nested response. This is not a promoted or model-synthesized artifact."
+}
