@@ -26,7 +26,9 @@ describe('exact-contract promotion registry (TC-010)', () => {
     const onTrace = vi.fn();
     const result = await registry.execute({ key, oldContract, newContract, input: { city: 'Ann Arbor' }, invoke: weatherInvoker, onTrace });
     expect(result).toEqual({ temperature: 64, conditions: 'Clear' });
-    expect(onTrace).toHaveBeenCalledWith(expect.objectContaining({ tool: 'get_weather', contractHash: key.oldContractHash }));
+    expect(onTrace).toHaveBeenCalledWith(expect.objectContaining({ tool: 'get_weather', contractHash: key.oldContractHash,
+      adapterPlanHash: key.adapterPlanHash, policyVersion: 'read-only-v1', targetTools: ['fetch_forecast'],
+      operations: expect.arrayContaining([{ phase: 'call', op: 'InvokeTool', tool: 'fetch_forecast', index: 0 }]) }));
   });
 
   it('rejects contract drift before invoking the target', async () => {

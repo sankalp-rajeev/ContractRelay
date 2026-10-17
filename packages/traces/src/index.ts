@@ -5,7 +5,11 @@ import type { JsonValue } from '@contractrelay/contracts';
 export const toolTraceSchema = z.object({
   traceId: z.string().min(1), tool: z.string().min(1),
   input: jsonValueSchema, output: jsonValueSchema,
-  contractHash: z.string().regex(/^[a-f0-9]{64}$/)
+  contractHash: z.string().regex(/^[a-f0-9]{64}$/),
+  adapterPlanHash: z.string().regex(/^[a-f0-9]{64}$/).optional(),
+  policyVersion: z.string().optional(), targetTools: z.array(z.string()).optional(),
+  operations: z.array(z.object({ phase: z.enum(['input', 'call', 'response']), op: z.string(), index: z.number().int().nonnegative(),
+    tool: z.string().optional(), field: z.string().optional() }).strict()).optional()
 }).strict();
 export type ToolTrace = z.infer<typeof toolTraceSchema>;
 

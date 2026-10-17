@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { jsonValueSchema, toolContractSchema } from '@contractrelay/contracts';
 import type { JsonValue, ToolContract } from '@contractrelay/contracts';
+import { allowsEffects, normalizeContracts } from '@contractrelay/contracts/policy';
+import type { PolicyVersion } from '@contractrelay/contracts/policy';
 
 const blocked = new Set(['__proto__', 'prototype', 'constructor']);
 const field = z.string().regex(/^[A-Za-z_][A-Za-z0-9_]*$/)
@@ -18,18 +20,42 @@ export const inputStepSchema = z.discriminatedUnion('op', [
   z.object({ op: z.literal('MapEnum'), arg: field, mapping: z.record(field, z.string()), evidence }).strict()
 ]);
 
-export const responseStepSchema = z.object({
+const projectResponseSchema = z.object({
   op: z.literal('ProjectResponse'),
   mapping: z.record(field, path).refine((mapping) => Object.keys(mapping).length > 0, 'Empty projection'),
   evidence
 }).strict();
 
+export const responseStepSchema = z.discriminatedUnion('op', [projectResponseSchema,
+  z.object({ op: z.literal('MapEnum'), field, mapping: z.record(field, z.string()), evidence }).strict()
+]);
+
+const referenceSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('input'), path }).strict(),
+  z.object({ kind: z.literal('result'), call: field, path }).strict()
+]);
+export const bindingSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('input'), path }).strict(),
+  z.object({ kind: z.literal('result'), call: field, path }).strict(),
+  z.object({ kind: z.literal('constant'), value: jsonValueSchema, evidence }).strict(),
+  z.object({ kind: z.literal('convert'), source: referenceSchema,
+    to: z.enum(['string', 'number', 'integer', 'boolean']),
+    scale: z.number().int().positive().max(Number.MAX_SAFE_INTEGER).optional(), evidence }).strict()
+]);
+export type Binding = z.infer<typeof bindingSchema>;
+export const composedCallSchema = z.object({ id: field, tool: z.string().min(1),
+  arguments: z.record(field, bindingSchema), evidence }).strict();
+const targetSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('single'), tool: z.string().min(1) }).strict(),
+  z.object({ kind: z.literal('compose'), op: z.literal('ComposeCalls'), calls: z.array(composedCallSchema).min(1).max(8) }).strict()
+]);
+
 export const translationPlanSchema = z.object({
   version: z.literal(1),
   source_tool: z.string().min(1),
-  target: z.object({ kind: z.literal('single'), tool: z.string().min(1) }).strict(),
+  target: targetSchema,
   steps: z.array(inputStepSchema).max(64),
-  response: z.array(responseStepSchema).max(1),
+  response: z.array(responseStepSchema).max(16),
   rationale: z.string().min(1)
 }).strict();
 
@@ -45,6 +71,11 @@ export const adapterPlanSchema = z.union([translationPlanSchema, rejectPlanSchem
 export type TranslationPlan = z.infer<typeof translationPlanSchema>;
 export type AdapterPlan = z.infer<typeof adapterPlanSchema>;
 export type InputStep = z.infer<typeof inputStepSchema>;
+export function planEvidenceReferences(plan: TranslationPlan): string[] {
+  return [...plan.steps.flatMap((step) => step.evidence), ...plan.response.flatMap((step) => step.evidence),
+    ...(plan.target.kind === 'compose' ? plan.target.calls.flatMap((call) => [...call.evidence,
+      ...Object.values(call.arguments).flatMap((binding) => 'evidence' in binding ? binding.evidence : [])]) : [])];
+}
 export interface Diagnostic { code: string; path: string; message: string }
 
 export class PlanValidationError extends Error {
@@ -69,18 +100,84 @@ function required(contract: ToolContract): Set<string> {
     ? schema.required.filter((value): value is string => typeof value === 'string') : []);
 }
 
-function hasPath(contract: ToolContract, dotted: string): boolean {
-  let schema: JsonValue | undefined = contract.outputSchema;
+function schemaAtPath(value: JsonValue | undefined, dotted: string): JsonValue | undefined {
+  let schema = value;
   for (const part of dotted.split('.')) {
     const props = record(record(schema).properties);
-    if (!Object.hasOwn(props, part)) return false;
+    if (!Object.hasOwn(props, part)) return undefined;
     schema = props[part];
   }
-  return true;
+  return schema;
+}
+
+function validateResponses(plan: TranslationPlan, oldContract: ToolContract, source: JsonValue | undefined, diagnostics: Diagnostic[]): void {
+  let current = source;
+  for (const [index, step] of plan.response.entries()) {
+    const at = `response.${index}`;
+    if (step.op === 'ProjectResponse') {
+      const projected: Record<string, JsonValue> = {};
+      for (const [name, sourcePath] of Object.entries(step.mapping)) {
+        if (!Object.hasOwn(properties(oldContract, 'outputSchema'), name)) diagnostics.push({ code: 'RESPONSE_TARGET', path: at, message: `Unknown old response field ${name}` });
+        const schema = schemaAtPath(current, sourcePath);
+        if (schema === undefined) diagnostics.push({ code: 'RESPONSE_SOURCE', path: at, message: `Unknown new response path ${sourcePath}` });
+        else projected[name] = schema;
+      }
+      current = { type: 'object', properties: projected };
+    } else {
+      const schema = schemaAtPath(current, step.field);
+      if (record(schema).type !== 'string') diagnostics.push({ code: 'RESPONSE_ENUM_TYPE', path: at, message: 'Response enum mapping requires a string field' });
+      const values = record(schema).enum;
+      if (Array.isArray(values) && values.some((value) => typeof value !== 'string' || !Object.hasOwn(step.mapping, value))) {
+        diagnostics.push({ code: 'ENUM_COVERAGE', path: at, message: 'Response enum mapping is incomplete' });
+      }
+    }
+  }
+}
+
+function validateComposition(plan: TranslationPlan, oldContract: ToolContract, targets: readonly ToolContract[], diagnostics: Diagnostic[]): void {
+  if (plan.target.kind !== 'compose') return;
+  const add = (code: string, at: string, message: string) => diagnostics.push({ code, path: at, message });
+  if (plan.steps.length) add('COMPOSE_INPUT_STEPS', 'steps', 'Composed arguments use explicit bindings; primitive input steps must be empty');
+  const seen = new Map<string, ToolContract>();
+  const outputs: Record<string, JsonValue> = {};
+  for (const [index, call] of plan.target.calls.entries()) {
+    const at = `target.calls.${index}`;
+    if (seen.has(call.id)) add('DUPLICATE_CALL_ID', at, 'Call identifiers must be unique');
+    const target = targets.find((tool) => tool.name === call.tool);
+    if (!target) { add('TARGET_TOOL', at, 'Composed target is not allowlisted'); continue; }
+    const targetFields = properties(target, 'inputSchema');
+    for (const name of required(target)) if (!Object.hasOwn(call.arguments, name)) add('MISSING_REQUIRED', at, `Missing composed target argument ${name}`);
+    for (const [name, binding] of Object.entries(call.arguments)) {
+      if (!Object.hasOwn(targetFields, name)) add('TARGET_FIELD', at, `Unknown composed target argument ${name}`);
+      let actual: JsonValue | undefined;
+      const reference = binding.kind === 'convert' ? binding.source : binding;
+      if (reference.kind === 'input') actual = schemaAtPath(oldContract.inputSchema, reference.path);
+      if (reference.kind === 'result') {
+        const prior = seen.get(reference.call);
+        if (!prior) add('CALL_GRAPH', at, 'Result references must point to an earlier call; forward references and cycles are forbidden');
+        actual = schemaAtPath(prior?.outputSchema, reference.path);
+      }
+      if (binding.kind === 'constant') actual = { type: binding.value === null ? 'null' : Array.isArray(binding.value) ? 'array'
+        : typeof binding.value === 'number' && Number.isSafeInteger(binding.value) ? 'integer' : typeof binding.value };
+      if (actual === undefined) add('SOURCE_FIELD', at, `Unknown binding source for ${name}`);
+      if (binding.kind === 'convert') {
+        if (binding.scale !== undefined && binding.to !== 'integer') add('INVALID_SCALE', at, 'Scaling requires integer output');
+        actual = { type: binding.to };
+      }
+      const actualType = record(actual).type;
+      const expectedType = record(targetFields[name]).type;
+      if (typeof actualType === 'string' && typeof expectedType === 'string' && actualType !== expectedType
+        && !(actualType === 'integer' && expectedType === 'number')) add('TYPE_MISMATCH', at, `Binding ${name} cannot satisfy the target type`);
+    }
+    seen.set(call.id, target);
+    if (target.outputSchema !== undefined) outputs[call.id] = target.outputSchema;
+  }
+  validateResponses(plan, oldContract, { type: 'object', properties: outputs }, diagnostics);
 }
 
 /** Structural validation only. A valid plan is a candidate, never a promotion. */
-export function validatePlan(value: unknown, oldValue: unknown, newValue: unknown): AdapterPlan {
+export function validatePlan(value: unknown, oldValue: unknown, newValue: unknown,
+  policy: PolicyVersion | 'planning-only' = 'read-only-v1'): AdapterPlan {
   const parsed = adapterPlanSchema.safeParse(value);
   if (!parsed.success) {
     throw new PlanValidationError(parsed.error.issues.map((issue) => ({
@@ -90,15 +187,22 @@ export function validatePlan(value: unknown, oldValue: unknown, newValue: unknow
   const plan = parsed.data;
   if ('op' in plan) return plan;
   const oldContract = toolContractSchema.parse(oldValue);
-  const newContract = toolContractSchema.parse(newValue);
+  const targets = normalizeContracts(newValue);
+  const target = plan.target;
+  const newContract = target.kind === 'single' ? targets.find((tool) => tool.name === target.tool) : targets[0];
   const diagnostics: Diagnostic[] = [];
   const add = (code: string, at: string, message: string) => diagnostics.push({ code, path: at, message });
   if (plan.source_tool !== oldContract.name) add('SOURCE_TOOL', 'source_tool', 'Source tool does not match contract');
-  if (plan.target.tool !== newContract.name) add('TARGET_TOOL', 'target.tool', 'Target tool is not allowlisted by contract');
-  // Stateful candidates need policy, isolated fixtures and V3 gates, which are not implemented yet.
-  if (oldContract.sideEffect !== 'READ_ONLY' || newContract.sideEffect !== 'READ_ONLY') {
-    add('SIDE_EFFECT_POLICY', 'target', 'This milestone supports READ_ONLY contracts only');
+  if (!newContract) add('TARGET_TOOL', 'target.tool', 'Target tool is not allowlisted by contract');
+  if (!allowsEffects([oldContract, ...targets], policy)) {
+    add('SIDE_EFFECT_POLICY', 'target', 'Side effects are unsupported by the selected execution policy');
   }
+  if (plan.target.kind === 'compose') {
+    validateComposition(plan, oldContract, targets, diagnostics);
+    if (diagnostics.length) throw new PlanValidationError(diagnostics);
+    return plan;
+  }
+  if (!newContract) throw new PlanValidationError(diagnostics);
   for (const [name, contract] of [['old', oldContract], ['new', newContract]] as const) {
     if (typeof contract.inputSchema !== 'object' || contract.inputSchema.type !== 'object') {
       add('INPUT_OBJECT', name, 'Primitive translation requires an object input schema');
@@ -170,13 +274,7 @@ export function validatePlan(value: unknown, oldValue: unknown, newValue: unknow
       add('TYPE_MISMATCH', 'steps', `Field ${name}: ${actualType} cannot satisfy ${expectedType}`);
     }
   }
-  for (const [index, step] of plan.response.entries()) {
-    const oldFields = properties(oldContract, 'outputSchema');
-    for (const [name, sourcePath] of Object.entries(step.mapping)) {
-      if (!Object.hasOwn(oldFields, name)) add('RESPONSE_TARGET', `response.${index}`, `Unknown old response field ${name}`);
-      if (!hasPath(newContract, sourcePath)) add('RESPONSE_SOURCE', `response.${index}`, `Unknown new response path ${sourcePath}`);
-    }
-  }
+  validateResponses(plan, oldContract, newContract.outputSchema, diagnostics);
   if (diagnostics.length) throw new PlanValidationError(diagnostics);
   return plan;
 }

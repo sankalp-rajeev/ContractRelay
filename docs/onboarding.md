@@ -15,7 +15,8 @@ Source: `prd.md`, version 1.3, dated 2026-10-17. It remains unchanged.
 The safety principle is to prefer a justified rejection over unverified success.
 `INCONCLUSIVE` must behave as rejection at runtime. Read-only tools need behavioral
 evidence (V2); supported writes need state/side-effect evidence (V3). Unknown
-effects must fail closed. The current compiler refuses writes altogether.
+effects must fail closed. Writes require explicit isolated fixture/simulator
+policies and independent V3 evidence; real external writes are not enabled.
 
 ## Initial deliverable
 
@@ -25,8 +26,9 @@ hashing, Zod plans and deterministic interpretation. Phase 1 is complete.
 Phase 2 adds independent read-only gates, promotion and structured synthesis
 infrastructure; its live generation, promotion and sealed-fixture acceptance pass.
 
-The CLI currently implements `status` and help. The PRD's snapshot/prepare/
-synthesize/verify/promote/serve/eval commands are explicitly future work.
+The CLI implements `status`, help and `serve --fixture weather|refund` over MCP
+stdio. Snapshot/prepare/synthesize/verify/promote/eval are library APIs or scripts
+until the general CLI workflow is completed.
 
 ## Flagship requirements to preserve
 
@@ -57,8 +59,7 @@ per-model request/token budgets and the Pacific daily reset, and report
 
 ## Acceptance boundary
 
-This is not the full MVP. Evidence loaders, process isolation, a read-only gate,
-promotion registry, provider and quota scheduler are locally tested. Live Gemini
-acceptance now passes. Phase 3 will add MCP proxying and ComposeCalls;
-SQLite state oracles, a B2 hostile-code sandbox and an executed comparative
-benchmark remain planned in [roadmap.md](roadmap.md).
+The usable MVP passes its local and live acceptance checks, including MCP stdio,
+ComposeCalls, SQLite state oracles and two semantic rejection cases. It is not
+flagship completion: a B2 hostile-code sandbox, frozen cases and the executed
+comparative benchmark remain planned in [roadmap.md](roadmap.md).

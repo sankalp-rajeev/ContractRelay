@@ -2,8 +2,10 @@ import { Ajv } from 'ajv';
 import type { ValidateFunction } from 'ajv';
 import { hashContract, hashJson, jsonValueSchema, toolContractSchema } from '@contractrelay/contracts';
 import type { JsonValue } from '@contractrelay/contracts';
+import { hashContractSet, normalizeContracts } from '@contractrelay/contracts/policy';
+import type { PolicyVersion } from '@contractrelay/contracts/policy';
 import { validatePlan } from '@contractrelay/dsl';
-import type { InputStep, TranslationPlan } from '@contractrelay/dsl';
+import type { Binding, InputStep, TranslationPlan } from '@contractrelay/dsl';
 
 export type ToolInvoker = (tool: string, args: Readonly<Record<string, JsonValue>>) => Promise<unknown>;
 
@@ -20,8 +22,10 @@ export interface CandidateAdapter {
   readonly oldContractHash: string;
   readonly newContractHash: string;
   /** For isolated fixtures only. This candidate has NOT passed a promotion gate. */
-  executeForVerification(input: unknown, invoke: ToolInvoker): Promise<JsonValue>;
+  executeForVerification(input: unknown, invoke: ToolInvoker, onOperation?: (operation: TranslationOperation) => void): Promise<JsonValue>;
 }
+
+export interface TranslationOperation { phase: 'input' | 'call' | 'response'; op: string; index: number; tool?: string; field?: string }
 
 function assertValid(validate: ValidateFunction, value: unknown, boundary: string): void {
   if (!validate(value)) throw new AdapterError('SCHEMA_VALIDATION', `Invalid ${boundary}`, structuredClone(validate.errors));
@@ -128,33 +132,81 @@ function project(value: JsonValue, mapping: Record<string, string>): JsonValue {
   return output;
 }
 
+function reference(value: JsonValue, path: string): JsonValue {
+  let current = value;
+  for (const segment of path.split('.')) {
+    if (current === null || typeof current !== 'object' || Array.isArray(current) || !Object.hasOwn(current, segment)) {
+      throw new AdapterError('BINDING_FAILED', 'A declared binding source is absent');
+    }
+    current = current[segment] as JsonValue;
+  }
+  return structuredClone(current);
+}
+
+function bind(binding: Binding, input: JsonValue, results: Record<string, JsonValue>): JsonValue {
+  if (binding.kind === 'constant') return structuredClone(binding.value);
+  const source = binding.kind === 'convert' ? binding.source : binding;
+  const value = source.kind === 'input' ? reference(input, source.path) : reference(results, `${source.call}.${source.path}`);
+  return binding.kind === 'convert' ? convert(value, binding.to, binding.scale) : value;
+}
+
 /** Compiles a candidate, not a promoted runtime adapter. No code generation/eval. */
-export function compileCandidate(planValue: unknown, oldValue: unknown, newValue: unknown): CandidateAdapter {
+export function compileCandidate(planValue: unknown, oldValue: unknown, newValue: unknown,
+  policy: PolicyVersion = 'read-only-v1'): CandidateAdapter {
   const oldContract = toolContractSchema.parse(oldValue);
-  const newContract = toolContractSchema.parse(newValue);
-  const plan = validatePlan(planValue, oldContract, newContract);
+  const targets = normalizeContracts(newValue);
+  const plan = validatePlan(planValue, oldContract, newValue, policy);
   if ('op' in plan) throw new AdapterError('PLAN_REJECTED', plan.reason);
-  const ajv = new Ajv({ strict: true, allErrors: true, coerceTypes: false, useDefaults: false, removeAdditional: false });
+  const ajv = new Ajv({ strict: true, allErrors: true, coerceTypes: false, useDefaults: false, removeAdditional: false, multipleOfPrecision: 12 });
   const oldInput = ajv.compile(oldContract.inputSchema);
-  const newInput = ajv.compile(newContract.inputSchema);
   const oldOutput = oldContract.outputSchema === undefined ? undefined : ajv.compile(oldContract.outputSchema);
-  const newOutput = newContract.outputSchema === undefined ? undefined : ajv.compile(newContract.outputSchema);
+  const targetSchemas = new Map(targets.map((target) => [target.name, { input: ajv.compile(target.inputSchema),
+    output: target.outputSchema === undefined ? undefined : ajv.compile(target.outputSchema) }]));
   // Use an isolated plan copy in the closure so callers cannot mutate a compiled candidate.
   const executable = structuredClone(plan);
   return Object.freeze({
     get plan() { return structuredClone(executable); },
     planHash: hashJson(executable),
     oldContractHash: hashContract(oldContract),
-    newContractHash: hashContract(newContract),
-    async executeForVerification(input: unknown, invoke: ToolInvoker): Promise<JsonValue> {
+    newContractHash: hashContractSet(newValue),
+    async executeForVerification(input: unknown, invoke: ToolInvoker, onOperation?: (operation: TranslationOperation) => void): Promise<JsonValue> {
       assertValid(oldInput, input, 'old input');
       const args = object(input);
-      for (const step of executable.steps) applyStep(args, step);
-      assertValid(newInput, args, 'translated input');
-      const raw = jsonValueSchema.parse(await invoke(executable.target.tool, args));
-      if (newOutput) assertValid(newOutput, raw, 'target response');
-      let result: JsonValue = structuredClone(raw);
-      for (const step of executable.response) result = project(result, step.mapping);
+      for (const [index, step] of executable.steps.entries()) { applyStep(args, step); onOperation?.({ phase: 'input', op: step.op, index }); }
+      const call = async (tool: string, arguments_: Record<string, JsonValue>, index: number): Promise<JsonValue> => {
+        const schemas = targetSchemas.get(tool);
+        if (!schemas) throw new AdapterError('UNALLOWLISTED_TARGET', 'Target tool is not allowlisted');
+        assertValid(schemas.input, arguments_, 'translated input');
+        onOperation?.({ phase: 'call', op: 'InvokeTool', tool, index });
+        const raw = jsonValueSchema.parse(await invoke(tool, arguments_));
+        if (schemas.output) assertValid(schemas.output, raw, 'target response');
+        return structuredClone(raw);
+      };
+      let result: JsonValue;
+      if (executable.target.kind === 'single') result = await call(executable.target.tool, args, 0);
+      else {
+        const results: Record<string, JsonValue> = Object.create(null) as Record<string, JsonValue>;
+        for (const [index, step] of executable.target.calls.entries()) {
+          const bound = Object.fromEntries(Object.entries(step.arguments).map(([name, binding]) => {
+            const value = bind(binding, args, results);
+            onOperation?.({ phase: 'input', op: binding.kind === 'convert' ? 'ConvertType' : `Bind:${binding.kind}`, index, tool: step.tool, field: name });
+            return [name, value];
+          }));
+          results[step.id] = await call(step.tool, bound, index);
+        }
+        result = results;
+      }
+      for (const [index, step] of executable.response.entries()) {
+        if (step.op === 'ProjectResponse') result = project(result, step.mapping);
+        else {
+          const mapped = object(result);
+          const value = mapped[step.field];
+          if (typeof value !== 'string' || !Object.hasOwn(step.mapping, value)) throw new AdapterError('UNMAPPED_ENUM', 'Response enum value is not declared');
+          mapped[step.field] = step.mapping[value] as string;
+          result = mapped;
+        }
+        onOperation?.({ phase: 'response', op: step.op, index });
+      }
       if (oldOutput) assertValid(oldOutput, result, 'old response');
       return result;
     }

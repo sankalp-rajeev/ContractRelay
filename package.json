@@ -15,8 +15,10 @@
     "test:smoke": "vitest run packages/compiler/test/weather.test.ts packages/runtime/test/lifecycle.test.ts",
     "demo": "tsx scripts/demo.ts",
     "demo:verified": "tsx scripts/demo-verified.ts",
+    "demo:refund": "tsx --experimental-sqlite scripts/demo-refund.ts",
     "synthesize:weather": "tsx --env-file-if-exists=.env scripts/synthesize-weather.ts",
-    "cli": "tsx packages/cli/src/index.ts"
+    "synthesize:refund": "tsx --experimental-sqlite --env-file-if-exists=.env scripts/synthesize-refund.ts",
+    "cli": "tsx --experimental-sqlite packages/cli/src/index.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

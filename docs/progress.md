@@ -33,12 +33,33 @@ Prompt/schema version `single-call-v2` retains prior failed attempts separately.
 `pnpm check` is the sequential API-free phase gate. Subsequent phase exits will
 be recorded only after required local tests and external acceptance checks pass.
 
-Latest local validation: lint and strict typechecking pass; all **103 tests in
+Phase 2 validation: lint and strict typechecking pass; all **103 tests in
 17 files** pass. This includes seeded conversion properties, real worker access
 denials, semantic rejection, promotion drift/tampering, tiny-quota resume,
 bounded rate-limit recovery, final cache isolation and crash-safe publication.
 
-## Phase 3 — next
+## Phase 3 — complete
 
-Real MCP proxy, bounded composed calls, isolated SQLite state oracles and
-idempotency/side-effect checks follow the now-green Phase 2 exit gate.
+The usable MVP now includes a real MCP compatibility proxy, a separate-process
+stdio server, bounded ComposeCalls with intermediate bindings, exact conversions,
+response enum mapping, and a resettable SQLite refund workflow. V3 independently
+checks amounts, state and side-effect counts, including retries and duplicate
+effects. Stateful execution requires an explicit isolated fixture/simulator policy;
+these permissions do not authorize real external writes.
+
+Send-vs-draft and delete-vs-deactivate are rejected despite schema-valid success
+responses. A separate bad-provenance fixture passes the gate and fails sealed
+evaluation, demonstrating that hidden scoring can falsify a promotion.
+
+Live composed synthesis passed on 2026-10-17 with `gemini-3.5-flash-lite`, followed
+by independent promotion, the unchanged MCP client, sealed SQL assertions and
+idempotent replay. Plan SHA-256:
+`57e55bf8464315463df62400001c8db9e448a1fca11cdba2761a5c9584a7d0dc`.
+Resume reused the persisted response with no new generation. Prompt version
+`bounded-plan-v5` uses a flat typed wire format to avoid provider schema complexity;
+the decoder and canonical DSL enforce all bounds and reject ambiguous records.
+
+Latest validation: lint, strict typechecking and **123 tests in 23 files** pass.
+Both API-free refund and retained live-response demos pass. No final-model quota
+or comparative benchmark has been used. Phase 4 is next: freeze cases, sandbox
+arbitrary baseline code and execute matched development regressions.

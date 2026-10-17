@@ -35,7 +35,23 @@ importers:
 
   packages/benchmark: {}
 
-  packages/cli: {}
+  packages/cli:
+    dependencies:
+      '@contractrelay/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+      '@contractrelay/mcp':
+        specifier: workspace:*
+        version: link:../mcp
+      '@contractrelay/runtime':
+        specifier: workspace:*
+        version: link:../runtime
+      '@contractrelay/verifier':
+        specifier: workspace:*
+        version: link:../verifier
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.20.0
+        version: 1.32.1(zod@3.25.76)
 
   packages/compiler:
     dependencies:
@@ -69,12 +85,24 @@ importers:
 
   packages/mcp:
     dependencies:
+      '@contractrelay/compiler':
+        specifier: workspace:*
+        version: link:../compiler
       '@contractrelay/contracts':
         specifier: workspace:*
         version: link:../contracts
+      '@contractrelay/runtime':
+        specifier: workspace:*
+        version: link:../runtime
+      '@contractrelay/traces':
+        specifier: workspace:*
+        version: link:../traces
       '@modelcontextprotocol/sdk':
         specifier: ^1.20.0
         version: 1.32.1(zod@3.25.76)
+      ajv:
+        specifier: ^8.17.1
+        version: 8.20.0
       zod:
         specifier: ^3.25.76
         version: 3.25.76

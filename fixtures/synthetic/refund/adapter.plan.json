@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "source_tool": "refund_order",
+  "target": {
+    "kind": "compose",
+    "op": "ComposeCalls",
+    "calls": [
+      {
+        "id": "lookup",
+        "tool": "lookup_payment",
+        "arguments": { "order_id": { "kind": "input", "path": "order_id" } },
+        "evidence": ["change.md#lookup"]
+      },
+      {
+        "id": "refund",
+        "tool": "refund_payment",
+        "arguments": {
+          "payment_id": { "kind": "result", "call": "lookup", "path": "payment_id" },
+          "amount_cents": { "kind": "convert", "source": { "kind": "input", "path": "amount_dollars" }, "to": "integer", "scale": 100, "evidence": ["change.md#amount"] },
+          "reason": { "kind": "constant", "value": "customer_request", "evidence": ["change.md#reason"] },
+          "idempotency_key": { "kind": "input", "path": "request_id" }
+        },
+        "evidence": ["change.md#amount", "change.md#reason", "change.md#idempotency"]
+      },
+      {
+        "id": "finalize",
+        "tool": "update_order_status",
+        "arguments": {
+          "order_id": { "kind": "input", "path": "order_id" },
+          "status": { "kind": "constant", "value": "refunded", "evidence": ["change.md#status"] },
+          "idempotency_key": { "kind": "input", "path": "request_id" }
+        },
+        "evidence": ["change.md#status", "change.md#idempotency"]
+      }
+    ]
+  },
+  "steps": [],
+  "response": [
+    { "op": "ProjectResponse", "mapping": { "refund_id": "refund.id", "status": "refund.state" }, "evidence": ["change.md#response"] },
+    { "op": "MapEnum", "field": "status", "mapping": { "completed": "refunded" }, "evidence": ["change.md#response"] }
+  ],
+  "rationale": "Controlled plan preserves the immediate refund, order state, customer-request provenance and request_id idempotency through three bounded calls."
+}

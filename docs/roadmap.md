@@ -28,19 +28,19 @@ Use `prd.md` sections 34, 42–45 and 49 for full acceptance criteria.
 - [x] API-free positive lifecycle and schema-valid semantic rejection demo.
 - [x] Live Gemini synthesis, promotion, sealed-fixture scoring and retained-response resume.
 
-## Phase 3 — next
+## Phase 3 — complete
 
-- [ ] Real MCP old-interface compatibility proxy (ingestion is complete).
-- [ ] Positive synthesized migration and send-vs-draft rejection demo.
-- [ ] Document usable vertical slice as MVP, benchmark in progress.
+- [x] Real MCP old-interface compatibility proxy, including separate-process stdio.
+- [x] Positive synthesized migration and send-vs-draft rejection demo.
+- [x] Document usable vertical slice as MVP, benchmark in progress.
 
 ## Stateful composition
 
-- [ ] Bounded ComposeCalls, intermediate references and static graph checks.
-- [ ] Resettable SQLite refund fixture and V3 state/side-effect oracles.
-- [ ] Idempotency/retry and duplicate-effect handling.
-- [ ] Delete-vs-deactivate or equivalent second semantic rejection.
-- [ ] Stable old MCP client completes a composed workflow.
+- [x] Bounded ComposeCalls, intermediate references and static graph checks.
+- [x] Resettable SQLite refund fixture and V3 state/side-effect oracles.
+- [x] Idempotency/retry and duplicate-effect handling.
+- [x] Delete-vs-deactivate second semantic rejection.
+- [x] Stable old MCP client completes a composed workflow.
 
 ## Benchmark and release
 

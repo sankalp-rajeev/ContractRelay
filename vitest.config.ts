@@ -4,6 +4,7 @@ export default defineConfig({
   test: {
     include: ['packages/**/test/**/*.test.ts'],
     environment: 'node',
-    clearMocks: true
+    clearMocks: true,
+    poolOptions: { forks: { execArgv: ['--experimental-sqlite'] } }
   }
 });

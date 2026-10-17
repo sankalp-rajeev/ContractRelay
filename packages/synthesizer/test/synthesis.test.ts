@@ -4,7 +4,9 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { GeminiProvider, loadModelConfig, QuotaScheduler, ScheduledPlanSynthesizer, retryAfterMilliseconds } from '../src/index.js';
 import type { SynthesisEvidence } from '../src/index.js';
-import { createPlanResponseJsonSchema } from '../src/synthesis.js';
+import { createPlanResponseJsonSchema, parseSynthesisCandidate } from '../src/synthesis.js';
+import { oldRefundContract, refundTargetContracts, refundEvidenceRefs } from '../../../fixtures/synthetic/refund/contracts.js';
+import refundPlan from '../../../fixtures/synthetic/refund/adapter.plan.json' with { type: 'json' };
 import { newContract, oldContract, plan } from '../../../fixtures/synthetic/weather/fixture.js';
 import { toolContractSchema } from '@contractrelay/contracts';
 
@@ -13,6 +15,24 @@ afterEach(async () => { vi.unstubAllGlobals(); await Promise.all(directories.spl
 const evidence: SynthesisEvidence = { dataClass: 'controlled-synthetic', oldContract: toolContractSchema.parse(oldContract),
   newContracts: [toolContractSchema.parse(newContract)], documents: ['tool', 'location', 'units', 'response'].map((section) => ({ id: `change.md#${section}`, text: 'Documented controlled change' })) };
 const planResponseJsonSchema = createPlanResponseJsonSchema(evidence);
+
+const refundEvidence: SynthesisEvidence = { dataClass: 'controlled-synthetic', oldContract: oldRefundContract,
+  newContracts: refundTargetContracts, documents: refundEvidenceRefs.map((id) => ({ id, text: 'Controlled authoritative change' })) };
+function refundWire() {
+  return { decision: 'adapt', source_tool: refundPlan.source_tool, reason: '', missing_evidence: [], risk: '', rationale: refundPlan.rationale,
+    calls: refundPlan.target.calls.map((call) => ({ ...call, arguments: Object.entries(call.arguments).map(([name, value]) => {
+      const binding = value as { kind: string; path?: string; call?: string; value?: string; to?: string; scale?: number;
+        source?: { kind: string; path: string; call?: string }; evidence?: string[] };
+      const source = binding.source ?? binding;
+      return { name, kind: binding.kind === 'convert' ? `convert_${source.kind}` : binding.kind,
+        path: source.path ?? '', call: source.call ?? '', value: binding.value ?? null, to: binding.to ?? 'string',
+        scale: binding.scale ?? 1, evidence: binding.evidence ?? [] };
+    }) })),
+    projection: [
+      { field: 'refund_id', source: 'refund.id', enum_map: [], evidence: ['change.md#response'] },
+      { field: 'status', source: 'refund.state', enum_map: [{ from: 'completed', to: 'refunded' }], evidence: ['change.md#response'] }
+    ] };
+}
 
 async function synthesize(response: unknown, input: unknown = evidence) {
   const dir = await mkdtemp(join(tmpdir(), 'contractrelay-synth-'));
@@ -24,6 +44,22 @@ async function synthesize(response: unknown, input: unknown = evidence) {
 }
 
 describe('structured synthesis trust boundary', () => {
+  it('decodes composed wire data into the bounded canonical plan with independent validation', () => {
+    expect(parseSynthesisCandidate({ candidate: refundWire() }, refundEvidence)).toEqual(refundPlan);
+  });
+
+  it('rejects ambiguous wire records and enforces bounds outside the provider schema', () => {
+    const duplicateBinding = refundWire();
+    duplicateBinding.calls[0]!.arguments.push(duplicateBinding.calls[0]!.arguments[0]!);
+    const duplicateProjection = refundWire(); duplicateProjection.projection.push(duplicateProjection.projection[0]!);
+    const duplicateEnum = refundWire(); duplicateEnum.projection[1]!.enum_map.push({ from: 'completed', to: 'refunded' });
+    const oversized = refundWire(); oversized.calls = Array.from({ length: 9 }, () => oversized.calls[0]!);
+    const rejectWithCalls = { ...refundWire(), decision: 'reject' };
+    for (const wire of [duplicateBinding, duplicateProjection, duplicateEnum, oversized, rejectWithCalls]) {
+      expect(() => parseSynthesisCandidate({ candidate: wire }, refundEvidence)).toThrow();
+    }
+  });
+
   it('accepts an evidence-grounded bounded plan through the shared scheduler', async () => {
     const { generate, promise } = await synthesize({ candidate: plan });
     expect(await promise).toEqual(plan);

@@ -7,11 +7,11 @@ the backend contract changes. It proposes a bounded declarative `AdapterPlan`,
 executes trusted deterministic translation, and independently verifies the
 candidate before promotion. Insufficient evidence must result in rejection.
 
-**Status: Phases 1 and 2 complete; Phase 3 is next.** Live Gemini generation,
-read-only verification/promotion, enforced evidence isolation,
-structured synthesis, and persisted quota/resume handling are implemented.
-MCP serving, composed/stateful workflows and the comparative benchmark remain
-planned. This is not yet the MVP, and no benchmark results have been measured.
+**Status: Phases 1–3 complete; usable MVP, benchmark in progress.** Live Gemini
+generation, evidence-gated promotion, MCP stdio compatibility, bounded composed
+workflows and isolated SQLite state/side-effect checks pass acceptance tests.
+The comparative benchmark and hostile-code sandbox remain planned; no benchmark
+results have been measured.
 
 ## Quick start
 
@@ -25,6 +25,7 @@ pnpm test
 pnpm check
 pnpm demo
 pnpm demo:verified
+pnpm demo:refund
 pnpm cli status
 ```
 
@@ -48,7 +49,7 @@ get_weather(city) -> fetch_forecast(location, units="imperial")
 
 The output includes the old/new contract hashes, plan hash and translated result.
 It is explicitly a **candidate fixture execution**, not an approved migration or
-live MCP proxy. Candidates currently support read-only contracts only.
+live MCP proxy. Stateful candidates require an explicit isolated fixture policy.
 
 `pnpm check` runs lint, typecheck and every deterministic test sequentially with
 `GEMINI_API_KEY` removed from child environments. It stops on the first failed gate.
@@ -58,6 +59,19 @@ evidence, replay traces and independent predicates, reject a schema-valid semant
 mismatch, promote the good candidate, freeze its decision, then score a separate
 input from sealed evidence. This uses no model and is not a benchmark result.
 
+`pnpm demo:refund` exercises the real MCP client/proxy and a three-call SQLite
+refund, then scores independent sealed state and idempotency assertions. To serve
+the unchanged logical interface to an MCP stdio client, launch:
+
+```sh
+pnpm cli serve --fixture refund
+```
+
+This server uses controlled local data only. Node 22 requires the experimental
+SQLite flag, which the scripts supply. Protocol messages use stdout; diagnostics
+use stderr. `--plan path` can load a generated plan, which must pass the gate
+before the server begins accepting calls.
+
 ## Repository
 
 ```text
@@ -66,12 +80,12 @@ packages/
   dsl/            bounded AdapterPlan schema and static validation
   compiler/       deterministic candidate interpreter
   synthesizer/    structured Gemini provider and persistent quota/resume scheduler
-  verifier/       read-only V0/V1/V2 gate, predicates and metamorphic checks
-  runtime/        exact-hash promotion registry and read-only execution
-  mcp/            paginated contract ingestion; compatibility proxy planned
+  verifier/       V0–V3 gates, predicates, state and side-effect assertions
+  runtime/        exact-hash promotion registry and policy-bound execution
+  mcp/            paginated ingestion and old-interface compatibility proxy
   traces/         canonical JSONL validation and recursive credential redaction
   benchmark/      baseline/run identifiers; harness/sandbox/scoring planned
-  cli/            development status/help commands
+  cli/            development status/help and fixture MCP stdio server
 fixtures/
   synthetic/     controlled, API-free development fixtures
   real/          reserved for optional post-v1 historical examples
@@ -96,9 +110,9 @@ installed `contractrelay` executable.
 - Strict Zod contract/plan schemas, explicit provenance and side-effect metadata.
 - Stable contract and plan hashes with recursively sorted JSON object keys.
 - `RenameTool`, `RenameArg`, `AddConstantDefault`, `ConvertType`, `MapEnum`,
-  `ProjectResponse`, and explicit `Reject` artifacts.
+  `ProjectResponse`, bounded `ComposeCalls`, and explicit `Reject` artifacts.
 - Source/target field checks, required-input checks, enum coverage, duplicate
-  assignment rejection, safe response paths and read-only policy.
+  assignment rejection, safe response paths and explicit effect policies.
 - JSON Schema checks at old-input, translated-input, backend-output and
   old-output boundaries. The interpreter never generates or evaluates code.
 - Candidate execution restricted by API naming to verification fixtures.
@@ -111,16 +125,21 @@ installed `contractrelay` executable.
 - Read-only replay and independent behavioral/metamorphic predicates; missing
   evidence and unsupported defaults fail closed. Promotion repeats verification.
 - Promotion artifact integrity checks, explicit revocation and contract drift refusal.
+- Resettable SQLite state/side-effect gates, idempotent write replay and two
+  schema-valid semantic rejection cases. Unknown effects fail closed.
+- Real SDK MCP integration and a separate-process stdio client test. Runtime
+  traces record plan/policy hashes, call order and translation operations.
 - Persisted request reservations, retained per-attempt responses, bounded 429
   retries, quota-day stops, crash recovery and final-trial cache bypass.
 
 Structural validation cannot establish semantic compatibility. An evidence
 reference is an audit pointer, not proof that the referenced statement is true.
-The verifier checks declared behavioral evidence; V3 state/side-effect support
-remains future work. Gate success does not imply success on unseen inputs.
+The verifier checks declared behavioral and isolated state/side-effect evidence.
+Gate success does not imply success on unseen inputs.
 Single-call translation uses object schemas and top-level input fields; response
-projection supports nested object paths. Composition and other DSL operators
-remain unsupported and are rejected by the schema.
+projection supports nested object paths. Composition is sequential and limited
+to eight allowlisted calls; only earlier results may be referenced. Unsupported
+operators are rejected by the schema.
 
 ## Budget and evidence policy
 
@@ -141,12 +160,14 @@ development model selected, then run:
 
 ```sh
 pnpm synthesize:weather --resume
+pnpm synthesize:refund --resume
 ```
 
 This generates one controlled synthetic weather plan through the quota scheduler,
 independently verifies it, retains artifacts under `runs/development/`, and writes
 `reports/weather-live-verification.json`. Completed trials are skipped on resume.
-Final-model use is blocked in this command until later benchmark prerequisites
+The refund command generates and verifies a composed plan with real MCP and
+SQLite fixtures. Final-model use is blocked until later benchmark prerequisites
 are implemented. The live development-model check passed on 2026-10-17, including
 promotion, separate sealed-fixture scoring and retained-response resume. This is
 not a comparative benchmark result. Ordinary tests still use controlled transports.
@@ -177,4 +198,5 @@ sandbox before it can execute.
 
 See [onboarding](docs/onboarding.md), [build milestones](docs/roadmap.md), and
 [architecture decisions](docs/adr/README.md). Phase 2's local and live acceptance
-checks pass. Phase 3's next work is the real MCP proxy and stateful composition.
+checks pass, as do Phase 3's composed MCP/SQLite checks. Phase 4 now follows the
+frozen-case, sandbox and matched-baseline gates.

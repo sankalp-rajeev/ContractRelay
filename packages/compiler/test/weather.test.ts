@@ -51,7 +51,8 @@ describe('controlled weather migration', () => {
     const candidate = compileCandidate(mutable, oldContract, newContract);
     const hash = candidate.planHash;
     mutable.target.tool = 'attacker';
-    candidate.plan.target.tool = 'also-attacker';
+    const exposed = candidate.plan;
+    if (exposed.target.kind === 'single') exposed.target.tool = 'also-attacker';
     const invoke = vi.fn<ToolInvoker>(async () => ({ current: { temperature: 64, summary: 'Clear' } }));
     const results = await Promise.all(Array.from({ length: 5 }, () => candidate.executeForVerification({ city: 'Ann Arbor' }, invoke)));
     expect(results.every((value) => JSON.stringify(value) === JSON.stringify(results[0]))).toBe(true);
