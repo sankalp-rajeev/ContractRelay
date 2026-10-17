@@ -9,6 +9,7 @@
     "@contractrelay/compiler": "workspace:*",
     "@contractrelay/dsl": "workspace:*",
     "@contractrelay/traces": "workspace:*",
+    "ajv": "^8.17.1",
     "zod": "^3.25.76"
   }
 }

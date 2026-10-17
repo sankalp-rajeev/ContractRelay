@@ -4,7 +4,7 @@ import type { GenerateContentParameters, GenerateContentResponse } from '@google
 export interface ModelRequest {
   model: string; prompt: string; schema: unknown; maxOutputTokens: number; temperature: number;
 }
-export interface ModelResponse { text: string; inputTokens: number; outputTokens: number }
+export interface ModelResponse { text: string; inputTokens: number; outputTokens: number; modelVersion?: string | undefined }
 export interface ModelProvider { generate(request: ModelRequest): Promise<ModelResponse> }
 
 export class ModelRequestError extends Error {
@@ -37,7 +37,7 @@ export function normalizeModelError(error: unknown): ModelRequestError {
   return new ModelRequestError('PROVIDER_FAILED');
 }
 
-type Generate = (request: GenerateContentParameters) => Promise<Pick<GenerateContentResponse, 'text' | 'usageMetadata'>>;
+type Generate = (request: GenerateContentParameters) => Promise<Pick<GenerateContentResponse, 'text' | 'usageMetadata' | 'modelVersion'>>;
 
 export class GeminiProvider implements ModelProvider {
   private readonly generateContent: Generate;
@@ -57,7 +57,8 @@ export class GeminiProvider implements ModelProvider {
           maxOutputTokens: request.maxOutputTokens, temperature: request.temperature } });
       if (!response.text) throw new ModelRequestError('EMPTY_MODEL_RESPONSE');
       return { text: response.text, inputTokens: response.usageMetadata?.promptTokenCount ?? 0,
-        outputTokens: (response.usageMetadata?.candidatesTokenCount ?? 0) + (response.usageMetadata?.thoughtsTokenCount ?? 0) };
+        outputTokens: (response.usageMetadata?.candidatesTokenCount ?? 0) + (response.usageMetadata?.thoughtsTokenCount ?? 0),
+        ...(response.modelVersion ? { modelVersion: response.modelVersion } : {}) };
     } catch (error) { throw normalizeModelError(error); }
   }
 }

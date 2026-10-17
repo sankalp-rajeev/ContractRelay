@@ -28,7 +28,7 @@ describe('artifact publication under filesystem contention', () => {
     directories.push(dir);
     const path = join(dir, 'artifact.json');
     await atomicWriteJson(path, { preserved: true });
-    for (let index = 0; index < 6; index++) vi.mocked(rename).mockRejectedValueOnce(Object.assign(new Error('Sharing violation'), { code: 'EPERM' }));
+    for (let index = 0; index < 10; index++) vi.mocked(rename).mockRejectedValueOnce(Object.assign(new Error('Sharing violation'), { code: 'EPERM' }));
     await expect(atomicWriteJson(path, { preserved: false })).rejects.toThrow('Sharing violation');
     expect(await readJson(path)).toEqual({ preserved: true });
   });

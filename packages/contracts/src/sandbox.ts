@@ -63,7 +63,10 @@ export async function runIsolatedTask(entry: string, payload: unknown,
       try {
         const message = JSON.parse(line) as { type: string; id?: number; method?: string; payload?: unknown; value?: unknown; code?: string };
         if (message.type === 'result') settle(undefined, jsonValueSchema.parse(message.value));
-        else if (message.type === 'error') settle(new Error(message.code ?? 'ISOLATED_WORKER_FAILED'));
+        else if (message.type === 'error') {
+          const code = message.code && /^[A-Z][A-Z0-9_]{0,63}$/.test(message.code) ? message.code : 'ISOLATED_WORKER_FAILED';
+          settle(Object.assign(new Error(code), { code }));
+        }
         else if (message.type === 'request' && typeof message.id === 'number' && typeof message.method === 'string') {
           void onRequest(message.method, jsonValueSchema.parse(message.payload)).then((value) => {
             if (!settled) child.stdin.write(`${JSON.stringify({ type: 'response', id: message.id, ok: true, payload: jsonValueSchema.parse(value) })}\n`);

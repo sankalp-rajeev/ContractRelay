@@ -1,0 +1,1 @@
+{"evidence_refs":["change.json"],"metamorphic":[],"predicates":[{"expected":{"delay":10},"id":"old-behavior","kind":"equals","path":"","trace_id":"gate-1"}],"supported_defaults":[],"traces":[{"contractHash":"c4f5545f5b604bff5b4838d345ef3baf8bc2f6d9afe5a29cd9c6754fd239dfc0","input":{"priority":"low"},"output":{"delay":10},"tool":"queue_delay","traceId":"gate-1"}],"version":1}

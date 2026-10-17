@@ -10,7 +10,7 @@ import type { ModelBudget } from './config.js';
 
 export interface SchedulerClock { now(): number; sleep(milliseconds: number): Promise<void> }
 const wallClock: SchedulerClock = { now: () => Date.now(), sleep: (ms) => new Promise((done) => setTimeout(done, ms)) };
-const responseSchema = z.object({ text: z.string(), inputTokens: z.number().int().nonnegative(), outputTokens: z.number().int().nonnegative() }).strict();
+const responseSchema = z.object({ text: z.string(), inputTokens: z.number().int().nonnegative(), outputTokens: z.number().int().nonnegative(), modelVersion: z.string().optional() }).strict();
 const ledgerSchema = z.object({ version: z.literal(1), model: z.string(), day: z.string(), requests: z.number().int().nonnegative(),
   blocked: z.boolean(), window: z.array(z.object({ at: z.number(), tokens: z.number().int().nonnegative() }).strict()) }).strict();
 type Ledger = z.infer<typeof ledgerSchema>;
@@ -40,7 +40,7 @@ export class QuotaScheduler {
   private readonly clock: SchedulerClock;
   private chain: Promise<void> = Promise.resolve();
   constructor(directory: string, private readonly provider: ModelProvider, private readonly budget: ModelBudget,
-    private readonly options: { cache?: boolean; maxRetries?: number; clock?: SchedulerClock } = {}) {
+    private readonly options: { cache?: boolean; maxRetries?: number; clock?: SchedulerClock; retainFailed?: boolean } = {}) {
     this.root = resolve(directory);
     this.clock = options.clock ?? wallClock;
     if (![budget.rpm, budget.tpm, budget.rpdHard, budget.rpdSoft].every((n) => Number.isSafeInteger(n) && n > 0)
@@ -114,6 +114,7 @@ export class QuotaScheduler {
     if (existing && (existing.request_hash !== requestHash || existing.job_id !== job.id || existing.model !== job.request.model || existing.mode !== job.mode)) {
       throw new ModelRequestError('RUN_IDENTITY_MISMATCH');
     }
+    if (existing?.status === 'failed' && this.options.retainFailed) throw new ModelRequestError(existing.error_code ?? 'RETAINED_TRIAL_FAILURE');
     if (existing?.status === 'completed') {
       if (!options.resume) throw new ModelRequestError('COMPLETED_TRIAL_EXISTS_USE_RESUME');
       const response = responseSchema.parse(await readJson(join(dir, 'response.json')));
@@ -131,6 +132,8 @@ export class QuotaScheduler {
     };
     // Recover a persisted response from a crash after the call but before completion.
     const finish = async (response: ModelResponse, cacheHit: boolean): Promise<ScheduledResult<T>> => {
+      // Invalid generated artifacts still consumed a real response and tokens.
+      run.response_hash = hashJson(response); run.input_tokens = response.inputTokens; run.output_tokens = response.outputTokens;
       let artifact: T;
       try { artifact = parse(JSON.parse(response.text)); }
       catch (error) { throw error instanceof ModelRequestError ? error : new ModelRequestError('INVALID_MODEL_OUTPUT'); }

@@ -18,6 +18,9 @@
     "demo:refund": "tsx --experimental-sqlite scripts/demo-refund.ts",
     "synthesize:weather": "tsx --env-file-if-exists=.env scripts/synthesize-weather.ts",
     "synthesize:refund": "tsx --experimental-sqlite --env-file-if-exists=.env scripts/synthesize-refund.ts",
+    "bench:freeze": "tsx --experimental-sqlite scripts/freeze-benchmark-v2.ts",
+    "bench": "tsx --experimental-sqlite --env-file-if-exists=.env scripts/benchmark.ts",
+    "test:sandbox": "tsx scripts/check-sandbox.ts",
     "cli": "tsx --experimental-sqlite packages/cli/src/index.ts"
   },
   "devDependencies": {

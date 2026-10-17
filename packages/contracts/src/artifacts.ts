@@ -24,10 +24,10 @@ export async function atomicWriteJson(path: string, value: unknown): Promise<voi
       try { await rename(temporary, path); break; }
       catch (error) {
         const code = (error as NodeJS.ErrnoException).code;
-        if (!['EPERM', 'EACCES', 'EBUSY'].includes(code ?? '') || attempt >= 5) throw error;
+        if (!['EPERM', 'EACCES', 'EBUSY'].includes(code ?? '') || attempt >= 9) throw error;
         // Windows file scanners can briefly hold an otherwise writable target.
         // Never unlink the old artifact: failed publication must retain its data.
-        await new Promise((done) => setTimeout(done, 10 * 2 ** attempt));
+        await new Promise((done) => setTimeout(done, Math.min(250, 10 * 2 ** attempt)));
       }
     }
   }

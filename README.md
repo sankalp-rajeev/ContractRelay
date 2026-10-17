@@ -10,8 +10,9 @@ candidate before promotion. Insufficient evidence must result in rejection.
 **Status: Phases 1–3 complete; usable MVP, benchmark in progress.** Live Gemini
 generation, evidence-gated promotion, MCP stdio compatibility, bounded composed
 workflows and isolated SQLite state/side-effect checks pass acceptance tests.
-The comparative benchmark and hostile-code sandbox remain planned; no benchmark
-results have been measured.
+The 15-case benchmark, matched baseline runner and hostile-code sandbox are
+implemented. Development-model comparison is in progress; final repeated-trial
+results have not been measured.
 
 ## Quick start
 
@@ -84,15 +85,16 @@ packages/
   runtime/        exact-hash promotion registry and policy-bound execution
   mcp/            paginated ingestion and old-interface compatibility proxy
   traces/         canonical JSONL validation and recursive credential redaction
-  benchmark/      baseline/run identifiers; harness/sandbox/scoring planned
+  benchmark/      frozen-case loader, matched baselines, Docker sandbox and scoring
   cli/            development status/help and fixture MCP stdio server
 fixtures/
   synthetic/     controlled, API-free development fixtures
   real/          reserved for optional post-v1 historical examples
 benchmarks/
-  manifests/     frozen benchmark definitions (not yet populated)
+  manifests/     frozen protocol and 15-case suite hashes
+  cases/         synthesis/gate/sealed partitions and executable task definitions
   traces/        benchmark replay evidence (not yet populated)
-  oracles/       independent oracle implementations (planned)
+  oracles/       reserved for additional external oracle implementations
   templates/     synthesis/gate/sealed-eval authoring layout
 config/          zero-cost model/quota snapshot
 docs/            onboarding, build order and architecture decisions
@@ -179,7 +181,7 @@ always bypass it. Daily exhaustion stops cleanly; there is no paid fallback.
 The scheduler uses a cross-process lock; after a crash a stale lease can take
 up to 30 seconds to expire before resume succeeds.
 
-Each future benchmark case must separate synthesis evidence, gate evidence, and
+Every frozen benchmark case separates synthesis evidence, gate evidence, and
 sealed final evaluation. The evaluator may open sealed evidence only after the
 candidate and gate decision are recorded. The template directories document the
 layout. The loader and process boundaries now enforce these roles; trusted
@@ -193,8 +195,11 @@ schema diffs and trace replay are existing techniques; this repository makes
 no claim of proving semantic equivalence or being the first adapter system.
 
 There is no planned v1 UI, hosted SaaS, protocol-version migrator or arbitrary
-generated-code runtime. Unconstrained B2 baseline code will require a separate
-sandbox before it can execute.
+generated-code production runtime. Unconstrained B2 baseline code executes only
+inside the separate disposable Docker sandbox.
+
+See [the benchmark protocol](docs/benchmark.md) for `pnpm bench --api-free`, the
+development comparison, exact B2/B2-V pairing, evidence hashes and quota resume.
 
 See [onboarding](docs/onboarding.md), [build milestones](docs/roadmap.md), and
 [architecture decisions](docs/adr/README.md). Phase 2's local and live acceptance

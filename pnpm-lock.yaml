@@ -33,7 +33,32 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@22.20.5)(tsx@4.23.15)
 
-  packages/benchmark: {}
+  packages/benchmark:
+    dependencies:
+      '@contractrelay/compiler':
+        specifier: workspace:*
+        version: link:../compiler
+      '@contractrelay/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+      '@contractrelay/dsl':
+        specifier: workspace:*
+        version: link:../dsl
+      '@contractrelay/runtime':
+        specifier: workspace:*
+        version: link:../runtime
+      '@contractrelay/synthesizer':
+        specifier: workspace:*
+        version: link:../synthesizer
+      '@contractrelay/verifier':
+        specifier: workspace:*
+        version: link:../verifier
+      ajv:
+        specifier: ^8.17.1
+        version: 8.20.0
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
 
   packages/cli:
     dependencies:
@@ -173,6 +198,9 @@ importers:
       '@contractrelay/traces':
         specifier: workspace:*
         version: link:../traces
+      ajv:
+        specifier: ^8.17.1
+        version: 8.20.0
       zod:
         specifier: ^3.25.76
         version: 3.25.76

@@ -1,0 +1,1 @@
+{"evidence_refs":["change.md"],"metamorphic":[],"predicates":[{"expected":{"price":10},"id":"old-behavior","kind":"equals","path":"","trace_id":"gate-1"}],"supported_defaults":[],"traces":[{"contractHash":"9a1ea9547e5a679359b4e7f7220020aed39e4c6073c0874aa5619e3ef548f757","input":{"item":"book"},"output":{"price":10},"tool":"price","traceId":"gate-1"}],"version":1}

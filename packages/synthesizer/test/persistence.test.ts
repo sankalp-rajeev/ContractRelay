@@ -12,6 +12,15 @@ const budget = { model: 'test-model', rpm: 100, tpm: 100_000, rpdSoft: 10, rpdHa
 const job = { id: 'trial-001', mode: 'final', request: { model: budget.model, prompt: 'synthetic', schema: {}, temperature: 0.2, maxOutputTokens: 100 } } as const;
 
 describe('model interaction persistence', () => {
+  it('retains a failed benchmark trial without issuing a replacement generation on resume', async () => {
+    const dir = await mkdtemp(join(tmpdir(), 'contractrelay-retained-failure-')); directories.push(dir);
+    const generate = vi.fn(async () => ({ text: 'not-json', inputTokens: 12, outputTokens: 20, modelVersion: 'controlled-version' }));
+    const scheduler = new QuotaScheduler(dir, { generate }, budget, { retainFailed: true });
+    await expect(scheduler.run(job, (value) => value)).rejects.toMatchObject({ code: 'INVALID_MODEL_OUTPUT' });
+    await expect(scheduler.run(job, (value) => value, { resume: true })).rejects.toMatchObject({ code: 'INVALID_MODEL_OUTPUT' });
+    expect(generate).toHaveBeenCalledTimes(1);
+    expect(await readJson(join(dir, job.id, 'attempts/attempt-001/response.json'))).toMatchObject({ modelVersion: 'controlled-version', inputTokens: 12 });
+  });
   it('retains every failed and successful attempt instead of replacing prior model output', async () => {
     const dir = await mkdtemp(join(tmpdir(), 'contractrelay-attempts-'));
     directories.push(dir);
@@ -19,6 +28,7 @@ describe('model interaction persistence', () => {
       .mockResolvedValueOnce({ text: '{"ok":true}', inputTokens: 1, outputTokens: 1 });
     const scheduler = new QuotaScheduler(dir, { generate }, budget);
     await expect(scheduler.run(job, (value) => value)).rejects.toMatchObject({ code: 'INVALID_MODEL_OUTPUT' });
+    expect(await readJson(join(dir, job.id, 'run.json'))).toMatchObject({ status: 'failed', input_tokens: 1, output_tokens: 1 });
     expect((await scheduler.run(job, (value) => value, { resume: true })).status).toBe('completed');
     expect(await readdir(join(dir, job.id, 'attempts'))).toEqual(['attempt-001', 'attempt-002']);
     expect(await readJson(join(dir, job.id, 'attempts', 'attempt-001', 'response.json'))).toMatchObject({ text: 'not-json' });

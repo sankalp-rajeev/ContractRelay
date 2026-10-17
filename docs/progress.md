@@ -63,3 +63,23 @@ Latest validation: lint, strict typechecking and **123 tests in 23 files** pass.
 Both API-free refund and retained live-response demos pass. No final-model quota
 or comparative benchmark has been used. Phase 4 is next: freeze cases, sandbox
 arbitrary baseline code and execute matched development regressions.
+
+## Phase 4 — development regression in progress
+
+The matched B0/B1/B2/B2-V/B3 runner, evidence parity manifests, repeated-trial
+orchestration and count-first scoring are implemented. Real Docker acceptance
+passes with a pinned official Node image, no host mounts/environment/network,
+bounded RPC, nonroot execution and process/memory/CPU/time/output limits.
+GitHub CI now includes the real sandbox checks.
+
+Fifteen cases are frozen, three held out from tuning. A pre-scoring correction
+to the limit case is recorded in suite version 2: opaque records and an independent
+SQLite read observation replace a count-only oracle that could reward fabrication.
+Version 1 remains intact; the frozen prompts and heuristics are unchanged.
+
+The 12 development cases have completed all five methods. Genuine model failures
+are retained, including invalid redundant renames and hidden monetary/semantic
+errors. The wrapper reading mismatch is rejected by its same-artifact B2-V gate.
+The composed refund passes B0/B2/B2-V/B3. These are exploratory development
+observations, not final-model benchmark conclusions. Held-out scoring follows
+the frozen version 2 oracle and a passing local gate.

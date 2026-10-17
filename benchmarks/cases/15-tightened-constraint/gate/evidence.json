@@ -1,0 +1,1 @@
+{"evidence_refs":["change.md"],"metamorphic":[],"predicates":[{"expected":{"returned":5},"id":"old-behavior","kind":"equals","path":"","trace_id":"gate-1"}],"supported_defaults":[],"traces":[{"contractHash":"f2c523bb4df37723010ed06ffb151a84b907d866aab402fcb737c0807bdaf042","input":{"limit":5},"output":{"returned":5},"tool":"list_items","traceId":"gate-1"}],"version":1}

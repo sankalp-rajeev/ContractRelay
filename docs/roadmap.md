@@ -44,9 +44,9 @@ Use `prd.md` sections 34, 42–45 and 49 for full acceptance criteria.
 
 ## Benchmark and release
 
-- [ ] Freeze 15 executable cases with hashes and at least 20% held out.
-- [ ] Implement B0/B1/B2/B2-V/B3 with matched synthesis information.
-- [ ] Sandbox B2 with no external network, secrets or host access.
+- [x] Freeze 15 executable cases with hashes and at least 20% held out.
+- [x] Implement B0/B1/B2/B2-V/B3 with matched synthesis information.
+- [x] Sandbox B2 with no external network, secrets or host access.
 - [ ] Tiny-quota resume tests and full development-model regression.
 - [ ] Three independent final-model trials per stochastic case across quota days.
 - [ ] Count-first recovery/hidden false-compatibility/rejection/model-use reports.

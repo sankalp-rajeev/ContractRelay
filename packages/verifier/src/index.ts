@@ -1,7 +1,8 @@
 import { z } from 'zod';
+import { Ajv } from 'ajv';
 import { canonicalJson, hashContract, hashJson, jsonValueSchema, toolContractSchema } from '@contractrelay/contracts';
 import type { JsonValue } from '@contractrelay/contracts';
-import { hashContractSet, normalizeContracts, policyVersionSchema } from '@contractrelay/contracts/policy';
+import { allowsEffects, hashContractSet, normalizeContracts, policyVersionSchema } from '@contractrelay/contracts/policy';
 import type { PolicyVersion } from '@contractrelay/contracts/policy';
 import { AdapterError, compileCandidate } from '@contractrelay/compiler';
 import type { CandidateAdapter, ToolInvoker } from '@contractrelay/compiler';
@@ -70,29 +71,56 @@ function evaluate(predicate: z.infer<typeof predicateSchema>, output: JsonValue 
 }
 
 /** Execute gate evidence only. No case paths or sealed-evaluation input. */
-export async function verifyCandidate(input: {
+type VerificationInput = {
   plan: unknown; oldContract: unknown; newContract: unknown; gateEvidence: unknown; invoke: ToolInvoker;
   policyVersion?: PolicyVersion; fixture?: GateFixture;
-}): Promise<VerificationReport> {
+};
+export async function verifyCandidate(input: VerificationInput): Promise<VerificationReport> {
+  return verifyGate(input);
+}
+
+export const wrapperArtifactSchema = z.object({ kind: z.literal('javascript-wrapper'), code: z.string().min(1).max(100000) }).strict();
+export type WrapperVerificationInput = Omit<VerificationInput, 'plan' | 'invoke'> & { artifact: unknown;
+  execute(input: JsonValue): Promise<JsonValue> };
+/** Executes only a supplied sandbox capability; generated source is never evaluated here. */
+export async function verifyWrapperCandidate(input: WrapperVerificationInput): Promise<VerificationReport> {
+  const artifact = wrapperArtifactSchema.parse(input.artifact);
+  const old = toolContractSchema.parse(input.oldContract);
+  const ajv = new Ajv({ strict: true, allErrors: true, multipleOfPrecision: 12 });
+  const validateInput = ajv.compile(old.inputSchema);
+  const validateOutput = old.outputSchema === undefined ? undefined : ajv.compile(old.outputSchema);
+  return verifyGate({ ...input, plan: artifact, invoke: async () => { throw new Error('Direct invocations unavailable'); } }, () => {
+    if (!allowsEffects([old, ...normalizeContracts(input.newContract)], input.policyVersion ?? 'read-only-v1')) throw new Error('Side effects');
+    return { executeForVerification: async (value) => {
+      if (!validateInput(value)) throw new AdapterError('SCHEMA_VALIDATION', 'Invalid old input');
+      const result = jsonValueSchema.parse(await input.execute(jsonValueSchema.parse(value)));
+      if (validateOutput && !validateOutput(result)) throw new AdapterError('SCHEMA_VALIDATION', 'Invalid old output');
+      return result;
+    } };
+  });
+}
+
+/** V1–V3 and verdict logic are shared verbatim by DSL and same-artifact B2-V. */
+async function verifyGate(input: VerificationInput, wrapperFactory?: () => Pick<CandidateAdapter, 'executeForVerification'>): Promise<VerificationReport> {
   const oldContract = toolContractSchema.parse(input.oldContract);
   const targets = normalizeContracts(input.newContract);
   const policy = policyVersionSchema.parse(input.policyVersion ?? 'read-only-v1');
   const gate = gateEvidenceSchema.parse(input.gateEvidence);
-  const plan = adapterPlanSchema.parse(input.plan);
+  const plan = wrapperFactory ? undefined : adapterPlanSchema.parse(input.plan);
   const report: VerificationReport = {
-    version: 1, policy_version: policy, plan_hash: hashJson(plan),
+    version: 1, policy_version: policy, plan_hash: hashJson(input.plan),
     contract_old_hash: hashContract(oldContract), contract_new_hash: hashContractSet(input.newContract),
     gate_evidence_hash: hashJson(gate), checks: [], traces_total: gate.traces.length, traces_passed: 0,
     oracle_results: [], side_effect_results: [], verdict: 'INCONCLUSIVE', residual_risks: []
   };
-  if ('op' in plan) {
+  if (plan && 'op' in plan) {
     report.checks.push({ id: 'explicit-reject', level: 'V0', passed: false, detail: 'Candidate explicitly rejects compatibility' });
     report.verdict = 'REJECTED';
     return report;
   }
-  let candidate: CandidateAdapter;
+  let candidate: Pick<CandidateAdapter, 'executeForVerification'>;
   try {
-    candidate = compileCandidate(plan, oldContract, input.newContract, policy);
+    candidate = wrapperFactory ? wrapperFactory() : compileCandidate(plan, oldContract, input.newContract, policy);
     report.checks.push({ id: 'structural', level: 'V0', passed: true, detail: 'Bounded plan and contract schemas validated' });
   } catch {
     report.checks.push({ id: 'structural', level: 'V0', passed: false, detail: 'Plan compilation or side-effect policy failed' });
@@ -100,14 +128,14 @@ export async function verifyCandidate(input: {
     return report;
   }
   const refs = new Set(gate.evidence_refs);
-  for (const step of [...plan.steps, ...plan.response]) {
+  for (const step of plan && !('op' in plan) ? [...plan.steps, ...plan.response] : []) {
     if (step.evidence.some((ref) => !refs.has(ref))) report.residual_risks.push('Unresolved transformation evidence reference');
     if (step.op === 'AddConstantDefault' && !gate.supported_defaults.some((entry) => entry.arg === step.arg
       && canonicalJson(entry.value) === canonicalJson(step.value) && step.evidence.includes(entry.evidence_ref))) {
       report.residual_risks.push(`No independent evidence supports constant default for ${step.arg}`);
     }
   }
-  if (plan.target.kind === 'compose') {
+  if (plan && !('op' in plan) && plan.target.kind === 'compose') {
     for (const call of plan.target.calls) {
       const citations = [...call.evidence, ...Object.values(call.arguments).flatMap((binding) => 'evidence' in binding ? binding.evidence : [])];
       if (citations.some((ref) => !refs.has(ref))) report.residual_risks.push('Unresolved composed-call evidence reference');

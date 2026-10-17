@@ -1,0 +1,1 @@
+{"evidence_refs":["change.json"],"metamorphic":[],"predicates":[{"expected":{"square":144},"id":"old-behavior","kind":"equals","path":"","trace_id":"gate-1"}],"supported_defaults":[],"traces":[{"contractHash":"91e9213949cc28c53374f27e3dbfaf4914d67aa9475eec907eb102fd22f284af","input":{"value":"12"},"output":{"square":144},"tool":"square","traceId":"gate-1"}],"version":1}
