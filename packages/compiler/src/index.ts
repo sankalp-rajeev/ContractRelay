@@ -37,6 +37,7 @@ function object(value: unknown): Record<string, JsonValue> {
 
 function scaledInteger(value: JsonValue, scale: number): number {
   const text = typeof value === 'number' ? String(value) : typeof value === 'string' ? value : '';
+  if (text.length > 256) throw new AdapterError('CONVERSION_FAILED', 'Decimal exceeds supported precision');
   const parts = /^(-?)(0|[1-9]\d*)(?:\.(\d+))?$/.exec(text);
   if (!parts) throw new AdapterError('CONVERSION_FAILED', 'Expected a finite decimal for exact scaling');
   const fraction = parts[3] ?? '';
@@ -47,6 +48,20 @@ function scaledInteger(value: JsonValue, scale: number): number {
     throw new AdapterError('CONVERSION_FAILED', 'Scaled value cannot be represented as a safe integer without rounding');
   }
   return Number(result);
+}
+
+function normalizedDecimal(text: string): string {
+  const parts = /^(-?)(0|[1-9]\d*)(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/.exec(text);
+  if (!parts || text.length > 256) throw new AdapterError('CONVERSION_FAILED', 'Unsupported decimal representation');
+  const fraction = parts[3] ?? '';
+  let digits = `${parts[2]}${fraction}`.replace(/^0+/, '');
+  if (!digits) return '0';
+  let exponent = Number(parts[4] ?? 0) - fraction.length;
+  if (!Number.isSafeInteger(exponent) || Math.abs(exponent) > 1000) throw new AdapterError('CONVERSION_FAILED', 'Unsupported exponent');
+  const trimmed = digits.replace(/0+$/, '');
+  exponent += digits.length - trimmed.length;
+  digits = trimmed;
+  return `${parts[1]}${digits}e${exponent}`;
 }
 
 function convert(value: JsonValue, to: 'string' | 'number' | 'integer' | 'boolean', scale?: number): JsonValue {
@@ -63,7 +78,13 @@ function convert(value: JsonValue, to: 'string' | 'number' | 'integer' | 'boolea
     const numeric = typeof value === 'number' ? value
       : typeof value === 'string' && /^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/.test(value)
         ? Number(value) : Number.NaN;
-    if (Number.isFinite(numeric) && (to !== 'integer' || Number.isSafeInteger(numeric))) return numeric;
+    if (Number.isFinite(numeric) && (to !== 'integer' || Number.isSafeInteger(numeric))) {
+      if (typeof value === 'string' && ((Number.isInteger(numeric) && !Number.isSafeInteger(numeric))
+        || normalizedDecimal(value) !== normalizedDecimal(String(numeric)))) {
+        throw new AdapterError('CONVERSION_FAILED', 'Numeric conversion would lose declared decimal precision');
+      }
+      return numeric;
+    }
   }
   throw new AdapterError('CONVERSION_FAILED', `Cannot losslessly convert value to ${to}`);
 }

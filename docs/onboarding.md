@@ -21,8 +21,9 @@ effects must fail closed. The current compiler refuses writes altogether.
 
 PRD section 23 defines the ten-package monorepo layout. Section 49.2 defines the
 API-free first milestone: install, lint, typecheck, primitive tests, ToolContract,
-hashing, Zod plans and deterministic interpretation. This scaffold implements
-that foundation. Tests cover mechanics and validation, not semantic promotion.
+hashing, Zod plans and deterministic interpretation. Phase 1 is complete.
+Phase 2 adds independent read-only gates, promotion and structured synthesis
+infrastructure; its live generation acceptance remains pending a Gemini key.
 
 The CLI currently implements `status` and help. The PRD's snapshot/prepare/
 synthesize/verify/promote/serve/eval commands are explicitly future work.
@@ -45,10 +46,10 @@ synthesize/verify/promote/serve/eval commands are explicitly future work.
 
 ## Zero-cost execution
 
-Model configuration comes from the PRD snapshot, with environment overrides to be
-wired into the scheduler. Development is planned around `gemini-3.5-flash-lite`;
+Model configuration comes from the PRD snapshot, with validated environment
+overrides wired into the scheduler. Development uses `gemini-3.5-flash-lite`;
 final evaluation around `gemini-3.8-flash`. Model IDs and actual free quotas must
-be checked before the provider goes live. No model calls are made in this milestone.
+be checked before the provider goes live. No live model calls have been made yet.
 
 The shared scheduler must persist each interaction, bound retries, respect
 per-model request/token budgets and the Pacific daily reset, and report
@@ -56,7 +57,8 @@ per-model request/token budgets and the Pacific daily reset, and report
 
 ## Acceptance boundary
 
-This foundation is not the full MVP. It has no synthesis/gate/evaluation loader,
-independent gate, promotion registry, MCP proxy, provider, quota scheduler,
-ComposeCalls, SQLite oracle, sandbox or executed comparative benchmark.
-Those are sequenced in [roadmap.md](roadmap.md).
+This is not the full MVP. Evidence loaders, process isolation, a read-only gate,
+promotion registry, provider and quota scheduler are locally tested. Live Gemini
+acceptance is still pending, so Phase 3 has not started. MCP proxying, ComposeCalls,
+SQLite state oracles, a B2 hostile-code sandbox and an executed comparative
+benchmark remain planned in [roadmap.md](roadmap.md).

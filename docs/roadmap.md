@@ -13,20 +13,24 @@ Use `prd.md` sections 34, 42–45 and 49 for full acceptance criteria.
 - [x] API-free primitive fixtures, negative tests and local smoke demo.
 - [x] GitHub Actions definition, ignored secrets/runs, model/quota snapshot.
 
-## Evidence, verification and promotion — next
+## Phase 2 — local checks pass; live acceptance pending
 
-- [ ] Typed partition loaders and enforced sealed-evaluation access boundary.
-- [ ] Trace validation/redaction/replay and V0/V1/V2 gate checks.
-- [ ] Independent predicate oracles and deterministic machine-readable reports.
-- [ ] Promotion registry keyed by old/new/plan hashes and policy version.
-- [ ] Reject missing evidence; invalidate promotions on contract drift.
+- [x] Typed partition loaders and enforced sealed-evaluation access boundary.
+- [x] Actual synthesis/verifier worker permissions and direct-filesystem denial tests.
+- [x] Trace validation/redaction/replay and V0/V1/V2 gate checks.
+- [x] Independent predicate/metamorphic oracles and deterministic reports.
+- [x] Promotion registry keyed by old/new/plan hashes and policy version.
+- [x] Reject missing evidence; invalidate promotions on contract drift.
+- [x] Shared persistent quota scheduler, bounded 429 retry and interruption/resume.
+- [x] `@google/genai` implementation behind the provider-neutral interface.
+- [x] Structured AdapterPlan generation boundary using synthesis evidence only.
+- [x] Tiny-quota/resume, retained-attempt, final-cache and concurrency tests.
+- [x] API-free positive lifecycle and schema-valid semantic rejection demo.
+- [ ] Live Gemini synthesis acceptance (`pnpm synthesize:weather --resume`); API key needed.
 
-## MCP and structured synthesis
+## Phase 3 — not started; gated on Phase 2 acceptance
 
-- [ ] MCP tools/list ingestion and old-interface compatibility proxy.
-- [ ] Shared persistent quota scheduler, bounded 429 retry and interruption/resume.
-- [ ] `@google/genai` implementation behind the provider-neutral interface.
-- [ ] Structured AdapterPlan generation using synthesis evidence only.
+- [ ] Real MCP old-interface compatibility proxy (ingestion is complete).
 - [ ] Positive synthesized migration and send-vs-draft rejection demo.
 - [ ] Document usable vertical slice as MVP, benchmark in progress.
 

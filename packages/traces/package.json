@@ -4,5 +4,5 @@
   "private": true,
   "type": "module",
   "exports": { ".": "./src/index.ts" },
-  "dependencies": { "@contractrelay/contracts": "workspace:*" }
+  "dependencies": { "@contractrelay/contracts": "workspace:*", "zod": "^3.25.76" }
 }

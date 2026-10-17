@@ -30,7 +30,7 @@ describe('primitive conversions and rejection', () => {
     expect(invoke).toHaveBeenCalledExactlyOnceWith('new', { value: expected });
   });
 
-  it.each(['', ' ', '0x10', 'NaN', 'Infinity', '12x'])(
+  it.each(['', ' ', '0x10', 'NaN', 'Infinity', '12x', '9007199254740993', '0.10000000000000000001', '1e-999'])(
     'refuses ambiguous numeric input %j before invocation', async (input) => {
       const candidate = fixture({ type: 'string' }, { type: 'number' }, [{ op: 'ConvertType', arg: 'value', to: 'number', evidence: ['fixture'] }]);
       const invoke = vi.fn();

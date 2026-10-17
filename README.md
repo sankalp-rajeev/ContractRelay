@@ -7,10 +7,11 @@ the backend contract changes. It proposes a bounded declarative `AdapterPlan`,
 executes trusted deterministic translation, and independently verifies the
 candidate before promotion. Insufficient evidence must result in rejection.
 
-**Status: repository foundation and deterministic primitive core.** This is not
-yet the MVP. MCP serving, verification/promotion, Gemini synthesis, quota/resume
-handling, composed workflows, and the comparative benchmark are planned.
-No recovery or compatibility results have been measured.
+**Status: Phase 1 complete; Phase 2 passes local tests, pending live Gemini
+acceptance.** Read-only verification/promotion, enforced evidence isolation,
+structured synthesis, and persisted quota/resume handling are implemented.
+MCP serving, composed/stateful workflows and the comparative benchmark remain
+planned. This is not yet the MVP, and no benchmark results have been measured.
 
 ## Quick start
 
@@ -21,7 +22,9 @@ pnpm install
 pnpm lint
 pnpm typecheck
 pnpm test
+pnpm check
 pnpm demo
+pnpm demo:verified
 pnpm cli status
 ```
 
@@ -47,18 +50,26 @@ The output includes the old/new contract hashes, plan hash and translated result
 It is explicitly a **candidate fixture execution**, not an approved migration or
 live MCP proxy. Candidates currently support read-only contracts only.
 
+`pnpm check` runs lint, typecheck and every deterministic test sequentially with
+`GEMINI_API_KEY` removed from child environments. It stops on the first failed gate.
+
+`pnpm demo:verified` runs the complete controlled local lifecycle: load isolated
+evidence, replay traces and independent predicates, reject a schema-valid semantic
+mismatch, promote the good candidate, freeze its decision, then score a separate
+input from sealed evidence. This uses no model and is not a benchmark result.
+
 ## Repository
 
 ```text
 packages/
-  contracts/      ToolContract schema, canonical JSON and SHA-256 hashing
+  contracts/      schemas/hashes, atomic artifacts, evidence and worker boundaries
   dsl/            bounded AdapterPlan schema and static validation
   compiler/       deterministic candidate interpreter
-  synthesizer/    provider-neutral interface; provider/scheduler planned
-  verifier/       initial report types; gate engine planned
-  runtime/        promotion identity types; registry/serving planned
+  synthesizer/    structured Gemini provider and persistent quota/resume scheduler
+  verifier/       read-only V0/V1/V2 gate, predicates and metamorphic checks
+  runtime/        exact-hash promotion registry and read-only execution
   mcp/            paginated contract ingestion; compatibility proxy planned
-  traces/         initial trace types; validation/redaction/replay planned
+  traces/         canonical JSONL validation and recursive credential redaction
   benchmark/      baseline/run identifiers; harness/sandbox/scoring planned
   cli/            development status/help commands
 fixtures/
@@ -93,10 +104,20 @@ installed `contractrelay` executable.
 - Candidate execution restricted by API naming to verification fixtures.
 - Paginated MCP tools/list snapshots; server safety hints remain untrusted.
 - Exact decimal scaling to safe integers, including dollars-to-cents conversion.
+- Hash-checked evidence partitions and immutable candidate/decision artifacts.
+- Permission-restricted synthesis/verifier processes with no host environment or
+  filesystem access beyond their trusted bundled code; tools/model calls use
+  narrow host capabilities. Direct sealed-file reads fail in both worker types.
+- Read-only replay and independent behavioral/metamorphic predicates; missing
+  evidence and unsupported defaults fail closed. Promotion repeats verification.
+- Promotion artifact integrity checks, explicit revocation and contract drift refusal.
+- Persisted request reservations, retained per-attempt responses, bounded 429
+  retries, quota-day stops, crash recovery and final-trial cache bypass.
 
 Structural validation cannot establish semantic compatibility. An evidence
 reference is an audit pointer, not proof that the referenced statement is true.
-The future verifier must independently check behavioral and state evidence.
+The verifier checks declared behavioral evidence; V3 state/side-effect support
+remains future work. Gate success does not imply success on unseen inputs.
 Single-call translation uses object schemas and top-level input fields; response
 projection supports nested object paths. Composition and other DSL operators
 remain unsupported and are rejected by the schema.
@@ -107,17 +128,40 @@ The source of truth is [prd.md](prd.md), version 1.3. Required external spend fo
 v1 is **$0**. Local infrastructure and account-approved Gemini free-tier usage
 are the intended execution path; paid fallback is forbidden.
 
-[.env.example](.env.example) reserves the later provider/scheduler settings.
-[config/models.json](config/models.json) records the PRD's model IDs and quota
-snapshot. These are user-supplied requirements, not verified current model
-availability or account quotas. No provider is called or configured by the core.
-Confirm availability and free-tier limits before the model integration milestone.
+[.env.example](.env.example) documents provider/scheduler configuration.
+[config/models.json](config/models.json) records the PRD's model IDs and account
+quota snapshot. Official [model documentation](https://ai.google.dev/gemini-api/docs/models)
+and [pricing](https://ai.google.dev/gemini-api/docs/pricing) were checked on
+2026-10-17; actual project quotas must still be checked in AI Studio.
 Never commit `.env`, credentials, private traces or generated model run artifacts.
+
+To run the remaining Phase 2 live acceptance check, copy `.env.example` to `.env`
+and set `GEMINI_API_KEY` to a key from your free-tier Gemini project. Keep the
+development model selected, then run:
+
+```sh
+pnpm synthesize:weather --resume
+```
+
+This generates one controlled synthetic weather plan through the quota scheduler,
+independently verifies it, retains artifacts under `runs/development/`, and writes
+`reports/weather-live-verification.json`. Completed trials are skipped on resume.
+Final-model use is blocked in this command until later benchmark prerequisites
+are implemented. Tests use controlled transports; no live model result is claimed
+until this command actually passes.
+
+Budgets and model IDs can be overridden with the documented environment names.
+Scheduling is sequential; the current implementation requires concurrency 1.
+`CONTRACTRELAY_CACHE_MODE=dev` enables development-only caching; final trials
+always bypass it. Daily exhaustion stops cleanly; there is no paid fallback.
+The scheduler uses a cross-process lock; after a crash a stale lease can take
+up to 30 seconds to expire before resume succeeds.
 
 Each future benchmark case must separate synthesis evidence, gate evidence, and
 sealed final evaluation. The evaluator may open sealed evidence only after the
 candidate and gate decision are recorded. The template directories document the
-layout; an enforced loader/process boundary is still to be implemented.
+layout. The loader and process boundaries now enforce these roles; trusted
+coordinator code alone freezes decisions and opens sealed evaluation.
 
 ## Scope and next step
 
@@ -131,6 +175,6 @@ generated-code runtime. Unconstrained B2 baseline code will require a separate
 sandbox before it can execute.
 
 See [onboarding](docs/onboarding.md), [build milestones](docs/roadmap.md), and
-[architecture decisions](docs/adr/README.md). The next smallest implementation
-step is the evidence-partition loader with tests preventing synthesis/gate access
-to sealed evidence, followed by verification and exact-hash promotion.
+[architecture decisions](docs/adr/README.md). Phase 2's remaining acceptance check
+is live structured synthesis with a free-tier key. Phase 3 remains gated on that
+check; its next work is the real MCP proxy and stateful composition.

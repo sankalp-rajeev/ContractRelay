@@ -7,12 +7,15 @@
   "packageManager": "pnpm@10.20.0",
   "engines": { "node": ">=22.12.0" },
   "scripts": {
+    "check": "node scripts/check.mjs",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:smoke": "vitest run packages/compiler/test/weather.test.ts",
+    "test:smoke": "vitest run packages/compiler/test/weather.test.ts packages/runtime/test/lifecycle.test.ts",
     "demo": "tsx scripts/demo.ts",
+    "demo:verified": "tsx scripts/demo-verified.ts",
+    "synthesize:weather": "tsx --env-file-if-exists=.env scripts/synthesize-weather.ts",
     "cli": "tsx packages/cli/src/index.ts"
   },
   "devDependencies": {

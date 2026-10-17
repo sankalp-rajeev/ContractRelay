@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "exports": { ".": "./src/index.ts" },
-  "dependencies": { "zod": "^3.25.76" }
+  "exports": { ".": "./src/index.ts", "./artifacts": "./src/artifacts.ts", "./evidence": "./src/evidence.ts",
+    "./sandbox": "./src/sandbox.ts", "./worker": "./src/worker.ts" },
+  "dependencies": { "zod": "^3.25.76", "esbuild": "^0.28.2" }
 }

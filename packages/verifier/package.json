@@ -3,5 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "exports": { ".": "./src/index.ts" }
+  "exports": { ".": "./src/index.ts", "./isolated": "./src/isolated.ts" },
+  "dependencies": {
+    "@contractrelay/contracts": "workspace:*",
+    "@contractrelay/compiler": "workspace:*",
+    "@contractrelay/dsl": "workspace:*",
+    "@contractrelay/traces": "workspace:*",
+    "zod": "^3.25.76"
+  }
 }

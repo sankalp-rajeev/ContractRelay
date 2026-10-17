@@ -18,4 +18,7 @@ The old tool returns Fahrenheit. The new `units` parameter is required;
 `temperature` is now `current.temperature`; `conditions` is now `current.summary`.
 
 This hand-authored fixture checks deterministic mechanics. It is not a frozen
-benchmark case and has no sealed evaluation partition or promotion verdict.
+benchmark case. `pnpm demo:verified` additionally creates isolated local evidence
+partitions, promotion/rejection reports and a separate scoring input under
+ignored `runs/local-demo/`. Live model acceptance uses the same controlled public
+contracts through `pnpm synthesize:weather --resume`.
