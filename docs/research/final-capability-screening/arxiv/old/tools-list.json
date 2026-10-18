@@ -1,0 +1,286 @@
+{
+  "tools": [
+    {
+      "name": "search",
+      "description": "\n\tSearch arXiv for papers matching the query.\n\n\tArgs:\n\t\tquery: Search query for arXiv papers (e.g., 'LLM', 'transformer architecture')\n\t\tcategory: Filter by arXiv category (e.g., 'cs.AI', 'cs.LG', 'stat.ML')\n\t\tauthor: Filter by author name\n\t\tsort_by: Sort order - 'relevance', 'date_desc', 'date_asc'\n\t\tpage: Page number (default: 1)\n\t\tpage_size: Results per page, max 50 (default: 25)\n\n\tReturns:\n\t\tSearch results with papers containing title, abstract, authors, and URLs\n\t",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "title": "Query",
+            "type": "string"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Category"
+          },
+          "author": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Author"
+          },
+          "sort_by": {
+            "default": "relevance",
+            "title": "Sort By",
+            "type": "string"
+          },
+          "page": {
+            "default": 1,
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "default": 25,
+            "title": "Page Size",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "title": "searchArguments"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "search_advanced",
+      "description": "\n\tAdvanced search with specific field filters.\n\n\tArgs:\n\t\ttitle: Search in paper titles\n\t\tabstract: Search in abstracts\n\t\tauthor: Search by author name\n\t\tcategory: Filter by arXiv category (e.g., 'cs.AI', 'cs.LG')\n\t\tid_arxiv: Search by arXiv ID pattern\n\t\tdate_from: Start date filter (YYYY-MM-DD format)\n\t\tdate_to: End date filter (YYYY-MM-DD format)\n\t\tsort_by: Sort order - 'relevance', 'date_desc', 'date_asc'\n\t\tpage: Page number (default: 1)\n\t\tpage_size: Results per page, max 50 (default: 25)\n\n\tReturns:\n\t\tSearch results with papers containing title, abstract, authors, and URLs\n\t",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Title"
+          },
+          "abstract": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Abstract"
+          },
+          "author": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Author"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Category"
+          },
+          "id_arxiv": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Id Arxiv"
+          },
+          "date_from": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Date From"
+          },
+          "date_to": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Date To"
+          },
+          "sort_by": {
+            "default": "relevance",
+            "title": "Sort By",
+            "type": "string"
+          },
+          "page": {
+            "default": 1,
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "default": 25,
+            "title": "Page Size",
+            "type": "integer"
+          }
+        },
+        "title": "search_advancedArguments"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_paper",
+      "description": "\n\tGet detailed information about a specific arXiv paper.\n\n\tArgs:\n\t\tid_or_url: arXiv paper ID (e.g., '2301.00001') or full arXiv URL\n\n\tReturns:\n\t\tPaper details including title, abstract, authors, categories, and URLs\n\t",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id_or_url": {
+            "title": "Id Or Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id_or_url"
+        ],
+        "title": "get_paperArguments"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_content",
+      "description": "\n\tGet the full text content of an arXiv paper using Jina Reader.\n\n\tArgs:\n\t\tid_or_url: arXiv paper ID (e.g., '2301.00001') or full arXiv URL\n\n\tReturns:\n\t\tFull text content of the paper in markdown format\n\t",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id_or_url": {
+            "title": "Id Or Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id_or_url"
+        ],
+        "title": "get_contentArguments"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "get_contentOutput"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_categories",
+      "description": "\n\tList all common arXiv categories.\n\n\tReturns:\n\t\tList of arXiv categories with code, name, and group\n\t",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "title": "list_categoriesArguments"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Result",
+            "type": "array"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "list_categoriesOutput"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_recent",
+      "description": "\n\tGet recent papers from a specific arXiv category.\n\n\tArgs:\n\t\tcategory: arXiv category code (default: 'cs.AI')\n\t\tcount: Number of papers to retrieve (max 50, default: 10)\n\n\tReturns:\n\t\tRecent papers from the specified category\n\t",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "default": "cs.AI",
+            "title": "Category",
+            "type": "string"
+          },
+          "count": {
+            "default": 10,
+            "title": "Count",
+            "type": "integer"
+          }
+        },
+        "title": "get_recentArguments"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    }
+  ]
+}

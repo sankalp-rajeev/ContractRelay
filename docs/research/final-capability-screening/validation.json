@@ -1,0 +1,47 @@
+{
+  "baseline_commit": "1b182ee94669d021c261a2241da7fccab64ad6da",
+  "date": "2026-10-18",
+  "status": "stopped_before_implementation_no_accepted_unseen_case",
+  "checks": {
+    "root_lint": "PASS",
+    "root_typecheck": "PASS",
+    "core_and_cli_tests": {
+      "passed": 158,
+      "files": 32
+    },
+    "historical_guard_tests": {
+      "passed": 9
+    },
+    "inspector_codegen_typecheck_lint_audit": "PASS",
+    "inspector_tests": {
+      "passed": 12
+    },
+    "inspector_production_build": "PASS",
+    "inspector_browser_tests": {
+      "passed": 8
+    },
+    "screening_offline_replay": "PASS",
+    "screening_fresh_build_and_native_replay": "PASS"
+  },
+  "protected_files": 452,
+  "protected_raw_aggregate_sha256": "b568d9c106f09830c894738ec1f29005c96b43624f1a1aa0adf52011d5e477dc",
+  "protected_lf_aggregate_sha256": "13c6ed0572f2044abdbef0d20731ccb701e1c537944447f0b6a04e3b72fd6e58",
+  "aggregate_algorithm": "SHA256 of UTF-8 compact sorted JSON mapping path to corresponding raw or LF SHA256",
+  "protected_unchanged": true,
+  "core_changed": false,
+  "readme_changed": false,
+  "gemini": {
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "thinking_tokens": 0,
+    "estimated_cost_usd": 0
+  },
+  "evaluation_trials": 0,
+  "false_compatible_count": null,
+  "notes": [
+    "All eight browser assertions passed; explicitly stopped the owned Next preview PID to finish Windows browser-runner teardown.",
+    "Initial lint found missing Node global imports in the new screening replay script; imports were added and lint/typecheck rerun successfully.",
+    "No historical replay evaluator was rerun in place; historical guard tests and original artifact hashes passed."
+  ]
+}

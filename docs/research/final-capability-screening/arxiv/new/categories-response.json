@@ -1,0 +1,306 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.AI\",\n  \"name\": \"Artificial Intelligence\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.CL\",\n  \"name\": \"Computation and Language\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.CR\",\n  \"name\": \"Cryptography and Security\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.CV\",\n  \"name\": \"Computer Vision and Pattern Recognition\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.DB\",\n  \"name\": \"Databases\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.DC\",\n  \"name\": \"Distributed, Parallel, and Cluster Computing\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.DS\",\n  \"name\": \"Data Structures and Algorithms\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.HC\",\n  \"name\": \"Human-Computer Interaction\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.IR\",\n  \"name\": \"Information Retrieval\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.IT\",\n  \"name\": \"Information Theory\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.LG\",\n  \"name\": \"Machine Learning\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.MA\",\n  \"name\": \"Multiagent Systems\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.NE\",\n  \"name\": \"Neural and Evolutionary Computing\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.PL\",\n  \"name\": \"Programming Languages\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.RO\",\n  \"name\": \"Robotics\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cs.SE\",\n  \"name\": \"Software Engineering\",\n  \"group\": \"Computer Science\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"eess.AS\",\n  \"name\": \"Audio and Speech Processing\",\n  \"group\": \"Electrical Engineering\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"eess.IV\",\n  \"name\": \"Image and Video Processing\",\n  \"group\": \"Electrical Engineering\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"eess.SP\",\n  \"name\": \"Signal Processing\",\n  \"group\": \"Electrical Engineering\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"math.NA\",\n  \"name\": \"Numerical Analysis\",\n  \"group\": \"Mathematics\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"math.OC\",\n  \"name\": \"Optimization and Control\",\n  \"group\": \"Mathematics\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"math.PR\",\n  \"name\": \"Probability\",\n  \"group\": \"Mathematics\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"math.ST\",\n  \"name\": \"Statistics Theory\",\n  \"group\": \"Mathematics\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"cond-mat\",\n  \"name\": \"Condensed Matter\",\n  \"group\": \"Physics\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"hep-th\",\n  \"name\": \"High Energy Physics - Theory\",\n  \"group\": \"Physics\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"quant-ph\",\n  \"name\": \"Quantum Physics\",\n  \"group\": \"Physics\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"q-bio.NC\",\n  \"name\": \"Neurons and Cognition\",\n  \"group\": \"Quantitative Biology\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"q-bio.QM\",\n  \"name\": \"Quantitative Methods\",\n  \"group\": \"Quantitative Biology\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"q-fin.CP\",\n  \"name\": \"Computational Finance\",\n  \"group\": \"Quantitative Finance\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"q-fin.ST\",\n  \"name\": \"Statistical Finance\",\n  \"group\": \"Quantitative Finance\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"stat.ME\",\n  \"name\": \"Methodology\",\n  \"group\": \"Statistics\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"stat.ML\",\n  \"name\": \"Machine Learning (Statistics)\",\n  \"group\": \"Statistics\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"code\": \"stat.TH\",\n  \"name\": \"Statistics Theory\",\n  \"group\": \"Statistics\"\n}"
+    }
+  ],
+  "structuredContent": {
+    "result": [
+      {
+        "code": "cs.AI",
+        "name": "Artificial Intelligence",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.CL",
+        "name": "Computation and Language",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.CR",
+        "name": "Cryptography and Security",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.CV",
+        "name": "Computer Vision and Pattern Recognition",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.DB",
+        "name": "Databases",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.DC",
+        "name": "Distributed, Parallel, and Cluster Computing",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.DS",
+        "name": "Data Structures and Algorithms",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.HC",
+        "name": "Human-Computer Interaction",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.IR",
+        "name": "Information Retrieval",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.IT",
+        "name": "Information Theory",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.LG",
+        "name": "Machine Learning",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.MA",
+        "name": "Multiagent Systems",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.NE",
+        "name": "Neural and Evolutionary Computing",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.PL",
+        "name": "Programming Languages",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.RO",
+        "name": "Robotics",
+        "group": "Computer Science"
+      },
+      {
+        "code": "cs.SE",
+        "name": "Software Engineering",
+        "group": "Computer Science"
+      },
+      {
+        "code": "eess.AS",
+        "name": "Audio and Speech Processing",
+        "group": "Electrical Engineering"
+      },
+      {
+        "code": "eess.IV",
+        "name": "Image and Video Processing",
+        "group": "Electrical Engineering"
+      },
+      {
+        "code": "eess.SP",
+        "name": "Signal Processing",
+        "group": "Electrical Engineering"
+      },
+      {
+        "code": "math.NA",
+        "name": "Numerical Analysis",
+        "group": "Mathematics"
+      },
+      {
+        "code": "math.OC",
+        "name": "Optimization and Control",
+        "group": "Mathematics"
+      },
+      {
+        "code": "math.PR",
+        "name": "Probability",
+        "group": "Mathematics"
+      },
+      {
+        "code": "math.ST",
+        "name": "Statistics Theory",
+        "group": "Mathematics"
+      },
+      {
+        "code": "cond-mat",
+        "name": "Condensed Matter",
+        "group": "Physics"
+      },
+      {
+        "code": "hep-th",
+        "name": "High Energy Physics - Theory",
+        "group": "Physics"
+      },
+      {
+        "code": "quant-ph",
+        "name": "Quantum Physics",
+        "group": "Physics"
+      },
+      {
+        "code": "q-bio.NC",
+        "name": "Neurons and Cognition",
+        "group": "Quantitative Biology"
+      },
+      {
+        "code": "q-bio.QM",
+        "name": "Quantitative Methods",
+        "group": "Quantitative Biology"
+      },
+      {
+        "code": "q-fin.CP",
+        "name": "Computational Finance",
+        "group": "Quantitative Finance"
+      },
+      {
+        "code": "q-fin.ST",
+        "name": "Statistical Finance",
+        "group": "Quantitative Finance"
+      },
+      {
+        "code": "stat.ME",
+        "name": "Methodology",
+        "group": "Statistics"
+      },
+      {
+        "code": "stat.ML",
+        "name": "Machine Learning (Statistics)",
+        "group": "Statistics"
+      },
+      {
+        "code": "stat.TH",
+        "name": "Statistics Theory",
+        "group": "Statistics"
+      }
+    ]
+  },
+  "isError": false
+}

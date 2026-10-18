@@ -1,0 +1,802 @@
+{
+  "tools": [
+    {
+      "name": "search",
+      "description": "\n\tSearch arXiv for papers matching the query.\n\n\tArgs:\n\t\tquery: Search query for arXiv papers (e.g., 'LLM', 'transformer architecture')\n\t\tcategory: Filter by arXiv category (e.g., 'cs.AI', 'cs.LG', 'stat.ML')\n\t\tauthor: Filter by author name\n\t\tsort_by: Sort order - 'relevance', 'date_desc', 'date_asc'\n\t\tpage: Page number (default: 1)\n\t\tpage_size: Results per page, max 50 (default: 25)\n\n\tReturns:\n\t\tSearch results with papers containing title, abstract, authors, and URLs\n\t",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "title": "Query",
+            "type": "string"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Category"
+          },
+          "author": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Author"
+          },
+          "sort_by": {
+            "default": "relevance",
+            "title": "Sort By",
+            "type": "string"
+          },
+          "page": {
+            "default": 1,
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "default": 25,
+            "title": "Page Size",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "title": "searchArguments"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "description": "The search query used",
+            "title": "Query",
+            "type": "string"
+          },
+          "total_results": {
+            "description": "Total number of results found",
+            "title": "Total Results",
+            "type": "integer"
+          },
+          "papers": {
+            "description": "List of papers",
+            "items": {
+              "$ref": "#/$defs/Paper"
+            },
+            "title": "Papers",
+            "type": "array"
+          },
+          "page": {
+            "default": 1,
+            "description": "Current page number",
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "default": 25,
+            "description": "Number of results per page",
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "has_more": {
+            "default": false,
+            "description": "Whether more results exist",
+            "title": "Has More",
+            "type": "boolean"
+          },
+          "next_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Next page number if has_more is True",
+            "title": "Next Page"
+          }
+        },
+        "required": [
+          "query",
+          "total_results",
+          "papers"
+        ],
+        "$defs": {
+          "Paper": {
+            "description": "Represents an arXiv paper.",
+            "properties": {
+              "id_arxiv": {
+                "description": "arXiv paper ID (e.g., '2301.00001')",
+                "title": "Id Arxiv",
+                "type": "string"
+              },
+              "title": {
+                "description": "Paper title",
+                "title": "Title",
+                "type": "string"
+              },
+              "abstract": {
+                "description": "Paper abstract",
+                "title": "Abstract",
+                "type": "string"
+              },
+              "authors": {
+                "description": "List of authors",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Authors",
+                "type": "array"
+              },
+              "categories": {
+                "description": "arXiv categories",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Categories",
+                "type": "array"
+              },
+              "url_abstract": {
+                "description": "URL to the abstract page",
+                "title": "Url Abstract",
+                "type": "string"
+              },
+              "url_pdf": {
+                "description": "URL to the PDF",
+                "title": "Url Pdf",
+                "type": "string"
+              },
+              "date_published": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Publication date",
+                "title": "Date Published"
+              },
+              "date_updated": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Last updated date",
+                "title": "Date Updated"
+              }
+            },
+            "required": [
+              "id_arxiv",
+              "title",
+              "abstract",
+              "url_abstract",
+              "url_pdf"
+            ],
+            "title": "Paper",
+            "type": "object"
+          }
+        },
+        "description": "Search result containing papers and metadata.",
+        "title": "SearchResult"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "search_advanced",
+      "description": "\n\tAdvanced search with specific field filters.\n\n\tArgs:\n\t\ttitle: Search in paper titles\n\t\tabstract: Search in abstracts\n\t\tauthor: Search by author name\n\t\tcategory: Filter by arXiv category (e.g., 'cs.AI', 'cs.LG')\n\t\tid_arxiv: Search by arXiv ID pattern\n\t\tdate_from: Start date filter (YYYY-MM-DD format)\n\t\tdate_to: End date filter (YYYY-MM-DD format)\n\t\tsort_by: Sort order - 'relevance', 'date_desc', 'date_asc'\n\t\tpage: Page number (default: 1)\n\t\tpage_size: Results per page, max 50 (default: 25)\n\n\tReturns:\n\t\tSearch results with papers containing title, abstract, authors, and URLs\n\t",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Title"
+          },
+          "abstract": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Abstract"
+          },
+          "author": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Author"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Category"
+          },
+          "id_arxiv": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Id Arxiv"
+          },
+          "date_from": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Date From"
+          },
+          "date_to": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Date To"
+          },
+          "sort_by": {
+            "default": "relevance",
+            "title": "Sort By",
+            "type": "string"
+          },
+          "page": {
+            "default": 1,
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "default": 25,
+            "title": "Page Size",
+            "type": "integer"
+          }
+        },
+        "title": "search_advancedArguments"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "description": "The search query used",
+            "title": "Query",
+            "type": "string"
+          },
+          "total_results": {
+            "description": "Total number of results found",
+            "title": "Total Results",
+            "type": "integer"
+          },
+          "papers": {
+            "description": "List of papers",
+            "items": {
+              "$ref": "#/$defs/Paper"
+            },
+            "title": "Papers",
+            "type": "array"
+          },
+          "page": {
+            "default": 1,
+            "description": "Current page number",
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "default": 25,
+            "description": "Number of results per page",
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "has_more": {
+            "default": false,
+            "description": "Whether more results exist",
+            "title": "Has More",
+            "type": "boolean"
+          },
+          "next_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Next page number if has_more is True",
+            "title": "Next Page"
+          }
+        },
+        "required": [
+          "query",
+          "total_results",
+          "papers"
+        ],
+        "$defs": {
+          "Paper": {
+            "description": "Represents an arXiv paper.",
+            "properties": {
+              "id_arxiv": {
+                "description": "arXiv paper ID (e.g., '2301.00001')",
+                "title": "Id Arxiv",
+                "type": "string"
+              },
+              "title": {
+                "description": "Paper title",
+                "title": "Title",
+                "type": "string"
+              },
+              "abstract": {
+                "description": "Paper abstract",
+                "title": "Abstract",
+                "type": "string"
+              },
+              "authors": {
+                "description": "List of authors",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Authors",
+                "type": "array"
+              },
+              "categories": {
+                "description": "arXiv categories",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Categories",
+                "type": "array"
+              },
+              "url_abstract": {
+                "description": "URL to the abstract page",
+                "title": "Url Abstract",
+                "type": "string"
+              },
+              "url_pdf": {
+                "description": "URL to the PDF",
+                "title": "Url Pdf",
+                "type": "string"
+              },
+              "date_published": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Publication date",
+                "title": "Date Published"
+              },
+              "date_updated": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Last updated date",
+                "title": "Date Updated"
+              }
+            },
+            "required": [
+              "id_arxiv",
+              "title",
+              "abstract",
+              "url_abstract",
+              "url_pdf"
+            ],
+            "title": "Paper",
+            "type": "object"
+          }
+        },
+        "description": "Search result containing papers and metadata.",
+        "title": "SearchResult"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_paper",
+      "description": "\n\tGet detailed information about a specific arXiv paper.\n\n\tArgs:\n\t\tid_or_url: arXiv paper ID (e.g., '2301.00001') or full arXiv URL\n\n\tReturns:\n\t\tPaper details including title, abstract, authors, categories, and URLs\n\t",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id_or_url": {
+            "title": "Id Or Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id_or_url"
+        ],
+        "title": "get_paperArguments"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "id_arxiv": {
+            "description": "arXiv paper ID (e.g., '2301.00001')",
+            "title": "Id Arxiv",
+            "type": "string"
+          },
+          "title": {
+            "description": "Paper title",
+            "title": "Title",
+            "type": "string"
+          },
+          "abstract": {
+            "description": "Paper abstract",
+            "title": "Abstract",
+            "type": "string"
+          },
+          "authors": {
+            "description": "List of authors",
+            "items": {
+              "type": "string"
+            },
+            "title": "Authors",
+            "type": "array"
+          },
+          "categories": {
+            "description": "arXiv categories",
+            "items": {
+              "type": "string"
+            },
+            "title": "Categories",
+            "type": "array"
+          },
+          "url_abstract": {
+            "description": "URL to the abstract page",
+            "title": "Url Abstract",
+            "type": "string"
+          },
+          "url_pdf": {
+            "description": "URL to the PDF",
+            "title": "Url Pdf",
+            "type": "string"
+          },
+          "date_published": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Publication date",
+            "title": "Date Published"
+          },
+          "date_updated": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Last updated date",
+            "title": "Date Updated"
+          }
+        },
+        "required": [
+          "id_arxiv",
+          "title",
+          "abstract",
+          "url_abstract",
+          "url_pdf"
+        ],
+        "description": "Represents an arXiv paper.",
+        "title": "Paper"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_content",
+      "description": "\n\tGet the full text content of an arXiv paper using Jina Reader.\n\n\tArgs:\n\t\tid_or_url: arXiv paper ID (e.g., '2301.00001') or full arXiv URL\n\n\tReturns:\n\t\tFull text content of the paper in markdown format\n\t",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id_or_url": {
+            "title": "Id Or Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id_or_url"
+        ],
+        "title": "get_contentArguments"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "get_contentOutput"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_categories",
+      "description": "\n\tList all common arXiv categories.\n\n\tReturns:\n\t\tList of arXiv categories with code, name, and group\n\t",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "title": "list_categoriesArguments"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "items": {
+              "$ref": "#/$defs/Category"
+            },
+            "title": "Result",
+            "type": "array"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "$defs": {
+          "Category": {
+            "description": "arXiv category information.",
+            "properties": {
+              "code": {
+                "description": "Category code (e.g., 'cs.AI')",
+                "title": "Code",
+                "type": "string"
+              },
+              "name": {
+                "description": "Full category name",
+                "title": "Name",
+                "type": "string"
+              },
+              "group": {
+                "description": "Category group (e.g., 'Computer Science')",
+                "title": "Group",
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "name",
+              "group"
+            ],
+            "title": "Category",
+            "type": "object"
+          }
+        },
+        "title": "list_categoriesOutput"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_recent",
+      "description": "\n\tGet recent papers from a specific arXiv category.\n\n\tArgs:\n\t\tcategory: arXiv category code (default: 'cs.AI')\n\t\tcount: Number of papers to retrieve (max 50, default: 10)\n\n\tReturns:\n\t\tRecent papers from the specified category\n\t",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "default": "cs.AI",
+            "title": "Category",
+            "type": "string"
+          },
+          "count": {
+            "default": 10,
+            "title": "Count",
+            "type": "integer"
+          }
+        },
+        "title": "get_recentArguments"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "description": "Category code (e.g., 'cs.AI')",
+            "title": "Category",
+            "type": "string"
+          },
+          "category_name": {
+            "description": "Full category name",
+            "title": "Category Name",
+            "type": "string"
+          },
+          "count": {
+            "description": "Number of papers returned",
+            "title": "Count",
+            "type": "integer"
+          },
+          "papers": {
+            "description": "List of recent papers",
+            "items": {
+              "$ref": "#/$defs/Paper"
+            },
+            "title": "Papers",
+            "type": "array"
+          }
+        },
+        "required": [
+          "category",
+          "category_name",
+          "count",
+          "papers"
+        ],
+        "$defs": {
+          "Paper": {
+            "description": "Represents an arXiv paper.",
+            "properties": {
+              "id_arxiv": {
+                "description": "arXiv paper ID (e.g., '2301.00001')",
+                "title": "Id Arxiv",
+                "type": "string"
+              },
+              "title": {
+                "description": "Paper title",
+                "title": "Title",
+                "type": "string"
+              },
+              "abstract": {
+                "description": "Paper abstract",
+                "title": "Abstract",
+                "type": "string"
+              },
+              "authors": {
+                "description": "List of authors",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Authors",
+                "type": "array"
+              },
+              "categories": {
+                "description": "arXiv categories",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Categories",
+                "type": "array"
+              },
+              "url_abstract": {
+                "description": "URL to the abstract page",
+                "title": "Url Abstract",
+                "type": "string"
+              },
+              "url_pdf": {
+                "description": "URL to the PDF",
+                "title": "Url Pdf",
+                "type": "string"
+              },
+              "date_published": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Publication date",
+                "title": "Date Published"
+              },
+              "date_updated": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Last updated date",
+                "title": "Date Updated"
+              }
+            },
+            "required": [
+              "id_arxiv",
+              "title",
+              "abstract",
+              "url_abstract",
+              "url_pdf"
+            ],
+            "title": "Paper",
+            "type": "object"
+          }
+        },
+        "description": "Recent papers from a specific arXiv category.",
+        "title": "RecentPapers"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+diff --git a/src/server/output-schemas.ts b/src/server/output-schemas.ts
+index c8ada97..13447df 100644
+--- a/src/server/output-schemas.ts
++++ b/src/server/output-schemas.ts
+@@ -50,9 +50,14 @@ export const FilesSearchResultItemSchema = z.object({
+ });
+ 
+ /**
+- * files_searchの戻り値スキーマ（配列）
++ * files_searchの戻り値スキーマ
++ *
++ * Note: MCP outputSchema requires type="object" at top level.
++ * Claude Code rejects tools with type="array" outputSchema.
+  */
+-export const FilesSearchResultSchema = z.array(FilesSearchResultItemSchema);
++export const FilesSearchResultSchema = z.object({
++  results: z.array(FilesSearchResultItemSchema).describe("検索結果の配列"),
++});
+ 
+ // =============================================================================
+ // snippets_get
+diff --git a/src/server/rpc.ts b/src/server/rpc.ts
+index a32ad56..1a78c8f 100644
+--- a/src/server/rpc.ts
++++ b/src/server/rpc.ts
+@@ -862,7 +862,7 @@ async function executeToolByName(
+       if (degrade.current.active && allowDegrade) {
+         // Use same output option logic as normal mode for consistency
+         const includePreview = params.compact !== true;
+-        return degrade.search(params.query, params.limit ?? 20).map((hit) => {
++        const results = degrade.search(params.query, params.limit ?? 20).map((hit) => {
+           const result = {
+             path: hit.path,
+             matchLine: hit.matchLine,
+@@ -872,9 +872,17 @@ async function executeToolByName(
+           };
+           return includePreview ? { ...result, preview: hit.preview } : result;
+         });
++        // MCP outputSchema requires type="object" at top level
++        return { results };
+       } else {
+-        const handler = async () =>
+-          await withSpan("files_search", async () => await filesSearch(context, params));
++        const handler = async () => {
++          const results = await withSpan(
++            "files_search",
++            async () => await filesSearch(context, params)
++          );
++          // MCP outputSchema requires type="object" at top level
++          return { results };
++        };
+         return await degrade.withResource(handler, "duckdb:files_search");
+       }
+     }

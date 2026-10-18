@@ -1,0 +1,23 @@
+{
+  "arxiv/LICENSE.txt": "1b0efe7a423884eec083a84ebe6844dfa2be4e952a9bc9affa4d8c567cdabc10",
+  "arxiv/new/categories-response.json": "82370c47a9e49e2d4a2a8771052953cd0cd9f83f5ca1d65e5936752c231bea65",
+  "arxiv/new/Dockerfile": "d9b3021fa672a2bd7046b244ef6472f7dd3abe56cea123a1b6cc5d2b7d32270e",
+  "arxiv/new/pyproject.toml": "a35a2e47b4f8c6b5a21b88a9af045d6ebf8b3646b5aa4fb314538af9e6f9e8a5",
+  "arxiv/new/runtime.json": "1863513335fe545b6c1ba334b369ef5a64d8ad47ee58e74cc1bab55a5d6a3ab0",
+  "arxiv/new/src__arxiv_mcp__models.py": "356cb71d27cbd7d2080e7f688a56e9279ae6ebb414473ca4dbc327a070a347fc",
+  "arxiv/new/src__arxiv_mcp__server.py": "b882753df4119674c5d390b2876c8a46e125a84e2810e3227a375f8d8da7c616",
+  "arxiv/new/tools-list.json": "c6675550c3f19c7eb61e78a99f9fdaa2165cc6f1144da5cc6aa72cd7fc9c34df",
+  "arxiv/new/uv.lock": "5e8632ecff8281437937b615b95b4dd4519f618b36fb017e1ac9366d7ed21dbd",
+  "arxiv/old/categories-response.json": "82370c47a9e49e2d4a2a8771052953cd0cd9f83f5ca1d65e5936752c231bea65",
+  "arxiv/old/Dockerfile": "d9b3021fa672a2bd7046b244ef6472f7dd3abe56cea123a1b6cc5d2b7d32270e",
+  "arxiv/old/pyproject.toml": "030369eacc95dfff2fe8c77f9d400aeeec44cd469bd213bdc4eea943d68b006a",
+  "arxiv/old/runtime.json": "a04def14ec3affea6bd064c9ef5c4d4f23531d661be71bcf9b0ab9b5c8781443",
+  "arxiv/old/src__arxiv_mcp__models.py": "9a01f790da95d88df486122dddd0b2224727f025c9dadaf9ff09184a854951f4",
+  "arxiv/old/src__arxiv_mcp__server.py": "3cad49869f0c45834e8c3003ba9ffcf12a1f72cd8b0a4be4eaa5dcb49c88a23b",
+  "arxiv/old/tools-list.json": "270d08310fc184ebda387e2229e0ef499f895ccfb59a483f64234e950b868039",
+  "arxiv/old/uv.lock": "e8c47d91834a55a8ee97bf20c60378d0521b686ea93e79e04e6eaa2dc162e77b",
+  "kiri/change.diff": "975ef87b085e3bdb90f9bc15aa7ae1219803614e28b47da364517d2de1168e11",
+  "kiri/LICENSE.txt": "8ead22876ea169a44a27de46be8ba9ca128783f5ee9dcefc3f36db9744e0f01f",
+  "kiri/new-output-schemas.ts.txt": "3966ea279e4d544c2cf7368bfdc1e33bfa0818aff0dfd8403a2b80246f21664d",
+  "kiri/old-output-schemas.ts.txt": "ce8c4b379492c6f654ac96d63ff39ff3d9df25d0b3c4e694f7bc8f8248211558"
+}

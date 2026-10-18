@@ -1,0 +1,6 @@
+{
+  "commit": "728bde88e7ccdccf10e52bd60b4ac1a7b6f02a61",
+  "image_id": "sha256:c6fe53d1bb1c72c4801ab4a0dd494b1510e641d86fa02ef2070c4f7e4df78a25",
+  "source_archive_sha256": "70ec3ac36acefb382bb0166526c88d08a00227bef591e93a94f122ceaf376bcf",
+  "lock_origin": "generated using uv 0.9.5 --exclude-newer 2026-06-03T00:00:00Z; upstream revision has no lock"
+}
