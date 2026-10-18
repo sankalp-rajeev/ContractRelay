@@ -84,6 +84,7 @@ const realCase = z.object({
   promoted: count,
   safe_rejections: count,
   hidden_false_compatible: count,
+  evaluation_kind: z.enum(['post-fix regression', 'previously unseen historical migration']).optional(),
   limitations: z.array(z.string()),
 });
 const externalSummary = z.object({ cases: z.array(realCase).min(1), source_hash: hash });
@@ -188,13 +189,27 @@ export class ArtifactService {
     return Promise.all(
       cases.map(async (entry) => {
         const base = `${entry.root}/${entry.project}`;
-        const first = await this.load(`${base}/results/trial-001.json`, trial);
+        const recorded = await Promise.all(Array.from({ length: entry.trials }, (_, index) =>
+          this.load(`${base}/results/trial-${String(index + 1).padStart(3, '0')}.json`, trial),
+        ));
+        for (const [index, measured] of recorded.entries()) {
+          if (measured.identity.case_id !== entry.project || measured.identity.trial !== index + 1)
+            throw new ArtifactError('ARTIFACT_CORRUPT', `${base}/results/trial-${String(index + 1).padStart(3, '0')}.json`);
+        }
+        const first = recorded[0];
         const change = await this.load(
           `${base}/provenance.json`,
           z.object({ change: z.string() }).passthrough(),
         );
         return {
           id: entry.project,
+          evaluationKind: entry.evaluation_kind ?? 'pre-extension external evaluation',
+          trialOutcomes: recorded.map((measured) => ({
+            trial: measured.identity.trial,
+            status: measured.gate_report.verdict,
+            generationError: 'error_code' in measured.gate_report ? measured.gate_report.error_code : null,
+            safeRejection: measured.safe_rejection,
+          })),
           artifactBase: base,
           name:
             entry.project === 'nexus'
@@ -347,6 +362,7 @@ export class ArtifactService {
       throw new ArtifactError('ARTIFACT_CORRUPT', path);
     return {
       ...entry,
+      status: measured.gate_report.verdict,
       oldContract,
       newContract,
       adapterPlan: measured.candidate,

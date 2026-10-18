@@ -29,6 +29,31 @@ test('keeps pre-fix failures visible alongside new regression and unseen trial r
   await expect(page.getByText('REJECTED', { exact: true }).first()).toBeVisible();
 });
 
+test('distinguishes migration counts and evaluation groups while exposing frozen limitations', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByText('6 distinct historical migrations · 8 versioned evaluations', { exact: true })).toBeVisible();
+  await page.goto('/real-world');
+  const pre = page.getByRole('region', { name: 'Pre-extension external evaluation', exact: true });
+  const regression = page.getByRole('region', { name: 'Post-fix regression', exact: true });
+  const unseen = page.getByRole('region', { name: 'Previously unseen frozen case', exact: true });
+  await expect(pre.locator('article')).toHaveCount(5);
+  await expect(regression.locator('article')).toHaveCount(2);
+  await expect(unseen.locator('article')).toHaveCount(1);
+  for (const id of ['mapbox-v3', 'fabric-v3'])
+    await expect(regression.locator(`a[href="/migrations/${id}"]`).first()).toBeVisible();
+  const mapboxTrials = regression.getByRole('list', { name: 'mapbox-v3 recorded trial outcomes' });
+  await expect(mapboxTrials.getByRole('link', { name: 'Trial 3: Generation failure', exact: true })).toBeVisible();
+  await expect(mapboxTrials.getByRole('link', { name: /Safe rejection/ })).toHaveCount(0);
+  await expect(unseen.getByText(/no V3 state predicates/)).toBeVisible();
+  await expect(unseen.getByText(/JSON.stringify/)).toBeVisible();
+  await mapboxTrials.getByRole('link', { name: 'Trial 3: Generation failure', exact: true }).click();
+  await expect(page).toHaveURL(/mapbox-v3\?trial=3/);
+  await expect(page.getByText('Generation failure; this trial is not a safe rejection.', { exact: true })).toBeVisible();
+  await page.goto('/migrations/session-collab-v3');
+  await expect(page.getByText(/no V3 state predicates/)).toBeVisible();
+  await expect(page.getByText(/JSON.stringify/)).toBeVisible();
+});
+
 test('overview, refund inspection and persisted results work without model access', async ({
   page,
 }) => {

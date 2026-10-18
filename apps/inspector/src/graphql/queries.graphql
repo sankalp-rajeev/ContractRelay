@@ -66,6 +66,13 @@ query Results {
   }
   realWorldResults {
     id
+    evaluationKind
+    trialOutcomes {
+      trial
+      status
+      generationError
+      safeRejection
+    }
     name
     repository
     oldCommit

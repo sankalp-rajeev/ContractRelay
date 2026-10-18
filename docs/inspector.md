@@ -8,7 +8,7 @@ Historical results are discovered through `data/historical-catalog.json`; each
 root retains its own unchanged summary and trials. v2 adds Mapbox and Microsoft
 Fabric. Generation failures display INCONCLUSIVE with verification NOT RUN, empty
 gate checks and the retained error code. They are never relabeled as safe rejection.
-The inspector has fourteen API/component tests and twelve desktop/mobile browser checks.
+The inspector has sixteen API/component tests and fourteen desktop/mobile browser checks.
 
 The portfolio interface lives in `apps/inspector/`, outside the frozen workspace
 packages. It uses Next.js, React, strict TypeScript, Node.js, GraphQL and ordinary

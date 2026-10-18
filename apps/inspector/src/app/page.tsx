@@ -7,6 +7,9 @@ export const dynamic = 'force-dynamic';
 export default async function Overview() {
   const { benchmarkSummary: benchmark, realWorldResults } = await query(ResultsDocument, {});
   const sqlew = realWorldResults.find((item) => item.id === 'sqlew');
+  const distinctMigrations = new Set(realWorldResults.map((item) =>
+    JSON.stringify([item.repository, item.oldCommit, item.newCommit]),
+  )).size;
   return (
     <div className="page overview">
       <div className="pageIntro">
@@ -108,7 +111,7 @@ export default async function Overview() {
           Strong LLM methods saturated the suite; ContractRelay matched measured correctness.
         </p>
         <p>
-          <strong>{realWorldResults.length} public historical migrations</strong> evaluated
+          <strong>{distinctMigrations} distinct historical migrations · {realWorldResults.length} versioned evaluations</strong> evaluated
           separately against exact source revisions and synthetic fixtures.
         </p>
       </div>

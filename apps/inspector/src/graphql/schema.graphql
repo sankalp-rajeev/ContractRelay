@@ -94,6 +94,8 @@ type BenchmarkMethod {
 }
 type RealWorldResult {
   id: ID!
+  evaluationKind: String!
+  trialOutcomes: [HistoricalTrialOutcome!]!
   name: String!
   repository: String!
   oldCommit: String!
@@ -109,4 +111,11 @@ type RealWorldResult {
   status: MigrationStatus!
   rejectionReason: String
   limitations: [String!]!
+}
+
+type HistoricalTrialOutcome {
+  trial: Int!
+  status: MigrationStatus!
+  generationError: String
+  safeRejection: Boolean!
 }

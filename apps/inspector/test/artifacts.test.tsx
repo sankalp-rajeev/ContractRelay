@@ -35,6 +35,7 @@ describe('Read-only artifact GraphQL', () => {
         const data = await query(InspectMigrationDocument, { id: entry.id, trial });
         expect(data.migration?.id).toBe(entry.id);
         expect(data.migration?.trial).toBe(trial);
+        expect(data.migration?.status).toBe(data.migration?.verification.verdict);
       }
     }
   });
@@ -101,6 +102,42 @@ describe('Read-only artifact GraphQL', () => {
       ['session-collab-v3', 0, 3, 0, 3],
     ]);
     expect(realWorldResults.every((m) => m.directOutcome === 'BREAKS')).toBe(true);
+  });
+  it('separates distinct migrations, evaluation roles and recorded generation failures', async () => {
+    const { realWorldResults } = await query(ResultsDocument, {}, service);
+    expect(new Set(realWorldResults.map((item) => JSON.stringify([
+      item.repository, item.oldCommit, item.newCommit,
+    ]))).size).toBe(6);
+    expect(realWorldResults.map((item) => [item.id, item.evaluationKind])).toEqual([
+      ['mindwtr', 'pre-extension external evaluation'],
+      ['nexus', 'pre-extension external evaluation'],
+      ['sqlew', 'pre-extension external evaluation'],
+      ['mapbox', 'pre-extension external evaluation'],
+      ['fabric', 'pre-extension external evaluation'],
+      ['mapbox-v3', 'post-fix regression'],
+      ['fabric-v3', 'post-fix regression'],
+      ['session-collab-v3', 'previously unseen historical migration'],
+    ]);
+    const mapbox = realWorldResults.find((item) => item.id === 'mapbox-v3')!;
+    expect(mapbox.safeRejections).toBe(0);
+    expect(mapbox.trialOutcomes).toEqual([
+      { trial: 1, status: 'PROMOTED', generationError: null, safeRejection: false },
+      { trial: 2, status: 'PROMOTED', generationError: null, safeRejection: false },
+      { trial: 3, status: 'INCONCLUSIVE', generationError: 'INVALID_MODEL_OUTPUT', safeRejection: false },
+    ]);
+    const unseen = realWorldResults.find((item) => item.id === 'session-collab-v3')!;
+    expect(unseen.limitations.some((text) => text.includes('no V3 state predicates'))).toBe(true);
+    expect(unseen.limitations.some((text) => text.includes('JSON.stringify'))).toBe(true);
+  });
+  it('labels Mapbox v3 trial 3 as generation failure without an explicit rejection', async () => {
+    const { migration } = await query(InspectMigrationDocument, { id: 'mapbox-v3', trial: 3 }, service);
+    if (!migration) throw new Error('Missing Mapbox v3 trial 3');
+    expect(migration.status).toBe('INCONCLUSIVE');
+    const html = renderToStaticMarkup(<><AdapterView migration={migration} /><VerificationView migration={migration} /></>);
+    expect(html).toContain('Generation failure; this trial is not a safe rejection.');
+    expect(html).toContain('INVALID_MODEL_OUTPUT');
+    expect(html).not.toContain('Candidate explicitly rejects');
+    expect(migration.verification.checks).toEqual([]);
   });
   it('keeps actual local refund calls distinct from frozen sealed observations', async () => {
     const { migration } = await query(

@@ -1249,6 +1249,9 @@ pre code {
   padding: 30px 0 36px;
   border-top: 1px solid var(--line);
 }
+.historicalGroup + .historicalGroup {
+  margin-top: 40px;
+}
 .historicalHeading {
   display: flex;
   justify-content: space-between;
@@ -1259,10 +1262,10 @@ pre code {
   font-size: 9px;
   margin-bottom: 6px;
 }
-.historicalHeading h2 {
+.historicalHeading h3 {
   font-size: 27px;
 }
-.historicalHeading h2 span {
+.historicalHeading h3 span {
   font-size: 17px;
   color: #7d8c7e;
   margin-left: 5px;

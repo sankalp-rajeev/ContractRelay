@@ -50,6 +50,9 @@ export function AdapterView({ migration }: { migration: Migration }) {
           <div>
               <strong>{migration.status === 'INCONCLUSIVE' ? 'Synthesis failed before verification.' : 'Candidate explicitly rejects this migration.'}</strong>
             <p>{string(plan.reason)}</p>
+            {migration.status === 'INCONCLUSIVE' && migration.verification.policyVersion === 'NOT RUN' && (
+              <p>Generation failure; this trial is not a safe rejection.</p>
+            )}
           </div>
         </div>
       ) : (
@@ -417,7 +420,7 @@ export function MigrationInspection({ migration }: { migration: Migration }) {
       <section className="inspectionSection">
         <SectionTitle title="Evidence provenance" />
         <EvidenceBoundary />
-        <details className="disclosure">
+        <details className="disclosure" open={migration.id === 'session-collab-v3'}>
           <summary>Source artifact & scope limitations</summary>
           <p className="sourcePath mono">{migration.artifactSource}</p>
           <ul>
