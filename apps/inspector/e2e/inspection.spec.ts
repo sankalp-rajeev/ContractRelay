@@ -1,5 +1,21 @@
 import { test, expect } from '@playwright/test';
 
+test('the deployed artifact API returns data, not errors hidden behind HTTP 200', async ({ request }) => {
+  const response = await request.post('/api/graphql', { data: { query: `{
+    migrations { id }
+    benchmarkSummary { records }
+    realWorldResults { id }
+    migration(id: "12-refund-workflow") { id adapterHash }
+  }` } });
+  expect(response.ok()).toBe(true);
+  const body = await response.json();
+  expect(body.errors).toBeUndefined();
+  expect(body.data.migrations).toHaveLength(23);
+  expect(body.data.benchmarkSummary.records).toBe(195);
+  expect(body.data.realWorldResults).toHaveLength(8);
+  expect(body.data.migration.id).toBe('12-refund-workflow');
+});
+
 test('keeps pre-fix failures visible alongside new regression and unseen trial records', async ({ page }) => {
   await page.goto('/real-world');
   for (const id of ['mapbox', 'fabric', 'mapbox-v3', 'fabric-v3', 'session-collab-v3'])
@@ -57,7 +73,7 @@ test('sqlew rejection stays visible, trial links work and unknown cases show a m
   // state and noindex directive rather than requiring a pre-stream status code.
   await page.goto('/migrations/no-such-case');
   await expect(page.getByRole('heading', { name: 'Migration not found.' })).toBeVisible();
-  await expect(page.locator('head meta[name="robots"]')).toHaveAttribute('content', 'noindex');
+  await expect(page.locator('head meta[name="robots"]').first()).toHaveAttribute('content', 'noindex');
 });
 
 test('search is accessible and pages fit the viewport', async ({ page }) => {

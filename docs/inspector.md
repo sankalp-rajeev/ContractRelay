@@ -8,7 +8,7 @@ Historical results are discovered through `data/historical-catalog.json`; each
 root retains its own unchanged summary and trials. v2 adds Mapbox and Microsoft
 Fabric. Generation failures display INCONCLUSIVE with verification NOT RUN, empty
 gate checks and the retained error code. They are never relabeled as safe rejection.
-The inspector currently has twelve API/component tests and eight browser checks.
+The inspector has fourteen API/component tests and twelve desktop/mobile browser checks.
 
 The portfolio interface lives in `apps/inspector/`, outside the frozen workspace
 packages. It uses Next.js, React, strict TypeScript, Node.js, GraphQL and ordinary
@@ -46,7 +46,7 @@ Next.js Server Components / small React client components
                          ↓
 Generated typed GraphQL documents / read-only schema
                          ↓
-Node ArtifactService (validated, catalog-selected filesystem reads)
+Node ArtifactService (validated, catalog-selected public artifact bundle)
                          ↓
 Existing versioned ContractRelay results + completed presentation exports
 ```
@@ -56,6 +56,25 @@ SSR. `POST /api/graphql` exposes the same schema for external inspection. Both
 paths use the same resolvers and artifact service. GraphQL JSON output is
 validated; null-prototype execution results are normalized before crossing
 React's server/client boundary.
+
+## Vercel deployment
+
+Use the Next.js preset, Root Directory `apps/inspector`, install command `npm ci`,
+and build command `npm run build`. Enable **Include source files outside of the
+Root Directory in the Build Step** so the build can read the versioned evidence.
+No Gemini key or other environment variable is needed.
+
+The `prebuild` and `predev` hooks package an explicit allowlist of public evidence
+into the ignored `.generated/artifacts.json`. The app reads this bundle from its
+own directory, without assuming the repository exists two directories above the
+serverless function. Next.js tracing explicitly includes the bundle and GraphQL
+schema. `postbuild` checks the deployment traces for every data route and fails
+the build if either asset is missing. The original versioned files are never
+rewritten. The Sites hosting mirror uses the same allowlist.
+
+After deployment, check `/`, `/real-world`, `/benchmarks`, and a migration detail.
+An HTTP 200 alone is insufficient: streamed page failures and GraphQL errors can
+still use that status. The browser suite checks rendered content and API data.
 
 - `/`: overview, compatibility path, outcomes and evidence boundary.
 - `/migrations`: redirects to the stateful refund example.

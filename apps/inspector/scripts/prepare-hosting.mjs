@@ -4,6 +4,7 @@ import { cp, readFile, writeFile, mkdir, rm, readdir } from 'node:fs/promises';
 import { resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
+import { publicArtifacts } from './public-artifacts.mjs';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 const app = resolve(root, 'apps/inspector');
@@ -39,25 +40,7 @@ export default function Link(props: AnchorHTMLAttributes<HTMLAnchorElement> & { 
 }
 `);
 await mkdir(resolve(target, 'public'), { recursive: true });
-const catalog = {};
-const add = async path => { catalog[path] = await readFile(resolve(root, path), 'utf8'); };
-for (const path of ['benchmarks/results/final-v3.json', 'benchmarks/manifests/suite-v3.json',
-  'apps/inspector/data/historical-catalog.json', 'apps/inspector/data/exports.json', 'apps/inspector/data/refund-execution.json']) await add(path);
-const suite = JSON.parse(catalog['benchmarks/manifests/suite-v3.json']);
-for (const { id } of suite.cases) {
-  assert(/^[a-z0-9-]+$/.test(id));
-  for (const name of ['candidate.json', 'gate-report.json', 'observations.json', 'result.json']) await add(`apps/inspector/data/controlled/${id}/${name}`);
-  for (const name of ['synthesis/evidence.json', 'tasks.json']) await add(`benchmarks/cases/${id}/${name}`);
-}
-for (const historicalRoot of JSON.parse(catalog['apps/inspector/data/historical-catalog.json']).roots) {
-  assert(/^benchmarks\/realworld-v[1-9][0-9]*$/.test(historicalRoot));
-  await add(`${historicalRoot}/results/summary.json`);
-for (const entry of JSON.parse(catalog[`${historicalRoot}/results/summary.json`]).cases) {
-  assert(/^[a-z0-9-]+$/.test(entry.project));
-  for (const name of ['old-contract.json', 'new-contract.json', 'provenance.json']) await add(`${historicalRoot}/${entry.project}/${name}`);
-  for (let trial = 1; trial <= entry.trials; trial++) await add(`${historicalRoot}/${entry.project}/results/trial-${String(trial).padStart(3, '0')}.json`);
-}
-}
+const catalog = await publicArtifacts();
 await writeFile(resolve(target, 'src/server/artifact-catalog.json'), JSON.stringify(catalog));
 let service = await readFile(resolve(app, 'src/server/artifacts.ts'), 'utf8');
 service = service.replace("import { readFile } from 'node:fs/promises';\n", '').replace("import { resolve } from 'node:path';\n", '');

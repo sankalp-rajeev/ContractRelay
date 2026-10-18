@@ -388,7 +388,15 @@ export class ArtifactService {
 }
 
 // Works from app directory (npm --prefix / pnpm dev), with no environment/key loading.
+// repositoryRoot is retained for source-file audits/tests, never runtime reads.
 export const repositoryRoot = resolve(process.cwd(), '../..');
-export const artifacts = new ArtifactService((path) =>
-  readFile(/* turbopackIgnore: true */ resolve(repositoryRoot, path), 'utf8'),
-);
+let packaged: Promise<Record<string, string>> | undefined;
+export const artifacts = new ArtifactService(async (path) => {
+  packaged ??= readFile(
+    /* turbopackIgnore: true */ resolve(process.cwd(), '.generated/artifacts.json'), 'utf8',
+  ).then((source) => z.record(z.string(), z.string()).parse(JSON.parse(source) as unknown));
+  const catalog = await packaged;
+  if (!Object.hasOwn(catalog, path))
+    throw Object.assign(new Error('Missing versioned artifact'), { code: 'ENOENT' });
+  return catalog[path];
+});

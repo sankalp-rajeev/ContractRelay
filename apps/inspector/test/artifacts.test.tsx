@@ -15,6 +15,29 @@ import { POST } from '../src/app/api/graphql/route';
 const realRead = (path: string) => readFile(resolve(repositoryRoot, path), 'utf8');
 const service = new ArtifactService(realRead);
 describe('Read-only artifact GraphQL', () => {
+  it('packages byte-identical public artifacts without private or sealed inputs', async () => {
+    const packed = JSON.parse(await readFile('.generated/artifacts.json', 'utf8')) as Record<string, string>;
+    expect(Object.keys(packed)).toHaveLength(146);
+    for (const [path, source] of Object.entries(packed)) {
+      expect(path).not.toMatch(/(?:\.env|sealed|interactions|node_modules)/);
+      expect(source).toBe(await realRead(path));
+    }
+  });
+  it('serves every catalog entry and historical trial from the deployment bundle', async () => {
+    // Use the production reader, not the repository reader used by source audits.
+    const { migrations } = await query(CatalogDocument, {});
+    expect(migrations).toHaveLength(23);
+    const { benchmarkSummary, realWorldResults } = await query(ResultsDocument, {});
+    expect(benchmarkSummary.records).toBe(195);
+    expect(realWorldResults).toHaveLength(8);
+    for (const entry of migrations) {
+      for (let trial = 1; trial <= (entry.category === 'HISTORICAL' ? 3 : 1); trial++) {
+        const data = await query(InspectMigrationDocument, { id: entry.id, trial });
+        expect(data.migration?.id).toBe(entry.id);
+        expect(data.migration?.trial).toBe(trial);
+      }
+    }
+  });
   it('loads the full catalog and every completed controlled/historical detail', async () => {
     const { migrations } = await query(CatalogDocument, {}, service);
     expect(migrations).toHaveLength(23);
