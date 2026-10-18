@@ -1,0 +1,503 @@
+{
+  "kind": "separate-api-free-local-mcp-fixture-capture",
+  "model_calls": 0,
+  "description": "Recorded local replay of the completed B3 trial-1 plan through existing verification, promotion and MCP APIs. Separate from frozen benchmark measurements. Timings deliberately not measured.",
+  "adapter_hash": "a455a71a584ced13db91e1b6d95a2ab894a0a16d6b23d8ce5f5a2280aae23e87",
+  "old_invocation": {
+    "name": "refund_order",
+    "arguments": {
+      "order_id": "order-2",
+      "amount_dollars": 3.21,
+      "request_id": "inspector-demo"
+    }
+  },
+  "backend_calls": [
+    {
+      "invocation": 1,
+      "call": {
+        "name": "lookup_payment",
+        "arguments": {
+          "order_id": "order-2"
+        }
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"payment_id\":\"payment-2\"}"
+          }
+        ],
+        "structuredContent": {
+          "payment_id": "payment-2"
+        }
+      }
+    },
+    {
+      "invocation": 1,
+      "call": {
+        "name": "refund_payment",
+        "arguments": {
+          "amount_cents": 321,
+          "idempotency_key": "inspector-demo",
+          "payment_id": "payment-2",
+          "reason": "customer_request"
+        }
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"id\":\"refund-inspector-demo\",\"state\":\"completed\"}"
+          }
+        ],
+        "structuredContent": {
+          "id": "refund-inspector-demo",
+          "state": "completed"
+        }
+      }
+    },
+    {
+      "invocation": 1,
+      "call": {
+        "name": "update_order_status",
+        "arguments": {
+          "idempotency_key": "inspector-demo",
+          "order_id": "order-2",
+          "status": "refunded"
+        }
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"order_id\":\"order-2\",\"status\":\"refunded\"}"
+          }
+        ],
+        "structuredContent": {
+          "order_id": "order-2",
+          "status": "refunded"
+        }
+      }
+    },
+    {
+      "invocation": 2,
+      "call": {
+        "name": "lookup_payment",
+        "arguments": {
+          "order_id": "order-2"
+        }
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"payment_id\":\"payment-2\"}"
+          }
+        ],
+        "structuredContent": {
+          "payment_id": "payment-2"
+        }
+      }
+    },
+    {
+      "invocation": 2,
+      "call": {
+        "name": "refund_payment",
+        "arguments": {
+          "amount_cents": 321,
+          "idempotency_key": "inspector-demo",
+          "payment_id": "payment-2",
+          "reason": "customer_request"
+        }
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"id\":\"refund-inspector-demo\",\"state\":\"completed\"}"
+          }
+        ],
+        "structuredContent": {
+          "id": "refund-inspector-demo",
+          "state": "completed"
+        }
+      }
+    },
+    {
+      "invocation": 2,
+      "call": {
+        "name": "update_order_status",
+        "arguments": {
+          "idempotency_key": "inspector-demo",
+          "order_id": "order-2",
+          "status": "refunded"
+        }
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"order_id\":\"order-2\",\"status\":\"refunded\"}"
+          }
+        ],
+        "structuredContent": {
+          "order_id": "order-2",
+          "status": "refunded"
+        }
+      }
+    }
+  ],
+  "first_output": {
+    "refund_id": "refund-inspector-demo",
+    "status": "refunded"
+  },
+  "retry_output": {
+    "refund_id": "refund-inspector-demo",
+    "status": "refunded"
+  },
+  "final_state": {
+    "refund_count": 1,
+    "refund_amount_cents": 321,
+    "order_status": "refunded",
+    "payment_state": "refunded",
+    "refunded_cents": 321,
+    "ledger_count": 1,
+    "ledger_total_cents": 321,
+    "ledger_provenance": "customer_request",
+    "request_key": "inspector-demo",
+    "side_effects": {
+      "refund_payment": 1,
+      "update_order_status": 1,
+      "lookup_payment": 0
+    }
+  },
+  "verification": {
+    "version": 1,
+    "policy_version": "stateful-fixture-v1",
+    "plan_hash": "a455a71a584ced13db91e1b6d95a2ab894a0a16d6b23d8ce5f5a2280aae23e87",
+    "contract_old_hash": "e697607e5ada1c63ff1a229abea44c364293d118b2bde21da6699c482f22c131",
+    "contract_new_hash": "e800045fe4e64eb9900e79e33e769c75233e8afac05b31d90c68d3d18dc3f541",
+    "gate_evidence_hash": "16d410976d13f585984be0ff0082a045b7414f7b157d2ceab5a14844d6768006",
+    "checks": [
+      {
+        "id": "structural",
+        "level": "V0",
+        "passed": true,
+        "detail": "Bounded plan and contract schemas validated"
+      },
+      {
+        "id": "trace:refund-gate",
+        "level": "V1",
+        "passed": true,
+        "detail": "Replay passed schema boundaries"
+      },
+      {
+        "id": "predicate:returned-refunded",
+        "level": "V2",
+        "passed": true,
+        "detail": "Independent output predicate"
+      },
+      {
+        "id": "state:amount",
+        "level": "V3",
+        "passed": true,
+        "detail": "Independent fixture state predicate"
+      },
+      {
+        "id": "state:order-state",
+        "level": "V3",
+        "passed": true,
+        "detail": "Independent fixture state predicate"
+      },
+      {
+        "id": "state:payment-state",
+        "level": "V3",
+        "passed": true,
+        "detail": "Independent fixture state predicate"
+      },
+      {
+        "id": "state:single-refund",
+        "level": "V3",
+        "passed": true,
+        "detail": "Independent fixture state predicate"
+      },
+      {
+        "id": "state:ledger-once",
+        "level": "V3",
+        "passed": true,
+        "detail": "Independent fixture state predicate"
+      },
+      {
+        "id": "effects:refund-once",
+        "level": "V3",
+        "passed": true,
+        "detail": "Independent side-effect count"
+      },
+      {
+        "id": "effects:status-once",
+        "level": "V3",
+        "passed": true,
+        "detail": "Independent side-effect count"
+      }
+    ],
+    "traces_total": 1,
+    "traces_passed": 1,
+    "oracle_results": [
+      {
+        "id": "returned-refunded",
+        "passed": true
+      }
+    ],
+    "state_oracle_results": [
+      {
+        "id": "amount",
+        "passed": true
+      },
+      {
+        "id": "order-state",
+        "passed": true
+      },
+      {
+        "id": "payment-state",
+        "passed": true
+      },
+      {
+        "id": "single-refund",
+        "passed": true
+      },
+      {
+        "id": "ledger-once",
+        "passed": true
+      }
+    ],
+    "side_effect_results": [
+      {
+        "id": "refund-once",
+        "passed": true
+      },
+      {
+        "id": "status-once",
+        "passed": true
+      }
+    ],
+    "verdict": "PROMOTED",
+    "residual_risks": []
+  },
+  "old_contract": {
+    "contractId": "synthetic/refund/old",
+    "version": "1",
+    "provenance": {
+      "kind": "curated-fixture",
+      "source": "fixtures/synthetic/refund"
+    },
+    "name": "refund_order",
+    "description": "Immediately refund an order in dollars, mark it refunded, and record exactly one customer-request ledger entry. Repeating the same request_id must not refund twice.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "amount_dollars": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 1000,
+          "multipleOf": 0.01
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "order_id",
+        "amount_dollars",
+        "request_id"
+      ],
+      "additionalProperties": false
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "refund_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "refunded"
+          ]
+        }
+      },
+      "required": [
+        "refund_id",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "sideEffect": "REVERSIBLE_WRITE",
+    "idempotency": "CONDITIONAL"
+  },
+  "new_contracts": [
+    {
+      "contractId": "refund/lookup_payment",
+      "version": "2",
+      "provenance": {
+        "kind": "mcp-live-snapshot",
+        "source": "controlled-refund-mcp-server"
+      },
+      "name": "lookup_payment",
+      "description": "Resolve order_id to its payment_id without changing state.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "payment_id": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "payment_id"
+        ],
+        "additionalProperties": false
+      },
+      "sideEffect": "READ_ONLY",
+      "idempotency": "IDEMPOTENT"
+    },
+    {
+      "contractId": "refund/refund_payment",
+      "version": "2",
+      "provenance": {
+        "kind": "mcp-live-snapshot",
+        "source": "controlled-refund-mcp-server"
+      },
+      "name": "refund_payment",
+      "description": "Refund amount_cents immediately with reason customer_request. The same idempotency_key and arguments return the existing refund and never duplicate the ledger entry.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "payment_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "amount_cents": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100000
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "customer_request"
+            ]
+          },
+          "idempotency_key": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "payment_id",
+          "amount_cents",
+          "reason",
+          "idempotency_key"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "completed"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "state"
+        ],
+        "additionalProperties": false
+      },
+      "sideEffect": "REVERSIBLE_WRITE",
+      "idempotency": "CONDITIONAL"
+    },
+    {
+      "contractId": "refund/update_order_status",
+      "version": "2",
+      "provenance": {
+        "kind": "mcp-live-snapshot",
+        "source": "controlled-refund-mcp-server"
+      },
+      "name": "update_order_status",
+      "description": "After a completed payment refund, set order status to refunded. Replays with the same idempotency_key do not duplicate the status-change event.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "refunded"
+            ]
+          },
+          "idempotency_key": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "order_id",
+          "status",
+          "idempotency_key"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "refunded"
+            ]
+          }
+        },
+        "required": [
+          "order_id",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "sideEffect": "IDEMPOTENT_WRITE",
+      "idempotency": "IDEMPOTENT"
+    }
+  ]
+}

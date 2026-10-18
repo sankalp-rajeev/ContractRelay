@@ -1,0 +1,1 @@
+{"rationale":"Convert argument value from string to integer as documented in change.json. The response field square is unchanged and passes through.","response":[],"source_tool":"square","steps":[{"arg":"value","evidence":["change.json"],"op":"ConvertType","to":"integer"}],"target":{"kind":"single","tool":"square"},"version":1}

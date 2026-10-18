@@ -1,0 +1,1 @@
+{"rationale":"Map priority enum values low to standard and high to urgent as documented in change.json.","response":[],"source_tool":"queue_delay","steps":[{"arg":"priority","evidence":["change.json"],"mapping":{"high":"urgent","low":"standard"},"op":"MapEnum"}],"target":{"kind":"single","tool":"queue_delay"},"version":1}

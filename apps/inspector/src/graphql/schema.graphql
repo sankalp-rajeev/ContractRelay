@@ -1,0 +1,112 @@
+"Persisted JSON only; no executable expressions."
+scalar JSON
+
+enum MigrationStatus {
+  PROMOTED
+  REJECTED
+  INCONCLUSIVE
+}
+enum MigrationCategory {
+  CONTROLLED
+  HISTORICAL
+}
+enum VerificationLevel {
+  V0
+  V1
+  V2
+  V3
+}
+
+type Query {
+  migrations: [MigrationSummary!]!
+  migration(id: ID!, trial: Int = 1): Migration
+  benchmarkSummary: BenchmarkSummary!
+  realWorldResults: [RealWorldResult!]!
+}
+
+type MigrationSummary {
+  id: ID!
+  name: String!
+  category: MigrationCategory!
+  change: String!
+  status: MigrationStatus!
+  heldOut: Boolean!
+}
+
+type Migration {
+  id: ID!
+  name: String!
+  category: MigrationCategory!
+  change: String!
+  status: MigrationStatus!
+  heldOut: Boolean!
+  oldContract: JSON!
+  newContract: JSON!
+  adapterPlan: JSON!
+  adapterHash: String!
+  verification: VerificationReport!
+  executionTrace: JSON!
+  model: String!
+  promptVersion: String
+  trial: Int!
+  availableTrials: [Int!]!
+  provenance: String!
+  artifactSource: String!
+  "Null when rejection prevented promoted execution."
+  sealedPassed: Boolean
+  limitations: [String!]!
+}
+
+type VerificationReport {
+  verdict: MigrationStatus!
+  policyVersion: String!
+  gateEvidenceHash: String!
+  checks: [VerificationCheck!]!
+  tracesTotal: Int!
+  tracesPassed: Int!
+  residualRisks: [String!]!
+  raw: JSON!
+}
+type VerificationCheck {
+  id: ID!
+  level: VerificationLevel!
+  passed: Boolean!
+  detail: String!
+}
+
+type BenchmarkSummary {
+  model: String!
+  records: Int!
+  suiteHash: String!
+  protocolHash: String!
+  methods: [BenchmarkMethod!]!
+  limitations: [String!]!
+}
+type BenchmarkMethod {
+  id: ID!
+  name: String!
+  recovered: Int!
+  compatibleTrials: Int!
+  safeRejections: Int!
+  mustRejectTrials: Int!
+  hiddenFalseSuccess: Int!
+  trials: Int!
+}
+type RealWorldResult {
+  id: ID!
+  name: String!
+  repository: String!
+  oldCommit: String!
+  newCommit: String!
+  change: String!
+  directOutcome: String!
+  oldOutcome: String!
+  trials: Int!
+  recovered: Int!
+  promoted: Int!
+  safeRejections: Int!
+  hiddenFalseCompatible: Int!
+  status: MigrationStatus!
+  rejectionReason: String
+  limitations: [String!]!
+}

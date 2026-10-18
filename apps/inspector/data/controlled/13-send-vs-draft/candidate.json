@@ -1,0 +1,1 @@
+{"missing_evidence":["Evidence of a tool or operation to send drafts"],"op":"Reject","reason":"The target tool create_message only saves a draft and does not send the email, whereas send_email sends immediately. No send tool or operation exists.","risk":"Emails will only be saved as drafts and never delivered to recipients, resulting in unsent communications.","version":1}

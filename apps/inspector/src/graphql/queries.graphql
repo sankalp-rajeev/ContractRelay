@@ -1,0 +1,85 @@
+query Catalog {
+  migrations {
+    id
+    name
+    category
+    change
+    status
+    heldOut
+  }
+}
+query InspectMigration($id: ID!, $trial: Int = 1) {
+  migration(id: $id, trial: $trial) {
+    id
+    name
+    category
+    change
+    status
+    heldOut
+    oldContract
+    newContract
+    adapterPlan
+    adapterHash
+    model
+    promptVersion
+    trial
+    availableTrials
+    provenance
+    artifactSource
+    sealedPassed
+    limitations
+    verification {
+      verdict
+      policyVersion
+      gateEvidenceHash
+      tracesTotal
+      tracesPassed
+      residualRisks
+      raw
+      checks {
+        id
+        level
+        passed
+        detail
+      }
+    }
+    executionTrace
+  }
+}
+query Results {
+  benchmarkSummary {
+    model
+    records
+    suiteHash
+    protocolHash
+    limitations
+    methods {
+      id
+      name
+      recovered
+      compatibleTrials
+      safeRejections
+      mustRejectTrials
+      hiddenFalseSuccess
+      trials
+    }
+  }
+  realWorldResults {
+    id
+    name
+    repository
+    oldCommit
+    newCommit
+    change
+    directOutcome
+    oldOutcome
+    trials
+    recovered
+    promoted
+    safeRejections
+    hiddenFalseCompatible
+    status
+    rejectionReason
+    limitations
+  }
+}

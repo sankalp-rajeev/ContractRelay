@@ -26,6 +26,34 @@ the measured summary from versioned records without an API key.
 
 ## Quick start
 
+### Read-only web inspector
+
+```sh
+pnpm ui:install
+pnpm dev
+```
+
+Open **http://127.0.0.1:3000**. No Gemini key, Docker, or benchmark execution
+is needed. `pnpm ui:install` installs the isolated app with npm; the original
+pnpm lockfile and runtime dependencies remain frozen. The equivalent setup is
+`cd apps/inspector && npm ci && npm run dev`.
+
+Inspect all 15 frozen controlled cases and three public historical migrations,
+with actual contracts, adapter operations, V0–V3 reports and saved observations.
+The refund page also contains a separately labeled capture of real local MCP
+calls and an idempotent SQLite retry. sqlew's **0/3 recovery and 3/3 safe rejection**
+remain visible. The interface exposes no live/model-backed execution.
+
+Architecture: **React / Next.js → typed GraphQL → Node artifact service →
+existing ContractRelay results**. Server Components execute the same read-only
+schema as `POST /api/graphql`; generated operation types connect queries to
+components. CSS and fonts are local. See the [UI guide](docs/inspector.md) for
+routes, schema, provenance, tests and protected-file audit.
+
+![ContractRelay read-only inspector](docs/images/inspector-overview.png)
+
+### Runtime and CLI
+
 Requires Node.js 22.12+ and pnpm 10.20.0. All commands below run without an API key.
 
 ```sh

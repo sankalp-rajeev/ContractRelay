@@ -1,0 +1,1 @@
+{"rationale":"Project response fields id and name to data.identity.id and data.identity.label based on change.json.","response":[{"evidence":["change.json"],"mapping":{"id":"data.identity.id","name":"data.identity.label"},"op":"ProjectResponse"}],"source_tool":"profile","steps":[],"target":{"kind":"single","tool":"profile"},"version":1}

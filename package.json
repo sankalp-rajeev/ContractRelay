@@ -7,6 +7,10 @@
   "packageManager": "pnpm@10.20.0",
   "engines": { "node": ">=22.12.0" },
   "scripts": {
+    "dev": "npm --prefix apps/inspector run dev",
+    "ui:install": "npm --prefix apps/inspector ci",
+    "ui:check": "npm --prefix apps/inspector run check",
+    "ui:build": "npm --prefix apps/inspector run build",
     "check": "node scripts/check.mjs",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",

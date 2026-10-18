@@ -1,0 +1,1 @@
+{"rationale":"Project nested sensor reading field to temperature according to change.json","response":[{"evidence":["change.json"],"mapping":{"temperature":"sensor.reading.degrees_c"},"op":"ProjectResponse"}],"source_tool":"reading","steps":[],"target":{"kind":"single","tool":"reading"},"version":1}

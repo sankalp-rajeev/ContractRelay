@@ -179,3 +179,38 @@ no test timeouts or core sources were changed. All nine API-free replay outcomes
 match the measured records, with zero additional Gemini calls. The 221 protected
 files remain byte-for-byte unchanged. Separate CI checks cover the budget guard
 and evidence-partition denial behavior without paid calls.
+
+## Read-only frontend and evidence inspector — complete
+
+The isolated `apps/inspector/` application adds Next.js, React, strict TypeScript,
+Node.js and a read-only GraphQL artifact API. The overview explains the runtime;
+URL-addressable migration pages inspect all 15 controlled cases and all three
+public historical migrations. Historical trials are selectable. Adapter plans,
+V0–V3 gates, provenance, sealed observations, benchmark counts and failure cases
+come from completed artifacts. sqlew's 0/3 recovery and 3/3 safe rejection remain
+prominent. Controlled and historical results stay separate.
+
+Trial-1 controlled files were exported byte-for-byte for clone-ready inspection,
+with source paths and SHA-256 receipts. A separately labeled, API-free local MCP
+capture uses the existing verifier, promotion registry, proxy and SQLite fixture
+unchanged. It records six actual backend calls across an unchanged invocation and
+retry, with one ledger entry. It creates no new frozen benchmark result and uses
+no model. The web app exposes no execution mutations and needs no API key.
+
+Validation: **146 unchanged core tests**, **two historical budget tests**, **10
+UI/API tests**, and **six desktop/mobile browser checks** pass. Strict TypeScript,
+lint and production build pass. The root `pnpm dev` command launches the complete
+interface. Screenshots were reviewed on desktop and mobile. A separate UI CI
+workflow repeats checks, code generation, build and browser tests without keys.
+
+The before/after audit covers **317 protected files**, including the original
+221-file guard, all existing benchmark artifacts and synthetic fixtures. Raw
+aggregate SHA-256 remains
+`25aab4e3d73a68b58dee605aa827f9f5d4abbbafa83e38ee302e6789e3061ec9`.
+The benchmark execution fingerprint remains
+`ad4a35c05d8c2aba38e303fec9bdf12ee0e7c20c00bf0d278c43787e2546c299`.
+All 195 final records, suite/protocol hashes, frozen prompts, gates, scoring,
+heuristics, model/quota settings, core sources and the root lockfile are unchanged.
+
+Run `pnpm ui:install` once, then `pnpm dev`. The [UI guide](inspector.md) documents
+architecture, schema, routes, artifact provenance, validation and portable hashes.

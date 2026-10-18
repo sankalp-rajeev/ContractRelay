@@ -1,0 +1,246 @@
+{
+  "kind": "byte-identical-completed-artifact-exports",
+  "selection": "B3 trial 1 for every frozen suite-v3 case; no new evaluation",
+  "files": {
+    "controlled/01-tool-rename/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/01-tool-rename/b3/trial-001/candidate.json",
+      "sha256": "fffacf022fb796bfbc35f06b115d80e0784db353b32b9dd57363852ba6c3898b"
+    },
+    "controlled/01-tool-rename/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/01-tool-rename/b3/trial-001/gate-report.json",
+      "sha256": "955b2bfbe22f0ac164882b400a42237b12195288156baf8abd30c4e3f13d6fc8"
+    },
+    "controlled/01-tool-rename/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/01-tool-rename/b3/trial-001/observations.json",
+      "sha256": "39fe46cc2148dc1f0d654285df5e194a77b57609952f072ce1d370595225a006"
+    },
+    "controlled/01-tool-rename/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/01-tool-rename/b3/trial-001/result.json",
+      "sha256": "b104aff6841610a3a9f0118b189efe1992f4891f4945ac79505953fee0cfd941"
+    },
+    "controlled/02-arg-rename/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/02-arg-rename/b3/trial-001/candidate.json",
+      "sha256": "0659e7ee2dc927bc299508c8351b30b0c83333b8304068f5e4c5b6b81fa92783"
+    },
+    "controlled/02-arg-rename/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/02-arg-rename/b3/trial-001/gate-report.json",
+      "sha256": "6a3478c17106cb6bff2d3051267d6f2e4aea1a527e66cd86986ef8f78d35a17f"
+    },
+    "controlled/02-arg-rename/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/02-arg-rename/b3/trial-001/observations.json",
+      "sha256": "5e0ee1d5e2a17fb3295850c86b26c4954c8d9f448016d6dee03bf109756ba651"
+    },
+    "controlled/02-arg-rename/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/02-arg-rename/b3/trial-001/result.json",
+      "sha256": "c8294b9b61c972dc40e8395b333e8e6880e7c73dae0a8743aaa31fac69a097f0"
+    },
+    "controlled/03-weather-default/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/03-weather-default/b3/trial-001/candidate.json",
+      "sha256": "d52d2a10294fb5776dffb430aa31cf29949c690f7088c7741e2f20702f4d52b4"
+    },
+    "controlled/03-weather-default/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/03-weather-default/b3/trial-001/gate-report.json",
+      "sha256": "db837545a50bb31f1a5c917c9d275ac48a2ae0c44a958b66979a3c6c5e0823b7"
+    },
+    "controlled/03-weather-default/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/03-weather-default/b3/trial-001/observations.json",
+      "sha256": "a8fa74cf4438af06d83bd332594e6f326573ee4827331b31056a1878f7d002be"
+    },
+    "controlled/03-weather-default/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/03-weather-default/b3/trial-001/result.json",
+      "sha256": "667665d6685b5a2f1bb326a71bbbf91e96e404c9bf1a7b3963438ea91bad7939"
+    },
+    "controlled/04-unknown-default/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/04-unknown-default/b3/trial-001/candidate.json",
+      "sha256": "79113337d3c15f8471109b1691ba4c0ae327954db4a7871b2b450d9bc2643ea6"
+    },
+    "controlled/04-unknown-default/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/04-unknown-default/b3/trial-001/gate-report.json",
+      "sha256": "5cfbb8adc725e23bc148a91dee0333bbe83b91ac83d79f994adb2ea7b59a82e7"
+    },
+    "controlled/04-unknown-default/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/04-unknown-default/b3/trial-001/observations.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "controlled/04-unknown-default/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/04-unknown-default/b3/trial-001/result.json",
+      "sha256": "1b8a852cf4cab084e6302e6aa8cf555b053cd97b0ca208812e2b55720461f9d0"
+    },
+    "controlled/05-string-number/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/05-string-number/b3/trial-001/candidate.json",
+      "sha256": "1dab5e73dc71b7c48b5c49878d7e13fa17947fa9e3420565cdade4f1e7c1b57f"
+    },
+    "controlled/05-string-number/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/05-string-number/b3/trial-001/gate-report.json",
+      "sha256": "cf3673a4b01ffc560ba15d23935c4851c869c82a9e58e8b4b01d74b3ed333a4f"
+    },
+    "controlled/05-string-number/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/05-string-number/b3/trial-001/observations.json",
+      "sha256": "a712393ce165096e251f619b0560b52f3c4fa6891ac02d5829645b725a709394"
+    },
+    "controlled/05-string-number/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/05-string-number/b3/trial-001/result.json",
+      "sha256": "064c5a22533c576e394468fe1d55f1eb7f8bfb808d10683d7cc4673cf68f7abd"
+    },
+    "controlled/06-money-scale/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/06-money-scale/b3/trial-001/candidate.json",
+      "sha256": "9947e0e76bfb36f1f3846b524bf73854a9a1c2f3fbd64da3b4b8fea30bd47a3b"
+    },
+    "controlled/06-money-scale/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/06-money-scale/b3/trial-001/gate-report.json",
+      "sha256": "bb3614fe621b7cbb1fda97a8c5f13d7c5045816e772f481443d3f3ad196574f3"
+    },
+    "controlled/06-money-scale/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/06-money-scale/b3/trial-001/observations.json",
+      "sha256": "cf953dd4dd73f3a233ee2165bf2e650bc5fdc23ebbb52bc3cef87bb6af956428"
+    },
+    "controlled/06-money-scale/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/06-money-scale/b3/trial-001/result.json",
+      "sha256": "50448f479b27ae37e458aad35c114f09afa94df8afb0bb03f634d8c3c2e4a15a"
+    },
+    "controlled/07-input-enum/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/07-input-enum/b3/trial-001/candidate.json",
+      "sha256": "4b706bb24b70656742805053ac3e50e14a52f485db466178c22933df7a40b0c9"
+    },
+    "controlled/07-input-enum/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/07-input-enum/b3/trial-001/gate-report.json",
+      "sha256": "c0d6a33ba9c9254f71f9114043850db6a1d1babbc1903ac1b3032399cba11745"
+    },
+    "controlled/07-input-enum/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/07-input-enum/b3/trial-001/observations.json",
+      "sha256": "f0c0ff3cd47557d9b5c9c5c9d7d68b43be280757678e86a912415189931e5bdc"
+    },
+    "controlled/07-input-enum/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/07-input-enum/b3/trial-001/result.json",
+      "sha256": "806ee0657b9656c5173b78043c1923b701b4a3e03cbfa45bb6d497ffec940640"
+    },
+    "controlled/08-delivery-enum/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/08-delivery-enum/b3/trial-001/candidate.json",
+      "sha256": "826ff186b3bab09d421777b4c76a8b23b900ec5d018a942bd447ed9529419f38"
+    },
+    "controlled/08-delivery-enum/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/08-delivery-enum/b3/trial-001/gate-report.json",
+      "sha256": "207f62cfbf8a43d8ffd72c34cc1791140e1e0875b4574abcf3aa67a449a9303c"
+    },
+    "controlled/08-delivery-enum/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/08-delivery-enum/b3/trial-001/observations.json",
+      "sha256": "834d55856295d4f997fd4cd1020fb9448ce6ca372661abd0ec64ce01c61ecf8b"
+    },
+    "controlled/08-delivery-enum/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/08-delivery-enum/b3/trial-001/result.json",
+      "sha256": "254ef7455223832450ea61a1ea66b1eeac2a037380b2d61a4cf5c96096ca1205"
+    },
+    "controlled/09-profile-projection/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/09-profile-projection/b3/trial-001/candidate.json",
+      "sha256": "55e6300576a8f29c573f355f28256e352412164189352f75e7ae410f770fcdd0"
+    },
+    "controlled/09-profile-projection/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/09-profile-projection/b3/trial-001/gate-report.json",
+      "sha256": "af77f99c02f77ef9e4d316cecc8efaffe71f1d36c4f1793bcc73a141cd293248"
+    },
+    "controlled/09-profile-projection/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/09-profile-projection/b3/trial-001/observations.json",
+      "sha256": "d8f66194c7f94889e1802d2e6b376fd56b1e8eb09a57916ac370af99dd82dc9c"
+    },
+    "controlled/09-profile-projection/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/09-profile-projection/b3/trial-001/result.json",
+      "sha256": "f2b077961184db7001707f3978cd6d9850f9bbf6e92577dc89175ec487928c80"
+    },
+    "controlled/10-reading-projection/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/10-reading-projection/b3/trial-001/candidate.json",
+      "sha256": "b12c25c66085ba02888a81fc4231cdc814f655dd9dcf99081c1dbb83dcd6b46c"
+    },
+    "controlled/10-reading-projection/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/10-reading-projection/b3/trial-001/gate-report.json",
+      "sha256": "60b94ac174ae1bf32ddefecc050850df161a02829bdbb5b50c2f30ed17ec6430"
+    },
+    "controlled/10-reading-projection/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/10-reading-projection/b3/trial-001/observations.json",
+      "sha256": "1d2bc794f6629f62fd029e28cdfe4cfded6e24ba3214db757a0752264b1d837e"
+    },
+    "controlled/10-reading-projection/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/10-reading-projection/b3/trial-001/result.json",
+      "sha256": "9c18a248449edb546d8c5f16bc9d13e4247b8e268327e2a3974b45e736bd7557"
+    },
+    "controlled/11-workspace-composition/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/11-workspace-composition/b3/trial-001/candidate.json",
+      "sha256": "c51cf8e3c2fa7c4f0388992819029cb09f686ea1f350fa8277bf7a5d145740bd"
+    },
+    "controlled/11-workspace-composition/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/11-workspace-composition/b3/trial-001/gate-report.json",
+      "sha256": "5c0b080edbd52b194655aa34fefdec544b436d5479d3529d1e91084898d3f923"
+    },
+    "controlled/11-workspace-composition/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/11-workspace-composition/b3/trial-001/observations.json",
+      "sha256": "c7b9ea22c0d66b2cb394102794b1f3e69761c157ba786f480d9d954551cf7dbc"
+    },
+    "controlled/11-workspace-composition/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/11-workspace-composition/b3/trial-001/result.json",
+      "sha256": "41883eeaae41e26e9c3db796f3d2003f6a515af2ed0e078c40e46a54a997ffd6"
+    },
+    "controlled/12-refund-workflow/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/12-refund-workflow/b3/trial-001/candidate.json",
+      "sha256": "aac62e41c361cd36944515cfb83f4c651dc61fbeb924c672fa5f648ca6e50512"
+    },
+    "controlled/12-refund-workflow/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/12-refund-workflow/b3/trial-001/gate-report.json",
+      "sha256": "a5ea1abbc3b7396a9917322c7215e7ef1815794dadf78cdbbf84f493236d887c"
+    },
+    "controlled/12-refund-workflow/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/12-refund-workflow/b3/trial-001/observations.json",
+      "sha256": "de1e986fb19868e3e5ce986330ca67f474fedbbcfb5761c2875032bc95b604da"
+    },
+    "controlled/12-refund-workflow/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/12-refund-workflow/b3/trial-001/result.json",
+      "sha256": "acee0580d2cff9eb88f23994ca9c85982c0318ad2ff83b194758fcb56cfe9915"
+    },
+    "controlled/13-send-vs-draft/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/13-send-vs-draft/b3/trial-001/candidate.json",
+      "sha256": "bcaa00647469140c2458fb1e9ae9d20cd4452377ab12e190a66e9d96c9353013"
+    },
+    "controlled/13-send-vs-draft/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/13-send-vs-draft/b3/trial-001/gate-report.json",
+      "sha256": "dd6bbdaa3c97ee9f0432cc9037b4f04545d2276e56aab0f770a5ebd2e8eed50a"
+    },
+    "controlled/13-send-vs-draft/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/13-send-vs-draft/b3/trial-001/observations.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "controlled/13-send-vs-draft/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/13-send-vs-draft/b3/trial-001/result.json",
+      "sha256": "4875aa90a9cd5b15756231921e121bf428f6b2f10e37ff589e407bb9fa7a94dd"
+    },
+    "controlled/14-delete-vs-deactivate/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/14-delete-vs-deactivate/b3/trial-001/candidate.json",
+      "sha256": "64896e2959653d5e43a32d105d08716b5b0e1e83ae26081622f97525d77382b0"
+    },
+    "controlled/14-delete-vs-deactivate/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/14-delete-vs-deactivate/b3/trial-001/gate-report.json",
+      "sha256": "a0a3a9dfec097e838b2bb7f64e18584ea3cb4de72657085564107e21d69c154b"
+    },
+    "controlled/14-delete-vs-deactivate/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/14-delete-vs-deactivate/b3/trial-001/observations.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "controlled/14-delete-vs-deactivate/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/14-delete-vs-deactivate/b3/trial-001/result.json",
+      "sha256": "7ff4b2fac2c3218d934e9d1d7781cad0a93f7763a1ce78d7fc2735b91f64f434"
+    },
+    "controlled/15-stream-cap/candidate.json": {
+      "source": "runs/benchmark-v3-final-recovery/15-stream-cap/b3/trial-001/candidate.json",
+      "sha256": "4f7ef2814971a8e0b7574bfded0e9294e69840059ae815f9602fee749970eed6"
+    },
+    "controlled/15-stream-cap/gate-report.json": {
+      "source": "runs/benchmark-v3-final-recovery/15-stream-cap/b3/trial-001/gate-report.json",
+      "sha256": "d44558f24d38c18154e2eba9a83efefafe00cb88a7fc278a76c818bb5b66ceb2"
+    },
+    "controlled/15-stream-cap/observations.json": {
+      "source": "runs/benchmark-v3-final-recovery/15-stream-cap/b3/trial-001/observations.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "controlled/15-stream-cap/result.json": {
+      "source": "runs/benchmark-v3-final-recovery/15-stream-cap/b3/trial-001/result.json",
+      "sha256": "97c8ec2299dec8f247e1e74fecbe004d22ec45d693bbef00745f824888bd6f55"
+    }
+  }
+}

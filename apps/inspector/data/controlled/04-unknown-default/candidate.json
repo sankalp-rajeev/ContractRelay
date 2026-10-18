@@ -1,0 +1,1 @@
+{"missing_evidence":["Evidence establishing a compatible default currency or source for currency argument"],"op":"Reject","reason":"Mandatory argument currency has no default value or evidence establishing a compatible constant.","risk":"Arbitrarily selecting a currency would result in incorrect pricing calculations or currency mismatches.","version":1}

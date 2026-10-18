@@ -1,0 +1,1 @@
+[{"failed":false,"output":{"id":"two","name":"Person two"},"rejected":false,"state":{"side_effects":{}},"task_id":"hidden-1"},{"failed":false,"output":{"id":"three","name":"Person three"},"rejected":false,"state":{"side_effects":{}},"task_id":"hidden-2"}]
