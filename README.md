@@ -23,14 +23,19 @@ does not duplicate either write.
   compatible cases and safely rejected **4/4** must-reject cases. The final model
   saturated this suite: these results do not show that the adapter language or
   gate beats a plain model-generated wrapper.
-- **Three historical migrations from public MCP projects.** Mindwtr and Nexus-MCP
-  recovered in all three trials each. sqlew recovered **0/3**, with **3/3 safe
-  rejections**, because my schema compiler refuses the consolidated tool's native
-  union type. The [report](benchmarks/realworld-v1/REPORT.md) retains exact old/new
-  commits, the failure, and the limits of the synthetic fixtures.
-- **Known API cost: about $0.72.** The final controlled run accounts for
-  $0.674484 and the historical runs for $0.04337325. Six retained outage attempts
-  have unknown usage and are excluded; development runs are outside these totals.
+- **Five historical migrations from public MCP projects: two recovered, two
+  safely rejected, one failed to produce a valid plan.** Mindwtr and Nexus-MCP
+  each recovered **3/3** trials. sqlew and Mapbox each safely rejected **3/3**.
+  Mapbox requires wrapping a point in an array and reconstructing a changed response,
+  which my current DSL cannot express. Fabric's combined tool/argument rename
+  produced **3/3 invalid candidates** because the DSL forbids its real hyphenated
+  argument names; these are generation failures, not safe rejections. The
+  [v1 report](benchmarks/realworld-v1/REPORT.md) and
+  [v2 report](benchmarks/realworld-v2/REPORT.md) preserve exact commits and failures.
+- **Known API cost: about $0.75.** The final controlled run accounts for
+  $0.674484, the first historical extension for $0.04337325, and the harder
+  extension for $0.03602175. Six retained earlier outage attempts have unknown
+  usage and are excluded; development runs are outside these totals.
 
 The useful distinction here is a saved translation that runs deterministically
 without recurring model calls after promotion. Finite tests do not prove semantic
@@ -111,7 +116,7 @@ sandbox. There is no hosted tool execution, account system or billing product.
   [the previous README](docs/history/readme-before-editorial.md) retains the detailed
   commissioning and quota history.
 
-Core checks retain the original 146 tests and add 12 product CLI tests. The inspector adds ten API/component tests and six
+Core checks retain the original 146 tests and add 12 product CLI tests. The inspector adds twelve API/component tests and eight
 desktop/mobile browser checks. Both run in CI without model credentials. The
 [published final snapshot](benchmarks/results/final-v3.json) is the source for
 displayed benchmark counts; the UI does not rescore or rerun the evaluation.

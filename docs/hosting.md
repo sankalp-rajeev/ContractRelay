@@ -4,21 +4,26 @@ Live: https://contractrelay-inspector.fondsky12.chatgpt.site
 
 The public demo uses the same inspector pages, GraphQL schema, resolvers and
 artifact validation as the local Next.js application. A Sites/Vinext deployment
-copy replaces filesystem reads with 113 allowlisted public artifact files. It
+copy replaces filesystem reads with 127 allowlisted public artifact files. It
 contains no credentials, ignored runs, model calls or MCP tool execution.
 
 `apps/inspector/scripts/prepare-hosting.mjs` prepares that copy under the ignored
 `.contractrelay/inspector-site/` directory. Local UI sources remain unchanged.
 The deployment uses native anchor navigation because the current Vinext Worker
 implementation fails during `next/link` prefetch. Search and other React
-interactions still run; the existing six browser checks pass on the Worker build.
+interactions still run; all eight browser checks pass on the Worker build.
 
 ## Deployment identity
 
 - Site project: `appgprj_6ad43f7d52388191ac4d526456b2566d`
-- Hosting source commit: `aa24763f7a062c8813d2b50b46b645139e74fc74`
-- Saved version: `appgprj_6ad43f7d52388191ac4d526456b2566d~appgver_83bd8513a01c8191b816d541633794cf`
-- Archive SHA-256: `a2f4600a03b249cfc2fc5c925454c036e5fc8743b3cc0525fb15033633e1caad`
+- Hosting source commit: `637554ad59dacf34fe715d3f7ddb35f48133fd2d`
+- Saved version 2: `appgprj_6ad43f7d52388191ac4d526456b2566d~appgver_ceea313d75688191b5293cfd429fe455`
+- Archive SHA-256: `547aed2eb5142538660f951810c3bd1d29dc5a0c2e70acdebcd26b650b2f621d`
+
+Version 2 adds the v2 historical catalog and displays synthesis failures separately
+from gate rejection. The original public version remains in Site history at source
+commit `aa24763f7a062c8813d2b50b46b645139e74fc74` and saved version
+`appgprj_6ad43f7d52388191ac4d526456b2566d~appgver_83bd8513a01c8191b816d541633794cf`.
 
 The hosting source has its own repository and dependency lock. The core workspace
 and local inspector dependency locks were not changed. The hosting copy uses the

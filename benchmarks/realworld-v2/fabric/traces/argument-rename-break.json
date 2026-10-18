@@ -1,0 +1,1 @@
+{"call":{"arguments":{"workload-type":"notebook"},"name":"docs_item-api-spec"},"response":{"_meta":{"MicrosoftMcpToolId":"97229a98-c1ae-4255-a6e2-07631c2a42c5"},"content":[{"text":"Request rejected due to unknown arguments: workload-type","type":"text"}],"isError":true}}

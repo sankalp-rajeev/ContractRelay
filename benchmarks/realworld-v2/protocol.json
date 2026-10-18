@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "kind": "public-historical-mcp-external-validity",
+  "order": ["mapbox", "fabric"],
+  "optional": "arXiv only if the first two require no further setup repair and complete within 30 minutes; otherwise defer without counting it as evaluated or rejected",
+  "trials_per_accepted_case": 3,
+  "model": "gemini-3.8-flash",
+  "cache": false,
+  "max_concurrency": 1,
+  "hard_api_budget_usd": 1,
+  "budget_provider": "../realworld-v1/budget.mjs (unchanged), separate durable runs/realworld-v2/models ledger",
+  "pricing_verified_at": "2026-10-18",
+  "pricing_source": "https://ai.google.dev/gemini-api/docs/pricing#gemini-3.8-flash",
+  "input_usd_per_million": 0.75,
+  "output_and_thinking_usd_per_million": 3.75,
+  "request_reservation": "UTF-8 request byte bound plus overhead; entire max output/thinking ceiling; unknown usage retains full reservation",
+  "acceptance": "Exact old/new release SHAs; real old tools/list and successful workflow; real new unchanged old invocation fails; native replacement succeeds; no upstream source patches or migration-specific adapter",
+  "evidence": "Separately hashed synthesis, gate and sealed partitions; existing coordinator denies sealed reads before durable decision",
+  "score": "Recovered only when a promoted plan preserves all sealed old outputs, independent deterministic oracle checks and read-only filesystem observations; failures are retained",
+  "fail_closed": "Rejected/inconclusive candidate with no writable-layer changes; generation failure is separately counted and never called a safe rejection",
+  "replay": "API-free, real historical servers and unchanged verifier/promotion/MCP proxy; compare recorded verdicts and each sealed outcome",
+  "frozen_core": "No edits to existing core/CLI source, prompts, gates, scoring, 15-case suite, 195 records or realworld-v1 files"
+}

@@ -66,7 +66,22 @@ test('search is accessible and pages fit the viewport', async ({ page }) => {
   await search.fill('rejected');
   await expect(
     page.getByRole('complementary', { name: 'Migration selection' }).getByRole('link'),
-  ).toHaveCount(5);
+  ).toHaveCount(6);
   await search.fill('nothing matches');
   await expect(page.getByText('No migration matches')).toBeVisible();
+});
+
+test('new historical failures distinguish rejection from invalid synthesis', async ({ page }) => {
+  await page.goto('/real-world');
+  const mapbox = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Mapbox MCP' }) });
+  const fabric = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Microsoft Fabric MCP' }) });
+  await expect(mapbox).toContainText('3/3');
+  await expect(fabric).toContainText('Synthesis failure');
+  await expect(fabric).toContainText('INVALID_MODEL_OUTPUT');
+  await fabric.getByRole('link', { name: 'Inspect contracts, adapter and gate' }).click();
+  await page.getByRole('link', { name: '02 Adapter', exact: true }).click();
+  await expect(page.getByText('Synthesis failed before verification.')).toBeVisible();
+  await page.getByRole('link', { name: '03 Verification', exact: true }).click();
+  await expect(page.getByText('INCONCLUSIVE', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText('Synthesis failed before the gate: INVALID_MODEL_OUTPUT')).toBeVisible();
 });

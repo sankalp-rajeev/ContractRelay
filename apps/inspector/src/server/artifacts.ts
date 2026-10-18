@@ -40,10 +40,14 @@ const candidate = z.union([
     .passthrough(),
   z.object({ version: z.literal(1), op: z.literal('Reject'), reason: z.string() }).passthrough(),
 ]);
+const generationFailure = z.object({
+  verdict: z.literal('INCONCLUSIVE'), plan_hash: hash, gate_evidence_hash: hash,
+  error_code: z.string(),
+});
 const trial = z.object({
   identity: z.object({ case_id: z.string(), model: z.string(), trial: count }),
   candidate,
-  gate_report: verification,
+  gate_report: z.union([verification, generationFailure]),
   accepted: z.boolean(),
   safe_rejection: z.boolean(),
   hidden_passed: z.boolean(),
@@ -169,13 +173,21 @@ export class ArtifactService {
   }
 
   async realWorldResults() {
-    const summary = await this.load(
-      'benchmarks/realworld-v1/results/summary.json',
-      externalSummary,
-    );
+    const catalog = await this.load('apps/inspector/data/historical-catalog.json', z.object({
+      version: z.literal(1),
+      roots: z.array(z.string().regex(/^benchmarks\/realworld-v[1-9][0-9]*$/)).min(1),
+    }).strict());
+    if (new Set(catalog.roots).size !== catalog.roots.length)
+      throw new ArtifactError('ARTIFACT_CORRUPT', 'apps/inspector/data/historical-catalog.json');
+    const summaries = await Promise.all(catalog.roots.map(async (root) => ({
+      root, summary: await this.load(`${root}/results/summary.json`, externalSummary),
+    })));
+    const cases = summaries.flatMap(({ root, summary }) => summary.cases.map(entry => ({ ...entry, root })));
+    if (new Set(cases.map(entry => entry.project)).size !== cases.length)
+      throw new ArtifactError('ARTIFACT_CORRUPT', 'apps/inspector/data/historical-catalog.json');
     return Promise.all(
-      summary.cases.map(async (entry) => {
-        const base = `benchmarks/realworld-v1/${entry.project}`;
+      cases.map(async (entry) => {
+        const base = `${entry.root}/${entry.project}`;
         const first = await this.load(`${base}/results/trial-001.json`, trial);
         const change = await this.load(
           `${base}/provenance.json`,
@@ -183,12 +195,17 @@ export class ArtifactService {
         );
         return {
           id: entry.project,
+          artifactBase: base,
           name:
             entry.project === 'nexus'
               ? 'Nexus-MCP'
               : entry.project === 'mindwtr'
                 ? 'Mindwtr'
-                : entry.project,
+                : entry.project === 'mapbox'
+                  ? 'Mapbox MCP'
+                  : entry.project === 'fabric'
+                    ? 'Microsoft Fabric MCP'
+                    : entry.project,
           repository: entry.repository,
           oldCommit: entry.old_commit,
           newCommit: entry.new_commit,
@@ -203,7 +220,9 @@ export class ArtifactService {
           limitations: entry.limitations,
           status: first.gate_report.verdict,
           rejectionReason:
-            first.gate_report.checks
+            'error_code' in first.gate_report
+              ? `Synthesis failed before the gate: ${first.gate_report.error_code}`
+              : first.gate_report.checks
               .filter((check) => !check.passed)
               .map((check) => check.detail)
               .join('; ') || null,
@@ -317,7 +336,7 @@ export class ArtifactService {
     const historical = (await this.realWorldResults()).find((item) => item.id === id)!;
     if (!Number.isInteger(selectedTrial) || selectedTrial < 1 || selectedTrial > historical.trials)
       return null;
-    const base = `benchmarks/realworld-v1/${id}`;
+    const base = historical.artifactBase;
     const path = `${base}/results/trial-${String(selectedTrial).padStart(3, '0')}.json`;
     const [oldContract, newContract, measured] = await Promise.all([
       this.load(`${base}/old-contract.json`, contract),
@@ -349,7 +368,12 @@ export class ArtifactService {
     };
   }
 
-  private report(report: z.infer<typeof verification>) {
+  private report(report: z.infer<typeof verification> | z.infer<typeof generationFailure>) {
+    if ('error_code' in report) return {
+      verdict: report.verdict, policyVersion: 'NOT RUN', gateEvidenceHash: report.gate_evidence_hash,
+      checks: [], tracesTotal: 0, tracesPassed: 0,
+      residualRisks: [`Synthesis failed before the gate: ${report.error_code}`], raw: report,
+    };
     return {
       verdict: report.verdict,
       policyVersion: report.policy_version,

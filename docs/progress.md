@@ -266,3 +266,37 @@ Final validation: all **158 tests across 32 files**, root lint and strict
 TypeScript pass. The inspector's ten tests, protected-file audit and six browser
 checks on the hosting Worker also pass. Historical evidence partition validation
 passes for all three projects. No benchmark trial or paid API call was run.
+
+## Harder historical migrations — realworld-v2
+
+I evaluated Mapbox v0.11.0 → v0.12.3 and Microsoft Fabric 1.3.0 → 1.4.0 against
+their actual historical servers. Both old workflows succeed and genuinely break
+when sent unchanged to the new server. Source SHAs, native tools/list snapshots,
+old success/direct break/native-new controls and separated evidence are versioned
+under `benchmarks/realworld-v2/`.
+
+Mapbox safely rejected all three independent trials because singleton-array
+construction and the changed response are outside the DSL. Fabric produced three
+invalid generations: its genuine hyphenated argument names violate the unchanged
+identifier grammar. Fabric's verifier never ran, so these are generation failures,
+not safe rejections. No core or CLI source, prompt, gate or scoring change was made.
+Optional arXiv was deferred after the first two required setup repairs.
+
+The extension used six Gemini calls, 10,794 input tokens, 806 output tokens and
+6,641 thinking tokens, costing $0.03602175 under a durable $1 hard cap. All six
+outcomes replay API-free, including parser failures from retained raw responses.
+The API-free replay wrapper preserves the original evaluated harness and fixes
+failure reconstruction without replacing a candidate or result.
+
+The 321-file before/after audit, original 317-file inspector audit, all 195
+controlled records and every v1 file remain unchanged. Core/CLI tests: 158 pass;
+new extension tests: seven pass; inspector tests: twelve pass; desktop/mobile
+browser checks: eight pass. The catalog now loads versioned historical summaries
+without modifying earlier evidence and displays INCONCLUSIVE failures honestly.
+README outcomes now count five migrations: two recovered, two safely rejected,
+and one with generation failures. See the [v2 report](../benchmarks/realworld-v2/REPORT.md)
+for exact SHAs, trial results, cost ledger, hashes and replay commands.
+
+The public inspector's version 2 is deployed at
+https://contractrelay-inspector.fondsky12.chatgpt.site using 127 allowlisted public
+artifacts. [Hosting notes](hosting.md) retain the new source and archive receipts.

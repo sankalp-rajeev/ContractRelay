@@ -4,6 +4,12 @@ The [public inspector](https://contractrelay-inspector.fondsky12.chatgpt.site)
 shows the same artifacts without installation. [Hosting notes](hosting.md) record
 the deployment identity, compatibility adapter and reproduction steps.
 
+Historical results are discovered through `data/historical-catalog.json`; each
+root retains its own unchanged summary and trials. v2 adds Mapbox and Microsoft
+Fabric. Generation failures display INCONCLUSIVE with verification NOT RUN, empty
+gate checks and the retained error code. They are never relabeled as safe rejection.
+The inspector currently has twelve API/component tests and eight browser checks.
+
 The portfolio interface lives in `apps/inspector/`, outside the frozen workspace
 packages. It uses Next.js, React, strict TypeScript, Node.js, GraphQL and ordinary
 CSS. Server Components handle data and rendering; client components handle
@@ -134,11 +140,11 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-The 10 focused API/component tests cover the complete catalog and detail loading,
+The 12 focused API/component tests cover the complete catalog and detail loading,
 trial and missing-ID lookup, persisted benchmark parsing, historical results and
 denominators, rejected reports in all three trials, separate local trace display,
 missing/corrupt artifacts, export integrity and request/mutation handling.
-Six browser checks exercise navigation, refund operations, benchmark counts,
+Eight browser checks exercise navigation, refund operations, benchmark counts,
 sqlew rejection/trials, missing states, search and viewport overflow on desktop
 and mobile. Strict TypeScript, lint and production build are separate gates.
 

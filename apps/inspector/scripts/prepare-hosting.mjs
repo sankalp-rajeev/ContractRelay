@@ -42,17 +42,21 @@ await mkdir(resolve(target, 'public'), { recursive: true });
 const catalog = {};
 const add = async path => { catalog[path] = await readFile(resolve(root, path), 'utf8'); };
 for (const path of ['benchmarks/results/final-v3.json', 'benchmarks/manifests/suite-v3.json',
-  'benchmarks/realworld-v1/results/summary.json', 'apps/inspector/data/exports.json', 'apps/inspector/data/refund-execution.json']) await add(path);
+  'apps/inspector/data/historical-catalog.json', 'apps/inspector/data/exports.json', 'apps/inspector/data/refund-execution.json']) await add(path);
 const suite = JSON.parse(catalog['benchmarks/manifests/suite-v3.json']);
 for (const { id } of suite.cases) {
   assert(/^[a-z0-9-]+$/.test(id));
   for (const name of ['candidate.json', 'gate-report.json', 'observations.json', 'result.json']) await add(`apps/inspector/data/controlled/${id}/${name}`);
   for (const name of ['synthesis/evidence.json', 'tasks.json']) await add(`benchmarks/cases/${id}/${name}`);
 }
-for (const entry of JSON.parse(catalog['benchmarks/realworld-v1/results/summary.json']).cases) {
+for (const historicalRoot of JSON.parse(catalog['apps/inspector/data/historical-catalog.json']).roots) {
+  assert(/^benchmarks\/realworld-v[1-9][0-9]*$/.test(historicalRoot));
+  await add(`${historicalRoot}/results/summary.json`);
+for (const entry of JSON.parse(catalog[`${historicalRoot}/results/summary.json`]).cases) {
   assert(/^[a-z0-9-]+$/.test(entry.project));
-  for (const name of ['old-contract.json', 'new-contract.json', 'provenance.json']) await add(`benchmarks/realworld-v1/${entry.project}/${name}`);
-  for (let trial = 1; trial <= entry.trials; trial++) await add(`benchmarks/realworld-v1/${entry.project}/results/trial-${String(trial).padStart(3, '0')}.json`);
+  for (const name of ['old-contract.json', 'new-contract.json', 'provenance.json']) await add(`${historicalRoot}/${entry.project}/${name}`);
+  for (let trial = 1; trial <= entry.trials; trial++) await add(`${historicalRoot}/${entry.project}/results/trial-${String(trial).padStart(3, '0')}.json`);
+}
 }
 await writeFile(resolve(target, 'src/server/artifact-catalog.json'), JSON.stringify(catalog));
 let service = await readFile(resolve(app, 'src/server/artifacts.ts'), 'utf8');

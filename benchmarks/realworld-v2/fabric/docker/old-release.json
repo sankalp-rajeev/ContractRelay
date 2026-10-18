@@ -1,0 +1,19 @@
+{
+  "image": "mcr.microsoft.com/fabric/fabric-mcp@sha256:a651fb06ae7ef98ff73c5c6d0d929c5cf331a389995bc4c419265ed81a32c685",
+  "source_commit": "4828227fcf11fcae80794ff4620897160d32d583",
+  "vendor_labels": {
+    "com.azure.dev.image.build.buildnumber": "20260810.2",
+    "com.azure.dev.image.build.builduri": "vstfs:///Build/Build/6680718",
+    "com.azure.dev.image.build.containerTask": "v1",
+    "com.azure.dev.image.build.definitionname": "mcp - Fabric.Mcp.Server",
+    "com.azure.dev.image.build.pipelineTemplate": "1ESPT.Official",
+    "com.azure.dev.image.build.repository.name": "microsoft/mcp",
+    "com.azure.dev.image.build.repository.uri": "https://github.com/microsoft/mcp",
+    "com.azure.dev.image.build.sourcebranchname": "main",
+    "com.azure.dev.image.build.sourceversion": "4828227fcf11fcae80794ff4620897160d32d583",
+    "com.azure.dev.image.system.teamfoundationcollectionuri": "https://dev.azure.com/azure-sdk/",
+    "com.azure.dev.image.system.teamproject": "internal",
+    "image.base.digest": "sha256:ad7cd1ed2e913fbd806f8ecc0e8bb8e9e8fb7cfd4d3fa43be9aa0b4cd8008bf5",
+    "image.base.ref.name": "mcr.microsoft.com/dotnet/runtime-deps:10.0-alpine"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "candidates": [
+    {"repository":"https://github.com/mapbox/mcp-server","decision":"accepted","case":"mapbox","native_old_passed":true,"native_direct_break_proved":true,"trials":3},
+    {"repository":"https://github.com/microsoft/mcp","decision":"accepted","case":"fabric","native_old_passed":true,"native_direct_break_proved":true,"trials":3},
+    {"project":"arXiv MCP","decision":"deferred","reason":"Optional clean/quick prerequisite not met: Mapbox build metadata and Fabric read-only .NET extraction required setup repairs. No versions, repository acceptance or trial outcomes are claimed.","trials":0}
+  ],
+  "rejected_as_non_breaking_or_unreproducible": []
+}

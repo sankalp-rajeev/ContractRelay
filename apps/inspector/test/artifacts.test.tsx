@@ -17,7 +17,7 @@ const service = new ArtifactService(realRead);
 describe('Read-only artifact GraphQL', () => {
   it('loads the full catalog and every completed controlled/historical detail', async () => {
     const { migrations } = await query(CatalogDocument, {}, service);
-    expect(migrations).toHaveLength(18);
+    expect(migrations).toHaveLength(20);
     expect(Object.getPrototypeOf(migrations[0])).toBe(Object.prototype);
     for (const entry of migrations) {
       const data = await query(InspectMigrationDocument, { id: entry.id }, service);
@@ -71,6 +71,8 @@ describe('Read-only artifact GraphQL', () => {
       ['mindwtr', 3, 0, 3, 3],
       ['nexus', 3, 0, 3, 3],
       ['sqlew', 0, 3, 0, 3],
+      ['mapbox', 0, 3, 0, 3],
+      ['fabric', 0, 0, 0, 3],
     ]);
     expect(realWorldResults.every((m) => m.directOutcome === 'BREAKS')).toBe(true);
   });
@@ -88,6 +90,29 @@ describe('Read-only artifact GraphQL', () => {
     expect(html).toContain('321');
     expect(html).toContain('ledger_count');
     expect(html).toContain('refund_payment');
+  });
+  it('distinguishes structural rejection from generation failure in every new trial', async () => {
+    for (const trial of [1, 2, 3]) {
+      const mapbox = (await query(InspectMigrationDocument, { id: 'mapbox', trial }, service)).migration;
+      const fabric = (await query(InspectMigrationDocument, { id: 'fabric', trial }, service)).migration;
+      expect(mapbox?.status).toBe('REJECTED');
+      expect(fabric?.status).toBe('INCONCLUSIVE');
+      expect(fabric?.verification.checks).toEqual([]);
+      expect(fabric?.verification.policyVersion).toBe('NOT RUN');
+      if (!fabric) throw new Error('Missing Fabric trial');
+      const html = renderToStaticMarkup(<><AdapterView migration={fabric} /><VerificationView migration={fabric} /><TraceView migration={fabric} /></>);
+      expect(html).toContain('Synthesis failed before verification');
+      expect(html).toContain('INVALID_MODEL_OUTPUT');
+      expect(html).not.toContain('Candidate explicitly rejects');
+      expect(html).not.toContain('>PASS<');
+    }
+  });
+  it('rejects historical catalog traversal and duplicate roots', async () => {
+    for (const roots of [['benchmarks/realworld-v1/../../.env'], ['benchmarks/realworld-v1','benchmarks/realworld-v1']]) {
+      const broken = new ArtifactService(path => path.endsWith('historical-catalog.json') ? Promise.resolve(JSON.stringify({ version:1, roots })) : realRead(path));
+      const result = await executeRequest('{ realWorldResults { id } }', undefined, undefined, broken);
+      expect(result.errors?.[0].extensions.code).toBe('ARTIFACT_CORRUPT');
+    }
   });
   it('shows rejected sqlew reports honestly in all three trials', async () => {
     for (const trial of [1, 2, 3]) {

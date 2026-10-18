@@ -96,7 +96,7 @@ export default async function RealWorld() {
                   <strong>
                     {result.id === 'sqlew'
                       ? 'Unsupported union type in consolidated schema'
-                      : 'Gate rejection'}
+                      : result.status === 'INCONCLUSIVE' ? 'Synthesis failure' : 'Gate rejection'}
                   </strong>
                   <p>
                     {result.rejectionReason}.{' '}
@@ -121,7 +121,7 @@ export default async function RealWorld() {
         ))}
       </div>
       <p className="provenance">
-        Source: benchmarks/realworld-v1/results/summary.json and individual persisted trials. A 0/0
+        Source: versioned historical summaries in data/historical-catalog.json and individual persisted trials. A 0/0
         false-compatible denominator means no adapter was promoted; it is not evidence of successful
         compatibility.
       </p>

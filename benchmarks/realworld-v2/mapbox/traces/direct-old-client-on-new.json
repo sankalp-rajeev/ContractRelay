@@ -1,0 +1,1 @@
+{"call":{"arguments":{"point":{"latitude":1,"longitude":1},"polygon":[[[0,0],[8,0],[8,8],[0,8],[0,0]]]},"name":"point_in_polygon_tool"},"error":null,"response":{"content":[{"text":"MCP error -32602: Tool point_in_polygon_tool not found","type":"text"}],"isError":true}}

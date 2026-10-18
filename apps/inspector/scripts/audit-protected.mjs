@@ -31,12 +31,28 @@ async function walk(dir) {
   for (const entry of await readdir(resolve(root, dir), { withFileTypes: true })) {
     if (entry.name === 'node_modules') continue;
     const path = `${dir}/${entry.name}`;
+    // v2 has its own additive receipt; preserve the original 317-file catalog.
+    if (path === 'benchmarks/realworld-v2') continue;
     if (entry.isDirectory()) await walk(path);
     else paths.add(path);
   }
 }
 await walk('benchmarks');
 await walk('fixtures');
+const extensionGuard = JSON.parse(await readFile(resolve(root, 'benchmarks/realworld-v2/protected-before.json'), 'utf8'));
+for (const [path, expected] of Object.entries(extensionGuard.files)) {
+  const bytes = await readFile(resolve(root, path));
+  assert.equal(digest(bytes.toString('utf8').replaceAll('\r\n', '\n')), extensionGuard.lf_files[path], `V2_PROTECTED_CONTENT_DRIFT: ${path}`);
+  if (process.platform === 'win32') assert.equal(digest(bytes), expected, `V2_PROTECTED_BYTE_DRIFT: ${path}`);
+}
+const extensionFrozen = JSON.parse(await readFile(resolve(root, 'benchmarks/realworld-v2/frozen-files.json'), 'utf8'));
+for (const [path, expected] of Object.entries(extensionFrozen.files))
+  assert.equal(digest((await readFile(resolve(root, path), 'utf8')).replaceAll('\r\n', '\n')), expected, `V2_FROZEN_ARTIFACT_DRIFT: ${path}`);
+const supplemental = JSON.parse(await readFile(resolve(root, 'benchmarks/realworld-v2/supplemental-files.json'), 'utf8'));
+for (const [path, expected] of Object.entries(supplemental.files)) {
+  assert(!Object.hasOwn(extensionFrozen.files, path), 'Supplemental files cannot replace evaluated files');
+  assert.equal(digest((await readFile(resolve(root, path), 'utf8')).replaceAll('\r\n', '\n')), expected, `V2_REPLAY_ARTIFACT_DRIFT: ${path}`);
+}
 const hashes = {};
 const normalized = {};
 const actualHashes = {};
@@ -80,6 +96,9 @@ console.log(
   JSON.stringify(
     {
       protected_files: paths.size,
+      extension_protected_files: Object.keys(extensionGuard.files).length,
+      extension_frozen_files: Object.keys(extensionFrozen.files).length,
+      extension_supplemental_files: Object.keys(supplemental.files).length,
       original_guard_files: Object.keys(guard.files).length,
       aggregate_sha256: aggregate,
       normalized_aggregate_sha256: portable.aggregate,

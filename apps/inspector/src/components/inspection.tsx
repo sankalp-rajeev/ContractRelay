@@ -33,8 +33,8 @@ export function AdapterView({ migration }: { migration: Migration }) {
         index="02"
         title="Adapter plan"
         aside={
-          <span className="subtleTag">
-            {plan.op === 'Reject' ? 'EXPLICIT REJECTION' : 'BOUNDED DSL'}
+            <span className="subtleTag">
+              {migration.status === 'INCONCLUSIVE' ? 'NO VALID CANDIDATE' : plan.op === 'Reject' ? 'EXPLICIT REJECTION' : 'BOUNDED DSL'}
           </span>
         }
       />
@@ -48,7 +48,7 @@ export function AdapterView({ migration }: { migration: Migration }) {
       {plan.op === 'Reject' ? (
         <div className="failureNotice">
           <div>
-            <strong>Candidate explicitly rejects this migration.</strong>
+              <strong>{migration.status === 'INCONCLUSIVE' ? 'Synthesis failed before verification.' : 'Candidate explicitly rejects this migration.'}</strong>
             <p>{string(plan.reason)}</p>
           </div>
         </div>
@@ -240,7 +240,7 @@ export function TraceView({ migration }: { migration: Migration }) {
         <div className="blockedTrace">
           <span aria-hidden="true">⊘</span>
           <strong>No promoted execution</strong>
-          <p>The gate rejected this candidate. No successful compatibility trace is substituted.</p>
+          <p>{migration.status === 'INCONCLUSIVE' ? 'No valid candidate reached the gate. No compatibility execution was attempted.' : 'The gate rejected this candidate. No successful compatibility trace is substituted.'}</p>
         </div>
       ) : (
         <>
