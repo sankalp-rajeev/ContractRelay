@@ -50,7 +50,7 @@ const defaultIO: CliIO = { out: message => process.stdout.write(message), err: m
 async function synthesize(evidence: SynthesisEvidence, directory: string): Promise<AdapterPlan> {
   const { GeminiProvider, QuotaScheduler, loadModelConfig } = await import('../synthesizer/src/index.js');
   const { synthesizeIsolated } = await import('../synthesizer/src/isolated.js');
-  const { synthesisPromptVersion } = await import('../synthesizer/src/synthesis.js');
+  const { structuralSynthesisPromptVersion } = await import('../synthesizer/src/structural.js');
   if (!process.env.GEMINI_API_KEY) {
     try { process.loadEnvFile(fileURLToPath(new URL('../../.env', import.meta.url))); }
     catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
@@ -58,7 +58,7 @@ async function synthesize(evidence: SynthesisEvidence, directory: string): Promi
   if (!process.env.GEMINI_API_KEY?.trim()) throw new Error('MISSING_GEMINI_API_KEY: set it locally for migrate; verify/serve need no key');
   const config = await loadModelConfig();
   const scheduler = new QuotaScheduler(directory, new GeminiProvider(process.env.GEMINI_API_KEY), config.budget, { cache: config.cache, maxConcurrency: 1 });
-  return synthesizeIsolated(scheduler, evidence, { jobId: `cli/${synthesisPromptVersion}/${hashJson(evidence)}`, mode: config.mode, model: config.budget.model, resume: true });
+  return synthesizeIsolated(scheduler, evidence, { jobId: `cli/${structuralSynthesisPromptVersion}/${hashJson(evidence)}`, mode: config.mode, model: config.budget.model, resume: true, capabilities: 'structural-v1' });
 }
 
 async function readCandidate(planPath: string) {

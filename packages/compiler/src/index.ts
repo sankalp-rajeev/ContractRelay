@@ -5,7 +5,7 @@ import type { JsonValue } from '@contractrelay/contracts';
 import { hashContractSet, normalizeContracts } from '@contractrelay/contracts/policy';
 import type { PolicyVersion } from '@contractrelay/contracts/policy';
 import { validatePlan } from '@contractrelay/dsl';
-import type { Binding, InputStep, TranslationPlan } from '@contractrelay/dsl';
+import type { Binding, InputStep, ResponseBinding, TranslationPlan } from '@contractrelay/dsl';
 
 export type ToolInvoker = (tool: string, args: Readonly<Record<string, JsonValue>>) => Promise<unknown>;
 
@@ -106,6 +106,14 @@ function applyStep(args: Record<string, JsonValue>, step: InputStep): void {
     if (!Object.hasOwn(args, step.arg)) args[step.arg] = structuredClone(step.value);
     return;
   }
+  if (step.op === 'WrapArray') {
+    if (!Object.hasOwn(args, step.source)) return;
+    if (step.source !== step.target && Object.hasOwn(args, step.target)) throw new AdapterError('DUPLICATE_ASSIGNMENT', `Refusing to overwrite ${step.target}`);
+    const value = structuredClone(args[step.source] as JsonValue);
+    if (step.source !== step.target) delete args[step.source];
+    args[step.target] = [value];
+    return;
+  }
   if (!Object.hasOwn(args, step.arg)) return;
   const value = args[step.arg] as JsonValue;
   if (step.op === 'ConvertType') args[step.arg] = convert(value, step.to, step.scale);
@@ -145,9 +153,20 @@ function reference(value: JsonValue, path: string): JsonValue {
 
 function bind(binding: Binding, input: JsonValue, results: Record<string, JsonValue>): JsonValue {
   if (binding.kind === 'constant') return structuredClone(binding.value);
-  const source = binding.kind === 'convert' ? binding.source : binding;
+  const source = binding.kind === 'convert' || binding.kind === 'wrapArray' ? binding.source : binding;
   const value = source.kind === 'input' ? reference(input, source.path) : reference(results, `${source.call}.${source.path}`);
+  if (binding.kind === 'wrapArray') return [value];
   return binding.kind === 'convert' ? convert(value, binding.to, binding.scale) : value;
+}
+
+function responseValue(binding: ResponseBinding, input: JsonValue, response: JsonValue, results: Record<string, JsonValue>): JsonValue {
+  if (binding.kind === 'constant') return structuredClone(binding.value);
+  const source = binding.kind === 'compareInteger' ? binding.source : binding;
+  const value = source.kind === 'input' ? reference(input, source.path)
+    : source.kind === 'response' ? reference(response, source.path) : reference(results, `${source.call}.${source.path}`);
+  if (binding.kind !== 'compareInteger') return value;
+  if (typeof value !== 'number' || !Number.isSafeInteger(value)) throw new AdapterError('COMPARISON_FAILED', 'Integer comparison requires a safe integer; no coercion');
+  return binding.operator === 'eq' ? value === binding.value : value > binding.value;
 }
 
 /** Compiles a candidate, not a promoted runtime adapter. No code generation/eval. */
@@ -171,6 +190,7 @@ export function compileCandidate(planValue: unknown, oldValue: unknown, newValue
     newContractHash: hashContractSet(newValue),
     async executeForVerification(input: unknown, invoke: ToolInvoker, onOperation?: (operation: TranslationOperation) => void): Promise<JsonValue> {
       assertValid(oldInput, input, 'old input');
+      const originalInput = object(input);
       const args = object(input);
       for (const [index, step] of executable.steps.entries()) { applyStep(args, step); onOperation?.({ phase: 'input', op: step.op, index }); }
       const call = async (tool: string, arguments_: Record<string, JsonValue>, index: number): Promise<JsonValue> => {
@@ -183,9 +203,9 @@ export function compileCandidate(planValue: unknown, oldValue: unknown, newValue
         return structuredClone(raw);
       };
       let result: JsonValue;
+      const results: Record<string, JsonValue> = Object.create(null) as Record<string, JsonValue>;
       if (executable.target.kind === 'single') result = await call(executable.target.tool, args, 0);
       else {
-        const results: Record<string, JsonValue> = Object.create(null) as Record<string, JsonValue>;
         for (const [index, step] of executable.target.calls.entries()) {
           const bound = Object.fromEntries(Object.entries(step.arguments).map(([name, binding]) => {
             const value = bind(binding, args, results);
@@ -198,6 +218,11 @@ export function compileCandidate(planValue: unknown, oldValue: unknown, newValue
       }
       for (const [index, step] of executable.response.entries()) {
         if (step.op === 'ProjectResponse') result = project(result, step.mapping);
+        else if (step.op === 'ConstructResponse') {
+          const constructed: Record<string, JsonValue> = Object.create(null) as Record<string, JsonValue>;
+          for (const [name, binding] of Object.entries(step.fields)) constructed[name] = responseValue(binding, originalInput, result, results);
+          result = constructed;
+        }
         else {
           const mapped = object(result);
           const value = mapped[step.field];

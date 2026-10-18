@@ -1,0 +1,18 @@
+{
+  "baseline_commit": "4d307b21c8a964bd7f59c28e807afe6b5956b922",
+  "version": "bounded-plan-v6",
+  "entries": {
+    "mapbox-v3": {
+      "schema_hash": "a0dd9da54e992099752d5788622b7d06461bb422172bf43091a9c05615cb5e4c",
+      "prompt_hash": "fc73840be50e0bca5dd60301e7af88e18fffd7a271251d724e7a98f8fdde98d7"
+    },
+    "fabric-v3": {
+      "schema_hash": "07aded7b54ec8276f35e3ee43de6786f4844d05ddbd354e69e43df88194ff306",
+      "prompt_hash": "96b360834047ff2bd3e454b0e5238171d9c4da1b83a2517f9d77c55e538217e5"
+    },
+    "session-collab-v3": {
+      "schema_hash": "d1f7a4fdfb3c9ee7a8a27d5c501ea14c687c61134bcb5fe723cb9e23a68727d8",
+      "prompt_hash": "ca2db936457b610591cbb63552df050640abd35100f0e2d83ea88c0caeb4088b"
+    }
+  }
+}

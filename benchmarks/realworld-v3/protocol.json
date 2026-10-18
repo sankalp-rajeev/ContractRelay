@@ -1,0 +1,21 @@
+{
+  "version": 3,
+  "scope": "post-fix regressions plus a separately frozen unseen historical migration",
+  "freeze_commit": "d1658407df25d6ac728e3936652e7c1925395b3f",
+  "order": ["mapbox-v3", "fabric-v3", "session-collab-v3"],
+  "independent_trials_per_case": 3,
+  "model": "gemini-3.8-flash",
+  "synthesis_profile": "bounded-plan-v7",
+  "frozen_original_synthesis_profile": "bounded-plan-v6",
+  "gemini_hard_budget_usd": 1,
+  "cache": false,
+  "max_concurrency": 3,
+  "orchestration": "sequential cases and sequential trials; provider ceiling is three",
+  "transient_failures": "retain and pause on 503/504; resume the same trial without result replacement",
+  "gate": "existing verifier and promotion registry; frozen per-case gate evidence",
+  "scoring": "every unchanged old invocation replay must match the frozen native old output and independent oracle; SQLite state and mutation count must remain unchanged",
+  "post_sealed_changes": "no DSL, compiler, prompt, gate, workflow, oracle or scoring changes after evaluation begins",
+  "known_pre_evaluation_limitation": "The immutable session-collab gate predates implementation and contains two output traces but no V3 state predicates or side-effect assertions. The existing stateful gate must refuse any adapting plan lacking that evidence. Such an outcome is reported as inconclusive, not recovered or a safe semantic rejection. No evidence is added after the freeze.",
+  "preserved_unseen_oracle_limitation": "The frozen session oracle compares file_status using JSON.stringify and therefore depends on native nested-property insertion order. It accepts the retained native wire captures but can reject an otherwise equal object after canonical key sorting. It remains unchanged; any promoted trial affected by this is disclosed as an oracle limitation rather than semantic proof.",
+  "legacy_results": "v1/v2 replay uses the preserved original implementation; all original artifacts remain byte-for-byte unchanged"
+}

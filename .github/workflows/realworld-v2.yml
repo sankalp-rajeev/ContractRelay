@@ -16,6 +16,6 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: node --import=tsx --test benchmarks/realworld-v2/test/*.test.mjs
-      - run: node --import=tsx benchmarks/realworld-v2/run.mjs --validate
+      - run: node benchmarks/realworld-v3/legacy-check.mjs
+      - run: node --import=tsx benchmarks/realworld-v3/evaluate.mjs --validate
       - run: node apps/inspector/scripts/audit-protected.mjs

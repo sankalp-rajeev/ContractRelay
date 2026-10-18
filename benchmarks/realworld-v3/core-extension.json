@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "authorization": "Generic bounded capability iteration requested by user; no frozen benchmark or historical artifact changes",
+  "pre_capability_freeze_commit": "d1658407df25d6ac728e3936652e7c1925395b3f",
+  "freeze_receipt_lf_sha256": "cc6618b6e42e180201dfdd38496e28e644313559147ffa402203ced4802cc078",
+  "files": [
+    {
+      "original_path": "packages/cli/product.ts",
+      "current_path": "packages/cli/product.ts",
+      "before_raw_sha256": "3994606d5a98d4bfaa6ed4aebf28dfac1ef7f84b7b10e8010b4f663eb89ef250",
+      "before_lf_sha256": "3994606d5a98d4bfaa6ed4aebf28dfac1ef7f84b7b10e8010b4f663eb89ef250",
+      "after_raw_sha256": "06bdc302af98b00bbf1525aff456c3126074747a97cfe3490a58445815b4258a",
+      "after_lf_sha256": "06bdc302af98b00bbf1525aff456c3126074747a97cfe3490a58445815b4258a"
+    },
+    {
+      "original_path": "packages/compiler/src/index.ts",
+      "current_path": "packages/compiler/src/index.ts",
+      "before_raw_sha256": "0356f9dd7fe3d3bde5662138441bff8dbd860f8cce1152b32453e0caf48458d2",
+      "before_lf_sha256": "0356f9dd7fe3d3bde5662138441bff8dbd860f8cce1152b32453e0caf48458d2",
+      "after_raw_sha256": "7327d11d3374e4c8875a6321874d3f5a6e55b15c7fe096dfe86cee7995b3c722",
+      "after_lf_sha256": "7327d11d3374e4c8875a6321874d3f5a6e55b15c7fe096dfe86cee7995b3c722"
+    },
+    {
+      "original_path": "packages/dsl/src/index.ts",
+      "current_path": "packages/dsl/src/index.ts",
+      "before_raw_sha256": "711b3337d3db4de9472f53b406c0728da8c7c501462c06832c59d1b26ebcb35f",
+      "before_lf_sha256": "711b3337d3db4de9472f53b406c0728da8c7c501462c06832c59d1b26ebcb35f",
+      "after_raw_sha256": "991301b3a9f76dfccf00fc58447a5ad09b88c09fa17ef643e67be384067f0152",
+      "after_lf_sha256": "991301b3a9f76dfccf00fc58447a5ad09b88c09fa17ef643e67be384067f0152"
+    },
+    {
+      "original_path": "packages/synthesizer/src/isolated.ts",
+      "current_path": "packages/synthesizer/src/isolated.ts",
+      "before_raw_sha256": "f4adbafa7d638a8f7aeb3bac20536d3989661465b7dba467c39109a0d9c41caa",
+      "before_lf_sha256": "f4adbafa7d638a8f7aeb3bac20536d3989661465b7dba467c39109a0d9c41caa",
+      "after_raw_sha256": "f2d8808da66d7a81126c648d476fbae231291ae1e865636ea8e57956399e4800",
+      "after_lf_sha256": "f2d8808da66d7a81126c648d476fbae231291ae1e865636ea8e57956399e4800"
+    },
+    {
+      "original_path": "packages/synthesizer/src/isolation-worker.ts",
+      "current_path": "packages/synthesizer/src/isolation-worker.ts",
+      "before_raw_sha256": "075723b923e4b9d9603b239b521cf0a5383eae4ebd25e4beadf2c55f7b988500",
+      "before_lf_sha256": "075723b923e4b9d9603b239b521cf0a5383eae4ebd25e4beadf2c55f7b988500",
+      "after_raw_sha256": "3f37c1fba73df33929878c3ca3f3647a412121c2694fcde59090e1b30382b98b",
+      "after_lf_sha256": "3f37c1fba73df33929878c3ca3f3647a412121c2694fcde59090e1b30382b98b"
+    },
+    {
+      "original_path": "packages/verifier/src/index.ts",
+      "current_path": "packages/verifier/src/index.ts",
+      "before_raw_sha256": "a1b567a015baed1062af57b7699e072feb8e424b9c85a0465b4f6e1a6eb2d145",
+      "before_lf_sha256": "a1b567a015baed1062af57b7699e072feb8e424b9c85a0465b4f6e1a6eb2d145",
+      "after_raw_sha256": "1874b63ae41d066fac1a6420dd50d6e0eb05f49723b619a139b4aec639a249fc",
+      "after_lf_sha256": "1874b63ae41d066fac1a6420dd50d6e0eb05f49723b619a139b4aec639a249fc"
+    }
+  ],
+  "new_core_source": {
+    "packages/synthesizer/src/structural.ts": "1a6b2012a72cf870f4c0a4013714a0d1d8733a608728f171621c4cfe1945acec"
+  }
+}

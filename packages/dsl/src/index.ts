@@ -5,15 +5,37 @@ import { allowsEffects, normalizeContracts } from '@contractrelay/contracts/poli
 import type { PolicyVersion } from '@contractrelay/contracts/policy';
 
 const blocked = new Set(['__proto__', 'prototype', 'constructor']);
-const field = z.string().regex(/^[A-Za-z_][A-Za-z0-9_]*$/)
+const identifier = z.string().regex(/^[A-Za-z_][A-Za-z0-9_]*$/)
   .refine((value) => !blocked.has(value), 'Unsafe property name');
-const path = z.string().refine((value) =>
-  value.split('.').every((part) => field.safeParse(part).success), 'Unsafe response path');
+/** Literal JSON keys are data, not identifiers or executable expressions. */
+export const propertyNameSchema = z.string().min(1).max(128)
+  .refine((value) => !blocked.has(value) && [...value].every(character => character.charCodeAt(0) >= 32 && character.charCodeAt(0) !== 127), 'Unsafe property name');
+const field = propertyNameSchema;
+export const propertyPathSchema = z.string().min(1).max(2048).refine((value) => {
+  const segments = value.split('.');
+  return segments.length <= 16 && segments.every((part) => field.safeParse(part).success && !part.includes('[') && !part.includes(']') && !part.includes('\\'));
+}, 'Unsafe response path');
+const path = propertyPathSchema;
 const evidence = z.array(z.string().min(1)).min(1);
+
+const boundedConstant = jsonValueSchema.refine((value) => {
+  if (JSON.stringify(value).length > 4096) return false;
+  const pending = [{ value, depth: 0 }]; let nodes = 0;
+  while (pending.length) {
+    const item = pending.pop(); if (!item || ++nodes > 128 || item.depth > 4) return false;
+    if (item.value !== null && typeof item.value === 'object') {
+      const entries = Object.entries(item.value);
+      if (entries.length > 32 || (!Array.isArray(item.value) && entries.some(([name]) => !field.safeParse(name).success))) return false;
+      for (const [, child] of entries) pending.push({ value: child, depth: item.depth + 1 });
+    }
+  }
+  return true;
+}, 'Constant exceeds bounded construction limits');
 
 export const inputStepSchema = z.discriminatedUnion('op', [
   z.object({ op: z.literal('RenameTool'), from: z.string().min(1), to: z.string().min(1), evidence }).strict(),
   z.object({ op: z.literal('RenameArg'), from: field, to: field, evidence }).strict(),
+  z.object({ op: z.literal('WrapArray'), source: field, target: field, evidence }).strict(),
   z.object({ op: z.literal('AddConstantDefault'), arg: field, value: jsonValueSchema, evidence }).strict(),
   z.object({ op: z.literal('ConvertType'), arg: field, to: z.enum(['string', 'number', 'integer', 'boolean']),
     scale: z.number().int().positive().max(Number.MAX_SAFE_INTEGER).optional(), evidence }).strict(),
@@ -26,24 +48,37 @@ const projectResponseSchema = z.object({
   evidence
 }).strict();
 
-export const responseStepSchema = z.discriminatedUnion('op', [projectResponseSchema,
-  z.object({ op: z.literal('MapEnum'), field, mapping: z.record(field, z.string()), evidence }).strict()
-]);
-
 const referenceSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('input'), path }).strict(),
-  z.object({ kind: z.literal('result'), call: field, path }).strict()
+  z.object({ kind: z.literal('result'), call: identifier, path }).strict()
+]);
+const responseReferenceSchema = z.discriminatedUnion('kind', [
+  ...referenceSchema.options,
+  z.object({ kind: z.literal('response'), path }).strict()
+]);
+export const responseBindingSchema = z.discriminatedUnion('kind', [
+  ...responseReferenceSchema.options,
+  z.object({ kind: z.literal('constant'), value: boundedConstant }).strict(),
+  z.object({ kind: z.literal('compareInteger'), source: responseReferenceSchema,
+    operator: z.enum(['eq', 'gt']), value: z.number().int().safe() }).strict()
+]);
+export type ResponseBinding = z.infer<typeof responseBindingSchema>;
+export const responseStepSchema = z.discriminatedUnion('op', [projectResponseSchema,
+  z.object({ op: z.literal('MapEnum'), field, mapping: z.record(field, z.string()), evidence }).strict(),
+  z.object({ op: z.literal('ConstructResponse'), fields: z.record(field, responseBindingSchema)
+    .refine((fields) => Object.keys(fields).length > 0 && Object.keys(fields).length <= 32, 'Construction requires 1–32 fields'), evidence }).strict()
 ]);
 export const bindingSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('input'), path }).strict(),
-  z.object({ kind: z.literal('result'), call: field, path }).strict(),
+  z.object({ kind: z.literal('result'), call: identifier, path }).strict(),
   z.object({ kind: z.literal('constant'), value: jsonValueSchema, evidence }).strict(),
+  z.object({ kind: z.literal('wrapArray'), source: referenceSchema, evidence }).strict(),
   z.object({ kind: z.literal('convert'), source: referenceSchema,
     to: z.enum(['string', 'number', 'integer', 'boolean']),
     scale: z.number().int().positive().max(Number.MAX_SAFE_INTEGER).optional(), evidence }).strict()
 ]);
 export type Binding = z.infer<typeof bindingSchema>;
-export const composedCallSchema = z.object({ id: field, tool: z.string().min(1),
+export const composedCallSchema = z.object({ id: identifier, tool: z.string().min(1),
   arguments: z.record(field, bindingSchema), evidence }).strict();
 const targetSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('single'), tool: z.string().min(1) }).strict(),
@@ -110,7 +145,8 @@ function schemaAtPath(value: JsonValue | undefined, dotted: string): JsonValue |
   return schema;
 }
 
-function validateResponses(plan: TranslationPlan, oldContract: ToolContract, source: JsonValue | undefined, diagnostics: Diagnostic[]): void {
+function validateResponses(plan: TranslationPlan, oldContract: ToolContract, source: JsonValue | undefined, diagnostics: Diagnostic[],
+  callOutputs: Record<string, JsonValue> = {}): void {
   let current = source;
   for (const [index, step] of plan.response.entries()) {
     const at = `response.${index}`;
@@ -123,6 +159,27 @@ function validateResponses(plan: TranslationPlan, oldContract: ToolContract, sou
         else projected[name] = schema;
       }
       current = { type: 'object', properties: projected };
+    } else if (step.op === 'ConstructResponse') {
+      const constructed: Record<string, JsonValue> = Object.create(null) as Record<string, JsonValue>;
+      for (const [name, binding] of Object.entries(step.fields)) {
+        const reference = binding.kind === 'compareInteger' ? binding.source : binding;
+        let schema: JsonValue | undefined;
+        if (reference.kind === 'input') schema = schemaAtPath(oldContract.inputSchema, reference.path);
+        if (reference.kind === 'response') schema = schemaAtPath(current, reference.path);
+        if (reference.kind === 'result') schema = schemaAtPath(callOutputs[reference.call], reference.path);
+        if (binding.kind === 'constant') schema = { type: binding.value === null ? 'null' : Array.isArray(binding.value) ? 'array' : typeof binding.value };
+        if (schema === undefined) diagnostics.push({ code: 'RESPONSE_SOURCE', path: at, message: `Unknown construction source for ${name}` });
+        if (binding.kind === 'compareInteger') {
+          if (!['integer', 'number'].includes(String(record(schema).type))) diagnostics.push({ code: 'COMPARISON_TYPE', path: at, message: 'Integer comparison requires a numeric schema' });
+          schema = { type: 'boolean' };
+        }
+        const expected = properties(oldContract, 'outputSchema')[name];
+        if (oldContract.outputSchema !== undefined && expected === undefined) diagnostics.push({ code: 'RESPONSE_TARGET', path: at, message: `Unknown old response field ${name}` });
+        const actualType = record(schema).type, expectedType = record(expected).type;
+        if (typeof actualType === 'string' && typeof expectedType === 'string' && actualType !== expectedType && !(actualType === 'integer' && expectedType === 'number')) diagnostics.push({ code: 'RESPONSE_TYPE', path: at, message: `Construction type mismatch for ${name}` });
+        if (schema !== undefined) constructed[name] = schema;
+      }
+      current = { type: 'object', properties: constructed };
     } else {
       const schema = schemaAtPath(current, step.field);
       if (record(schema).type !== 'string') diagnostics.push({ code: 'RESPONSE_ENUM_TYPE', path: at, message: 'Response enum mapping requires a string field' });
@@ -150,7 +207,7 @@ function validateComposition(plan: TranslationPlan, oldContract: ToolContract, t
     for (const [name, binding] of Object.entries(call.arguments)) {
       if (!Object.hasOwn(targetFields, name)) add('TARGET_FIELD', at, `Unknown composed target argument ${name}`);
       let actual: JsonValue | undefined;
-      const reference = binding.kind === 'convert' ? binding.source : binding;
+      const reference = binding.kind === 'convert' || binding.kind === 'wrapArray' ? binding.source : binding;
       if (reference.kind === 'input') actual = schemaAtPath(oldContract.inputSchema, reference.path);
       if (reference.kind === 'result') {
         const prior = seen.get(reference.call);
@@ -164,6 +221,7 @@ function validateComposition(plan: TranslationPlan, oldContract: ToolContract, t
         if (binding.scale !== undefined && binding.to !== 'integer') add('INVALID_SCALE', at, 'Scaling requires integer output');
         actual = { type: binding.to };
       }
+      if (binding.kind === 'wrapArray' && actual !== undefined) actual = { type: 'array', items: actual, minItems: 1, maxItems: 1 };
       const actualType = record(actual).type;
       const expectedType = record(targetFields[name]).type;
       if (typeof actualType === 'string' && typeof expectedType === 'string' && actualType !== expectedType
@@ -172,7 +230,7 @@ function validateComposition(plan: TranslationPlan, oldContract: ToolContract, t
     seen.set(call.id, target);
     if (target.outputSchema !== undefined) outputs[call.id] = target.outputSchema;
   }
-  validateResponses(plan, oldContract, { type: 'object', properties: outputs }, diagnostics);
+  validateResponses(plan, oldContract, { type: 'object', properties: outputs }, diagnostics, outputs);
 }
 
 /** Structural validation only. A valid plan is a candidate, never a promotion. */
@@ -229,6 +287,16 @@ export function validatePlan(value: unknown, oldValue: unknown, newValue: unknow
       fields.delete(step.from);
       if (source !== undefined) fields.set(step.to, source);
       if (guaranteed.delete(step.from)) guaranteed.add(step.to);
+      continue;
+    }
+    if (step.op === 'WrapArray') {
+      const source = fields.get(step.source);
+      if (source === undefined) add('SOURCE_FIELD', at, `Unknown array source ${step.source}`);
+      if (!Object.hasOwn(targetFields, step.target)) add('TARGET_FIELD', at, `Unknown array target ${step.target}`);
+      if (step.source !== step.target && fields.has(step.target)) add('DUPLICATE_ASSIGNMENT', at, `Array construction would overwrite ${step.target}`);
+      fields.delete(step.source);
+      if (source !== undefined) fields.set(step.target, { type: 'array', items: source, minItems: 1, maxItems: 1 });
+      if (guaranteed.delete(step.source)) guaranteed.add(step.target);
       continue;
     }
     if (!Object.hasOwn(targetFields, step.arg)) add('TARGET_FIELD', at, `Unknown target field ${step.arg}`);

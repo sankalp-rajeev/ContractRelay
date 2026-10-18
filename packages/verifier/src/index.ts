@@ -6,12 +6,11 @@ import { allowsEffects, hashContractSet, normalizeContracts, policyVersionSchema
 import type { PolicyVersion } from '@contractrelay/contracts/policy';
 import { AdapterError, compileCandidate } from '@contractrelay/compiler';
 import type { CandidateAdapter, ToolInvoker } from '@contractrelay/compiler';
-import { adapterPlanSchema } from '@contractrelay/dsl';
+import { adapterPlanSchema, propertyPathSchema } from '@contractrelay/dsl';
 import { toolTraceSchema } from '@contractrelay/traces';
 
 const digest = z.string().regex(/^[a-f0-9]{64}$/);
-const safePath = z.string().refine((value) => value === '' || value.split('.').every((part) =>
-  /^[A-Za-z_][A-Za-z0-9_]*$/.test(part) && !['__proto__', 'constructor', 'prototype'].includes(part)), 'Unsafe predicate path');
+const safePath = z.union([z.literal(''), propertyPathSchema]);
 const predicateBase = { id: z.string().min(1), trace_id: z.string().min(1), path: safePath };
 export const predicateSchema = z.discriminatedUnion('kind', [
   z.object({ ...predicateBase, kind: z.literal('equals'), expected: jsonValueSchema }).strict(),

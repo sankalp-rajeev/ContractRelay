@@ -4,10 +4,12 @@ import type { ModelJob, QuotaScheduler, ScheduledResult } from './scheduler.js';
 import type { AdapterPlan } from '@contractrelay/dsl';
 import type { SynthesisEvidence } from './index.js';
 import { ScheduledPlanSynthesizer } from './synthesis.js';
+import { StructuralPlanSynthesizer } from './structural.js';
+import type { StructuralSynthesisSettings } from './structural.js';
 
 wireWorker(async (payload, rpc) => {
   const task = payload as { operation: string; path?: string; evidence?: SynthesisEvidence;
-    settings?: ConstructorParameters<typeof ScheduledPlanSynthesizer>[1] };
+    settings?: StructuralSynthesisSettings };
   if (task.operation === 'probe' && task.path) return readFile(task.path, 'utf8');
   if (task.operation !== 'synthesize' || !task.evidence || !task.settings) throw new Error('Invalid synthesis task');
   const scheduler: Pick<QuotaScheduler, 'run'> = {
@@ -17,5 +19,6 @@ wireWorker(async (payload, rpc) => {
       return { ...result, artifact: parse({ candidate: result.artifact }) };
     }
   };
-  return new ScheduledPlanSynthesizer(scheduler, task.settings).synthesize(task.evidence);
+  const Synthesizer = task.settings.capabilities === 'structural-v1' ? StructuralPlanSynthesizer : ScheduledPlanSynthesizer;
+  return new Synthesizer(scheduler, task.settings).synthesize(task.evidence);
 });
