@@ -1,0 +1,1 @@
+{"call":{"arguments":{"key":"fixture.alpha"},"name":"get_decision"},"response":{"content":[{"text":"{\n  \"error\": \"Unknown tool: get_decision\"\n}","type":"text"}],"isError":true}}

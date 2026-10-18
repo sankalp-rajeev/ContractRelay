@@ -1,0 +1,1 @@
+{"call":{"arguments":{"status":"inbox"},"name":"mindwtr.list_tasks"},"response":{"content":[{"text":"MCP error -32602: Tool mindwtr.list_tasks not found","type":"text"}],"isError":true}}

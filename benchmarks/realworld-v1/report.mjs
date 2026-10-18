@@ -1,0 +1,21 @@
+import {mkdir,writeFile} from 'node:fs/promises';
+import console from 'node:console';
+import {cases} from './cases.mjs';
+import {readJson,writeOnceJson} from '../../packages/contracts/src/artifacts.ts';
+import {assertFlagshipUnchanged} from './integrity.mjs';
+await assertFlagshipUnchanged();
+const summary=await readJson('runs/realworld-v1/evaluation/summary.json');
+if(summary.cases.length!==3||summary.cases.some(entry=>entry.trials!==3))throw new Error('EXTERNAL_SUITE_INCOMPLETE');
+const budget=summary.budget;
+const known=budget.requests.filter(request=>request.actual_nano_usd!==null);
+const unknown=budget.requests.filter(request=>request.actual_nano_usd===null);
+const total=key=>known.reduce((sum,request)=>sum+request.usage[key],0);
+const usd=known.reduce((sum,request)=>sum+request.actual_nano_usd,0)/1e9;
+const held=unknown.reduce((sum,request)=>sum+request.reserved_nano_usd,0)/1e9;
+const result={...summary,accounting:{gemini_calls:budget.requests.length,input_tokens:total('input_tokens'),output_tokens:total('output_tokens'),thinking_tokens:total('thinking_tokens'),
+ estimated_known_usd:usd,reserved_unknown_usd:held,hard_limit_usd:1,core_source_changes:0},claim:'ContractRelay was evaluated on a frozen 15-case controlled benchmark and separately evaluated against three historical tool-contract migrations from public MCP projects.'};
+await mkdir('benchmarks/realworld-v1/results',{recursive:true});
+await writeOnceJson('benchmarks/realworld-v1/results/summary.json',result);
+const rows=summary.cases.map(entry=>`| ${entry.project} | ${cases.find(item=>item.id===entry.project).change} | \`${entry.old_commit}\` | \`${entry.new_commit}\` | BREAKS | ${entry.successful}/3 | ${entry.trials} | ${entry.hidden_false_compatible}/${entry.promoted} promoted |`);
+await writeFile('benchmarks/realworld-v1/REPORT.md',`# Real-World External Validity — Public Historical MCP Migrations\n\nThis separate evaluation does not replace, rerun or retune the controlled flagship benchmark. The frozen 15-case, 195-record results remain unchanged.\n\n| Project | Historical change | Old commit | New commit | Direct old client on new | ContractRelay | Trials | False-compatible |\n|---|---|---|---|---|---|---|---|\n${rows.join('\n')}\n\nOld server plus old client passed for every selected case before synthesis. Success requires exact historical output, independent SQLite/AST observations, unchanged state and the unchanged invocation through the real compatibility proxy. Gate promotion alone is not success.\n\n## Cost and retained failures\n\n${budget.requests.length} Gemini calls; ${total('input_tokens')} input, ${total('output_tokens')} visible output and ${total('thinking_tokens')} thinking tokens. Estimated known cost: $${usd.toFixed(6)}; unknown reservations: $${held.toFixed(6)}; hard extension cap: $1.00. Rates: [Google pricing](${budget.pricing.source}). Every request is reserved before sending and missing usage retains its full reservation. Invalid model artifacts and rejections remain in the trial counts.\n\n${summary.cases.map(entry=>`- ${entry.project}: ${entry.safe_rejections}/3 safe rejections; ${entry.generation_failures}/3 generation failures. ${entry.limitations.join(' ')}`).join('\n')}\n\n## Limits and reproducibility\n\nOnly three selected public migrations and synthetic local data are evaluated; this is not production validation or a new comparative benchmark. Read-only workflows dominate. Nexus uses a genuinely parsed, preseeded graph and does not reproduce embeddings or full indexing. sqlew preserves the historical numeric-lookup limitation and uses independent SQLite write auditing. No core ContractRelay source changes were required.\n\n${result.claim}\n\nAcquire/build: \`node --import=tsx benchmarks/realworld-v1/acquire.mjs --case <project>\`. After acquisition, reproduce each case without model calls: \`node --import=tsx benchmarks/realworld-v1/run.mjs --case <project> --replay\`. Paid synthesis is an explicit separate command using \`--evaluate\`; completed trials are reused and never regenerated to improve scores. See each case's provenance, dependency locks, tools/list snapshots, evidence partitions and results.\n`);
+console.log(JSON.stringify(result.accounting));
