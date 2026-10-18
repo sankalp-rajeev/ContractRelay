@@ -1,10 +1,31 @@
 # Public inspector hosting
 
-Live: https://contractrelay-inspector.fondsky12.chatgpt.site
+Live: https://contract-relay.vercel.app/
 
-The public demo uses the same inspector pages, GraphQL schema, resolvers and
-artifact validation as the local Next.js application. A Sites/Vinext deployment
-copy replaces filesystem reads with 127 allowlisted public artifact files. It
+## Current deployment: Vercel
+
+The public inspector runs the Next.js application in `apps/inspector/` on Vercel,
+connected to the GitHub repository's `main` branch. The repository About website,
+README and demo walkthrough all point to the URL above.
+
+Use the Next.js preset, Root Directory `apps/inspector`, `npm ci` for installation,
+and `npm run build` for the build. Enable source files outside the Root Directory
+in the build step. No environment variables or model credentials are needed.
+
+The build packages 146 allowlisted public artifacts into `.generated/artifacts.json`.
+Next.js includes this bundle and the GraphQL schema in every data route's function;
+the postbuild check verifies their deployment traces. Runtime reads use the app
+directory without assuming the original repository layout exists on Vercel.
+See [inspector deployment instructions](inspector.md#vercel-deployment).
+
+The deployed packaging fix passed all twelve desktop/mobile browser checks,
+fourteen inspector tests and 169 core/CLI tests. Frozen evidence is unchanged.
+
+## Previous deployment: Sites
+
+The earlier public demo used the same inspector pages, GraphQL schema, resolvers
+and artifact validation through a Sites/Vinext deployment copy. Its version 2
+replaced filesystem reads with 127 allowlisted public artifact files. It
 contains no credentials, ignored runs, model calls or MCP tool execution.
 
 `apps/inspector/scripts/prepare-hosting.mjs` prepares that copy under the ignored
@@ -13,7 +34,7 @@ The deployment uses native anchor navigation because the current Vinext Worker
 implementation fails during `next/link` prefetch. Search and other React
 interactions still run; all eight browser checks pass on the Worker build.
 
-## Deployment identity
+### Archived version 2 deployment identity
 
 - Site project: `appgprj_6ad43f7d52388191ac4d526456b2566d`
 - Hosting source commit: `637554ad59dacf34fe715d3f7ddb35f48133fd2d`
@@ -29,7 +50,7 @@ The hosting source has its own repository and dependency lock. The core workspac
 and local inspector dependency locks were not changed. The hosting copy uses the
 Sites starter's Worker build integration, Vinext 1.0.0-beta.5 and Node 22.23.3.
 
-## Maintenance
+### Archived Sites mirror maintenance
 
 Reuse this Site project ID and its persisted `.openai/hosting.json` in the hosting
 checkout. Do not register a replacement Site. With the Sites plugin, open that

@@ -1,6 +1,6 @@
 # Read-only ContractRelay inspector
 
-The [public inspector](https://contractrelay-inspector.fondsky12.chatgpt.site)
+The [public inspector](https://contract-relay.vercel.app/)
 shows the same artifacts without installation. [Hosting notes](hosting.md) record
 the deployment identity, compatibility adapter and reproduction steps.
 

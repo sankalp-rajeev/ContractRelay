@@ -234,9 +234,9 @@ The public deployment uses the existing inspector and GraphQL service through a
 Sites/Vinext hosting adapter. An allowlisted bundle of public versioned artifacts
 replaces local filesystem reads; credentials, ignored runs and model/runtime
 execution are excluded. All six desktop/mobile browser checks pass on the Worker.
-Public version 1 deployed successfully at
-https://contractrelay-inspector.fondsky12.chatgpt.site. [Hosting notes](hosting.md)
-retain the exact source commit, saved version and archive hash.
+Public version 1 deployed successfully through Sites. The current public URL is
+https://contract-relay.vercel.app/. [Hosting notes](hosting.md)
+retain the historical source commit, saved version and archive hash.
 The same six checks also pass against the public URL in fresh anonymous browser
 contexts, confirming that a recruiter can open and navigate it without sign-in.
 
@@ -297,9 +297,10 @@ README outcomes now count five migrations: two recovered, two safely rejected,
 and one with generation failures. See the [v2 report](../benchmarks/realworld-v2/REPORT.md)
 for exact SHAs, trial results, cost ledger, hashes and replay commands.
 
-The public inspector's version 2 is deployed at
-https://contractrelay-inspector.fondsky12.chatgpt.site using 127 allowlisted public
-artifacts. [Hosting notes](hosting.md) retain the new source and archive receipts.
+The public inspector's version 2 deployed through Sites using 127 allowlisted
+public artifacts. Its historical source and archive receipts remain in
+[hosting notes](hosting.md). The current public inspector is at
+https://contract-relay.vercel.app/.
 
 Offline report generation uses the committed interactions and budget ledger;
 `report.mjs --offline` requires no ignored scheduler files or model credentials.

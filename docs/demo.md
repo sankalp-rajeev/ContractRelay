@@ -1,6 +1,6 @@
 # 90-second walkthrough
 
-Open the [live inspector](https://contractrelay-inspector.fondsky12.chatgpt.site)
+Open the [live inspector](https://contract-relay.vercel.app/)
 and follow these steps; every view reads completed artifacts.
 
 1. **0:00-0:15 - The problem.** On the overview, follow the unchanged old client

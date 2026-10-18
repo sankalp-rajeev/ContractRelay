@@ -9,7 +9,7 @@ only after independent checks of server behavior pass. Otherwise, it refuses.
 exact dollars-to-cents conversion. In the SQLite fixture, retrying the same request
 does not duplicate either write.
 
-[Live inspector](https://contractrelay-inspector.fondsky12.chatgpt.site) · [90-second walkthrough](docs/demo.md) · [Historical migration report](benchmarks/realworld-v3/REPORT.md)
+[Live inspector](https://contract-relay.vercel.app/) · [90-second walkthrough](docs/demo.md) · [Historical migration report](benchmarks/realworld-v3/REPORT.md)
 
 [![Core checks](https://github.com/sankalp-rajeev/ContractRelay/actions/workflows/ci.yml/badge.svg)](https://github.com/sankalp-rajeev/ContractRelay/actions/workflows/ci.yml)
 [![Inspector checks](https://github.com/sankalp-rajeev/ContractRelay/actions/workflows/inspector.yml/badge.svg)](https://github.com/sankalp-rajeev/ContractRelay/actions/workflows/inspector.yml)
