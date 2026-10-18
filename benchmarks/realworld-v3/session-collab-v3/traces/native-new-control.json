@@ -1,0 +1,1 @@
+{"call":{"arguments":{"action":"check","files":["/project/free.ts"],"session_id":"fixture-reader"},"name":"collab_claim"},"response":{"content":[{"text":"{\"has_conflicts\":false,\"can_edit\":true,\"recommendation\":\"proceed\",\"safe_files\":[\"/project/free.ts\"],\"message\":\"All files are safe to edit. Proceed.\"}","type":"text"}],"isError":false}}

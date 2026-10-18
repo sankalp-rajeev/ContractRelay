@@ -1,0 +1,1815 @@
+{
+  "baseline_commit": "4d307b21c8a964bd7f59c28e807afe6b5956b922",
+  "immutable": {
+    "benchmarks/README.md": {
+      "raw": "591321579567711c028c05d181abb16665c1cd73249b6934e4759275530f8fbc",
+      "lf": "591321579567711c028c05d181abb16665c1cd73249b6934e4759275530f8fbc"
+    },
+    "benchmarks/cases/01-tool-rename/case.json": {
+      "raw": "4f6574ac3d43454522c2c798ac6b0d36cf0e8ffc3b9fd50227756bd2eb434845",
+      "lf": "4f6574ac3d43454522c2c798ac6b0d36cf0e8ffc3b9fd50227756bd2eb434845"
+    },
+    "benchmarks/cases/01-tool-rename/fixture.json": {
+      "raw": "f3ceec1dfda537cdc14bdc9d14d2081ba6c12ad32246af278a411509c430d2ba",
+      "lf": "f3ceec1dfda537cdc14bdc9d14d2081ba6c12ad32246af278a411509c430d2ba"
+    },
+    "benchmarks/cases/01-tool-rename/gate/evidence.json": {
+      "raw": "d1225926ad7b4ad388f1be5a1963cb1ce19af9624d5d7af4eb2c87f742b79af9",
+      "lf": "d1225926ad7b4ad388f1be5a1963cb1ce19af9624d5d7af4eb2c87f742b79af9"
+    },
+    "benchmarks/cases/01-tool-rename/sealed-eval/evidence.json": {
+      "raw": "138a5956a6864ab138e0293af0f7a37e5594cb7a9f447c59e4ee2221e7f2f922",
+      "lf": "138a5956a6864ab138e0293af0f7a37e5594cb7a9f447c59e4ee2221e7f2f922"
+    },
+    "benchmarks/cases/01-tool-rename/synthesis/evidence.json": {
+      "raw": "59de9f7e7360cc7bf00a9b6ccb8a29806e2bc5e5d240f4a907a76fb07ed3cb00",
+      "lf": "59de9f7e7360cc7bf00a9b6ccb8a29806e2bc5e5d240f4a907a76fb07ed3cb00"
+    },
+    "benchmarks/cases/01-tool-rename/tasks.json": {
+      "raw": "b004bcb2cd3499467c01f98cda503438bcb4253ac4ee8bbb15561c0ec881aa97",
+      "lf": "b004bcb2cd3499467c01f98cda503438bcb4253ac4ee8bbb15561c0ec881aa97"
+    },
+    "benchmarks/cases/02-arg-rename/case.json": {
+      "raw": "574124308b3d6b62846c92460b722799d960e0344ee01c188c9a590fd6f21ecc",
+      "lf": "574124308b3d6b62846c92460b722799d960e0344ee01c188c9a590fd6f21ecc"
+    },
+    "benchmarks/cases/02-arg-rename/fixture.json": {
+      "raw": "9da1d4c777f0d9aabf9602756c95e2f573bbe5061bdd9bbbac71e5ef8c1b46e7",
+      "lf": "9da1d4c777f0d9aabf9602756c95e2f573bbe5061bdd9bbbac71e5ef8c1b46e7"
+    },
+    "benchmarks/cases/02-arg-rename/gate/evidence.json": {
+      "raw": "76a0ab40b049e4cf40948dc43fee90fe3098544fd6b38d42df805bd58e6e13f2",
+      "lf": "76a0ab40b049e4cf40948dc43fee90fe3098544fd6b38d42df805bd58e6e13f2"
+    },
+    "benchmarks/cases/02-arg-rename/sealed-eval/evidence.json": {
+      "raw": "9f369ed35728a45ed64f7e066fd0f7cf5fcaa558606f1f637dac7b7e17c8bc71",
+      "lf": "9f369ed35728a45ed64f7e066fd0f7cf5fcaa558606f1f637dac7b7e17c8bc71"
+    },
+    "benchmarks/cases/02-arg-rename/synthesis/evidence.json": {
+      "raw": "857c8cf7b633cf3b2e66f16d7a13121f18c5fa5ce61c239497e3c1659dcce1f4",
+      "lf": "857c8cf7b633cf3b2e66f16d7a13121f18c5fa5ce61c239497e3c1659dcce1f4"
+    },
+    "benchmarks/cases/02-arg-rename/tasks.json": {
+      "raw": "079a123c065247f0e6694ec96817d799fa5e8de48b877273fcfd5c8216570b80",
+      "lf": "079a123c065247f0e6694ec96817d799fa5e8de48b877273fcfd5c8216570b80"
+    },
+    "benchmarks/cases/03-weather-default/case.json": {
+      "raw": "6907d413feff9286dd4c6c2f8ba09c9afc06ebb12641feda4b8293310e280e12",
+      "lf": "6907d413feff9286dd4c6c2f8ba09c9afc06ebb12641feda4b8293310e280e12"
+    },
+    "benchmarks/cases/03-weather-default/fixture.json": {
+      "raw": "06f18403b6d96d014b59f35d83bb41cf31410ab89ecfb89c6e08dbc751c19538",
+      "lf": "06f18403b6d96d014b59f35d83bb41cf31410ab89ecfb89c6e08dbc751c19538"
+    },
+    "benchmarks/cases/03-weather-default/gate/evidence.json": {
+      "raw": "ac61a1484ea172ebe4ef97ae9f4bb1b5e7ab621cb87e0a437f43ed44e9c1b930",
+      "lf": "ac61a1484ea172ebe4ef97ae9f4bb1b5e7ab621cb87e0a437f43ed44e9c1b930"
+    },
+    "benchmarks/cases/03-weather-default/sealed-eval/evidence.json": {
+      "raw": "c83a52ff14e90249d3c61dfbf3d1f65ae115822f6dd8914c1b027780ddb1ecf5",
+      "lf": "c83a52ff14e90249d3c61dfbf3d1f65ae115822f6dd8914c1b027780ddb1ecf5"
+    },
+    "benchmarks/cases/03-weather-default/synthesis/evidence.json": {
+      "raw": "ed3b940664604fbb7bd8a973d722bce43853756e45eef027f6c2f258cf0016a6",
+      "lf": "ed3b940664604fbb7bd8a973d722bce43853756e45eef027f6c2f258cf0016a6"
+    },
+    "benchmarks/cases/03-weather-default/tasks.json": {
+      "raw": "91a7183e79cd24020a183f348631866c9e242cbbbe12ee6d4bf30ca94920c4f1",
+      "lf": "91a7183e79cd24020a183f348631866c9e242cbbbe12ee6d4bf30ca94920c4f1"
+    },
+    "benchmarks/cases/04-unknown-default/case.json": {
+      "raw": "8e9a104bf9dde6fb8b5af2ac2516b837f31279fcebb3dfec508bd1bf621f1128",
+      "lf": "8e9a104bf9dde6fb8b5af2ac2516b837f31279fcebb3dfec508bd1bf621f1128"
+    },
+    "benchmarks/cases/04-unknown-default/fixture.json": {
+      "raw": "ee5cac15ab742db55666bdd65adc81b1fad5a0b7ee200d93e90f8b9ed19cd28d",
+      "lf": "ee5cac15ab742db55666bdd65adc81b1fad5a0b7ee200d93e90f8b9ed19cd28d"
+    },
+    "benchmarks/cases/04-unknown-default/gate/evidence.json": {
+      "raw": "673f186aa4a58094d580f05d425baaf60859049341f67c16ba9d1768ab1d7a3f",
+      "lf": "673f186aa4a58094d580f05d425baaf60859049341f67c16ba9d1768ab1d7a3f"
+    },
+    "benchmarks/cases/04-unknown-default/sealed-eval/evidence.json": {
+      "raw": "9bf2cdbad306b9f1d11bd59657648028ec3a10d161100096c9e0755ef20d55af",
+      "lf": "9bf2cdbad306b9f1d11bd59657648028ec3a10d161100096c9e0755ef20d55af"
+    },
+    "benchmarks/cases/04-unknown-default/synthesis/evidence.json": {
+      "raw": "9052554721acd58ebfdc95f1bf260ba80e1f27f95e9394b640a2e4352910b031",
+      "lf": "9052554721acd58ebfdc95f1bf260ba80e1f27f95e9394b640a2e4352910b031"
+    },
+    "benchmarks/cases/04-unknown-default/tasks.json": {
+      "raw": "fa47a2f84d6984ca8b3c905e11dc7752b2a2b809ab145cd0a4bc8bf35474f35c",
+      "lf": "fa47a2f84d6984ca8b3c905e11dc7752b2a2b809ab145cd0a4bc8bf35474f35c"
+    },
+    "benchmarks/cases/05-string-number/case.json": {
+      "raw": "cef355eeaa8b2657df23e68c7b074f253206725ead539e8f2391fa9d05f5fc89",
+      "lf": "cef355eeaa8b2657df23e68c7b074f253206725ead539e8f2391fa9d05f5fc89"
+    },
+    "benchmarks/cases/05-string-number/fixture.json": {
+      "raw": "1ff3a03a780392545cb44a16ab30a383c4c70d1650e8ce17836ceed89b361e5e",
+      "lf": "1ff3a03a780392545cb44a16ab30a383c4c70d1650e8ce17836ceed89b361e5e"
+    },
+    "benchmarks/cases/05-string-number/gate/evidence.json": {
+      "raw": "925d8bbcb1e28581a99b77347639aa3840422a574e89b8a204cabc6a916bcc89",
+      "lf": "925d8bbcb1e28581a99b77347639aa3840422a574e89b8a204cabc6a916bcc89"
+    },
+    "benchmarks/cases/05-string-number/sealed-eval/evidence.json": {
+      "raw": "d1ecfd9942807db4dc1e8e8e23ff52acd50dcd1a74dd5f0704248d5504798f10",
+      "lf": "d1ecfd9942807db4dc1e8e8e23ff52acd50dcd1a74dd5f0704248d5504798f10"
+    },
+    "benchmarks/cases/05-string-number/synthesis/evidence.json": {
+      "raw": "d7f2e293c5fb918a94c921a2e66f6e290f1c699873754894c8872ab531b1400a",
+      "lf": "d7f2e293c5fb918a94c921a2e66f6e290f1c699873754894c8872ab531b1400a"
+    },
+    "benchmarks/cases/05-string-number/tasks.json": {
+      "raw": "27774d68d5556b010f0c057bf55993e18c9a6b30c29bc9026f68cb7ee645a002",
+      "lf": "27774d68d5556b010f0c057bf55993e18c9a6b30c29bc9026f68cb7ee645a002"
+    },
+    "benchmarks/cases/06-money-scale/case.json": {
+      "raw": "a3d99f7ddf2c0cdba879d1c020d63182dcc39374d2e2c0c65258c2a81a60f8bc",
+      "lf": "a3d99f7ddf2c0cdba879d1c020d63182dcc39374d2e2c0c65258c2a81a60f8bc"
+    },
+    "benchmarks/cases/06-money-scale/fixture.json": {
+      "raw": "20f65f3971bac7cb582342c96a02f03cd480eaa9ae6c1f19a4e9e46384f74ed3",
+      "lf": "20f65f3971bac7cb582342c96a02f03cd480eaa9ae6c1f19a4e9e46384f74ed3"
+    },
+    "benchmarks/cases/06-money-scale/gate/evidence.json": {
+      "raw": "215bf578602344d4cd67eb5ef1900e4a4236302e69903a820fd49a0449d39d1a",
+      "lf": "215bf578602344d4cd67eb5ef1900e4a4236302e69903a820fd49a0449d39d1a"
+    },
+    "benchmarks/cases/06-money-scale/sealed-eval/evidence.json": {
+      "raw": "53e65de09f3990000d442ef45ed91fe3df535918e656f896f66d7859c83e7d05",
+      "lf": "53e65de09f3990000d442ef45ed91fe3df535918e656f896f66d7859c83e7d05"
+    },
+    "benchmarks/cases/06-money-scale/synthesis/evidence.json": {
+      "raw": "b88fda67e8e43e304bef96b45fb562aa3f42a26e12714cb05da101d342674700",
+      "lf": "b88fda67e8e43e304bef96b45fb562aa3f42a26e12714cb05da101d342674700"
+    },
+    "benchmarks/cases/06-money-scale/tasks.json": {
+      "raw": "205b61e8c7179d971320b6824e043e915126f9af154e90c4ea35ffd3cd1da9bb",
+      "lf": "205b61e8c7179d971320b6824e043e915126f9af154e90c4ea35ffd3cd1da9bb"
+    },
+    "benchmarks/cases/07-input-enum/case.json": {
+      "raw": "231eb494e070bfa53f2b278bd87cf2fbb47217fbefbeb105887b3cb85df2a96c",
+      "lf": "231eb494e070bfa53f2b278bd87cf2fbb47217fbefbeb105887b3cb85df2a96c"
+    },
+    "benchmarks/cases/07-input-enum/fixture.json": {
+      "raw": "604db7a6cb8747fb2766e174437baeb138d64dbf3144745adcca623b5cacca1f",
+      "lf": "604db7a6cb8747fb2766e174437baeb138d64dbf3144745adcca623b5cacca1f"
+    },
+    "benchmarks/cases/07-input-enum/gate/evidence.json": {
+      "raw": "0ffdd63721f7859e40025e456d0065964f0063d7cb556c8c12475ea8385c781f",
+      "lf": "0ffdd63721f7859e40025e456d0065964f0063d7cb556c8c12475ea8385c781f"
+    },
+    "benchmarks/cases/07-input-enum/sealed-eval/evidence.json": {
+      "raw": "d82fc8abcb5d8d104270c83c0f9e337b43c2484a243619e4b20c9cd2dfcd77e3",
+      "lf": "d82fc8abcb5d8d104270c83c0f9e337b43c2484a243619e4b20c9cd2dfcd77e3"
+    },
+    "benchmarks/cases/07-input-enum/synthesis/evidence.json": {
+      "raw": "f35796d7a75dbd736f734e9ffa2ee8e28f54b0a439ed887321073304c582be19",
+      "lf": "f35796d7a75dbd736f734e9ffa2ee8e28f54b0a439ed887321073304c582be19"
+    },
+    "benchmarks/cases/07-input-enum/tasks.json": {
+      "raw": "bf0152af6df0f20486c54ed1b5addfbf20d03fcf49f67b1fef582b36f44017ae",
+      "lf": "bf0152af6df0f20486c54ed1b5addfbf20d03fcf49f67b1fef582b36f44017ae"
+    },
+    "benchmarks/cases/08-delivery-enum/case.json": {
+      "raw": "de91786d9325524294bde8e7a63fac72227595db642340d9e2f82d16e3c1794a",
+      "lf": "de91786d9325524294bde8e7a63fac72227595db642340d9e2f82d16e3c1794a"
+    },
+    "benchmarks/cases/08-delivery-enum/fixture.json": {
+      "raw": "23100642a6704b8b737597054372a22a97ab1219d07fb545b4a773f3601f4fd0",
+      "lf": "23100642a6704b8b737597054372a22a97ab1219d07fb545b4a773f3601f4fd0"
+    },
+    "benchmarks/cases/08-delivery-enum/gate/evidence.json": {
+      "raw": "8ee1da71ac0bf5f1c8231727967c7029d03aefd16bd6e480af5942f190a91c34",
+      "lf": "8ee1da71ac0bf5f1c8231727967c7029d03aefd16bd6e480af5942f190a91c34"
+    },
+    "benchmarks/cases/08-delivery-enum/sealed-eval/evidence.json": {
+      "raw": "3004a749e3bca2ee574b614d5d375fd00331f4a5dfc715edcff90660f36533ce",
+      "lf": "3004a749e3bca2ee574b614d5d375fd00331f4a5dfc715edcff90660f36533ce"
+    },
+    "benchmarks/cases/08-delivery-enum/synthesis/evidence.json": {
+      "raw": "0196297b21773b58b7b176b778c4b559aa02f2a9e439ec2ef37f3d589f0f2238",
+      "lf": "0196297b21773b58b7b176b778c4b559aa02f2a9e439ec2ef37f3d589f0f2238"
+    },
+    "benchmarks/cases/08-delivery-enum/tasks.json": {
+      "raw": "8640ed1dd8cdd00f514eb5e32255f626ec8c4208e030c3d8214c912dad5fe6b8",
+      "lf": "8640ed1dd8cdd00f514eb5e32255f626ec8c4208e030c3d8214c912dad5fe6b8"
+    },
+    "benchmarks/cases/08-response-enum/case.json": {
+      "raw": "b7ab92ad4a8aa145f7334251cb9efd2832027a581c85d4979e1e67260a0903c1",
+      "lf": "b7ab92ad4a8aa145f7334251cb9efd2832027a581c85d4979e1e67260a0903c1"
+    },
+    "benchmarks/cases/08-response-enum/fixture.json": {
+      "raw": "cd39a94f42522f778fb2e85baa965e8499323eb27d7687553230cca25426becf",
+      "lf": "cd39a94f42522f778fb2e85baa965e8499323eb27d7687553230cca25426becf"
+    },
+    "benchmarks/cases/08-response-enum/gate/evidence.json": {
+      "raw": "dd0fbc0ae07169d831e7431491eea2c29d0209790fb7bf267958ad693f0d5633",
+      "lf": "dd0fbc0ae07169d831e7431491eea2c29d0209790fb7bf267958ad693f0d5633"
+    },
+    "benchmarks/cases/08-response-enum/sealed-eval/evidence.json": {
+      "raw": "11c8be465749de1d144e0c55084b061b8d79dbe8c5cfa637d57483e7ac459976",
+      "lf": "11c8be465749de1d144e0c55084b061b8d79dbe8c5cfa637d57483e7ac459976"
+    },
+    "benchmarks/cases/08-response-enum/synthesis/evidence.json": {
+      "raw": "13b69c69a61b6cb82f213fb52143dfae85bbb2c46d235d141742d735cb7e0d54",
+      "lf": "13b69c69a61b6cb82f213fb52143dfae85bbb2c46d235d141742d735cb7e0d54"
+    },
+    "benchmarks/cases/08-response-enum/tasks.json": {
+      "raw": "ca694ef25f9ff14f40f16aafd8894df628c8a5c34e76b21774f1ccd8132c9028",
+      "lf": "ca694ef25f9ff14f40f16aafd8894df628c8a5c34e76b21774f1ccd8132c9028"
+    },
+    "benchmarks/cases/09-profile-projection/case.json": {
+      "raw": "3aa1d9492224fed28d521b0a12838adb3f71e8c193244acbbe4cccf01ea71916",
+      "lf": "3aa1d9492224fed28d521b0a12838adb3f71e8c193244acbbe4cccf01ea71916"
+    },
+    "benchmarks/cases/09-profile-projection/fixture.json": {
+      "raw": "8b91ae95d9b4e7214cbace66a87886efd8e79d95d6f6bcd7703127550b2eb478",
+      "lf": "8b91ae95d9b4e7214cbace66a87886efd8e79d95d6f6bcd7703127550b2eb478"
+    },
+    "benchmarks/cases/09-profile-projection/gate/evidence.json": {
+      "raw": "5be53ce7e09d5c4bff84f2c170eb2dd389199f1496d91c4edf3960237d65d0c0",
+      "lf": "5be53ce7e09d5c4bff84f2c170eb2dd389199f1496d91c4edf3960237d65d0c0"
+    },
+    "benchmarks/cases/09-profile-projection/sealed-eval/evidence.json": {
+      "raw": "a483350eecc787e7aab36353eea0a04f9d5b797b4d6f1a0a8eb01b863e3beb8f",
+      "lf": "a483350eecc787e7aab36353eea0a04f9d5b797b4d6f1a0a8eb01b863e3beb8f"
+    },
+    "benchmarks/cases/09-profile-projection/synthesis/evidence.json": {
+      "raw": "4412b3ff7ba50738d4f2dca01fb7c288faee453264aa6947d597db1868f0ed8b",
+      "lf": "4412b3ff7ba50738d4f2dca01fb7c288faee453264aa6947d597db1868f0ed8b"
+    },
+    "benchmarks/cases/09-profile-projection/tasks.json": {
+      "raw": "cd87c73fc4a43beb8a4eab4ab8a0332f7cd8694b5ee6732f17b1266137f5e48b",
+      "lf": "cd87c73fc4a43beb8a4eab4ab8a0332f7cd8694b5ee6732f17b1266137f5e48b"
+    },
+    "benchmarks/cases/10-reading-projection/case.json": {
+      "raw": "b4b8ba2686b187e7d1a26925058edc07f8fc7754f6fd3d3583d7f1281546dca4",
+      "lf": "b4b8ba2686b187e7d1a26925058edc07f8fc7754f6fd3d3583d7f1281546dca4"
+    },
+    "benchmarks/cases/10-reading-projection/fixture.json": {
+      "raw": "4f9c4f80be9d2f1791b9acc1a63d68c0ece526ca326c52f0cd143440b6f6acee",
+      "lf": "4f9c4f80be9d2f1791b9acc1a63d68c0ece526ca326c52f0cd143440b6f6acee"
+    },
+    "benchmarks/cases/10-reading-projection/gate/evidence.json": {
+      "raw": "042a811698e4b2d5728b98e5b340bdcfbf95584671523e27a0c90527aef762df",
+      "lf": "042a811698e4b2d5728b98e5b340bdcfbf95584671523e27a0c90527aef762df"
+    },
+    "benchmarks/cases/10-reading-projection/sealed-eval/evidence.json": {
+      "raw": "915d6f1fc19e4963edde7ba740e4c784f87d84d05e006596cd012405c7237926",
+      "lf": "915d6f1fc19e4963edde7ba740e4c784f87d84d05e006596cd012405c7237926"
+    },
+    "benchmarks/cases/10-reading-projection/synthesis/evidence.json": {
+      "raw": "c53932813a5d137c6717abe3eb372f3d776b3c1b8b07ea073ed3c6b59cccae5b",
+      "lf": "c53932813a5d137c6717abe3eb372f3d776b3c1b8b07ea073ed3c6b59cccae5b"
+    },
+    "benchmarks/cases/10-reading-projection/tasks.json": {
+      "raw": "4dcb5cbad1956572230382df897dd0b5c3d5513a81f736b74eaae0ee74aead8c",
+      "lf": "4dcb5cbad1956572230382df897dd0b5c3d5513a81f736b74eaae0ee74aead8c"
+    },
+    "benchmarks/cases/11-report-composition/case.json": {
+      "raw": "71ddfdd4041262851b7dbef6451f766915b314d015d2ff8542a51361f40b0d4e",
+      "lf": "71ddfdd4041262851b7dbef6451f766915b314d015d2ff8542a51361f40b0d4e"
+    },
+    "benchmarks/cases/11-report-composition/fixture.json": {
+      "raw": "c8dbcd0078becf004ef130371d6b6e90f98411d44bd8dd728c31d319b389ba80",
+      "lf": "c8dbcd0078becf004ef130371d6b6e90f98411d44bd8dd728c31d319b389ba80"
+    },
+    "benchmarks/cases/11-report-composition/gate/evidence.json": {
+      "raw": "8a6de9ba9c922b019e42222524960718fe78974dab1c98a25879e31a1bd1d44c",
+      "lf": "8a6de9ba9c922b019e42222524960718fe78974dab1c98a25879e31a1bd1d44c"
+    },
+    "benchmarks/cases/11-report-composition/sealed-eval/evidence.json": {
+      "raw": "6b0a2153c7eb5568d78f3baf18ec57c109e38b9037d2401ac3ce1f3a049fcb95",
+      "lf": "6b0a2153c7eb5568d78f3baf18ec57c109e38b9037d2401ac3ce1f3a049fcb95"
+    },
+    "benchmarks/cases/11-report-composition/synthesis/evidence.json": {
+      "raw": "15b4dbdfeabcc032f5343f28de46331a854c13fb477bc05092f79e3e4487b6a5",
+      "lf": "15b4dbdfeabcc032f5343f28de46331a854c13fb477bc05092f79e3e4487b6a5"
+    },
+    "benchmarks/cases/11-report-composition/tasks.json": {
+      "raw": "0b000db02c19a6a14b0794f335b7eb69f7b796952d9c33816e65818902b45cb8",
+      "lf": "0b000db02c19a6a14b0794f335b7eb69f7b796952d9c33816e65818902b45cb8"
+    },
+    "benchmarks/cases/11-workspace-composition/case.json": {
+      "raw": "e6ac71713627ac9493a7b75859dcf6b052d79760340b20961dd6a95ab2c70e38",
+      "lf": "e6ac71713627ac9493a7b75859dcf6b052d79760340b20961dd6a95ab2c70e38"
+    },
+    "benchmarks/cases/11-workspace-composition/fixture.json": {
+      "raw": "98374a2b06044985f69e3c94ce510a2ec5b585e98f23fcb3925e0c0334238846",
+      "lf": "98374a2b06044985f69e3c94ce510a2ec5b585e98f23fcb3925e0c0334238846"
+    },
+    "benchmarks/cases/11-workspace-composition/gate/evidence.json": {
+      "raw": "9415f7e5467ce1191d24f77f45283cf444bdd1a63e317514da8106bc576c6893",
+      "lf": "9415f7e5467ce1191d24f77f45283cf444bdd1a63e317514da8106bc576c6893"
+    },
+    "benchmarks/cases/11-workspace-composition/sealed-eval/evidence.json": {
+      "raw": "5f83e35b777fb98aa21e69229b54657b069e18cc89cfa558754dcb4a916f4052",
+      "lf": "5f83e35b777fb98aa21e69229b54657b069e18cc89cfa558754dcb4a916f4052"
+    },
+    "benchmarks/cases/11-workspace-composition/synthesis/evidence.json": {
+      "raw": "e054852751c983aaed184166a28cc47ec2a4424da3b251228bf71dc7a98f42bd",
+      "lf": "e054852751c983aaed184166a28cc47ec2a4424da3b251228bf71dc7a98f42bd"
+    },
+    "benchmarks/cases/11-workspace-composition/tasks.json": {
+      "raw": "5b1d2a03d4c45d7ac87868c9b3bc28fe85e55153f1aa389d82f7df2cfd8e28b1",
+      "lf": "5b1d2a03d4c45d7ac87868c9b3bc28fe85e55153f1aa389d82f7df2cfd8e28b1"
+    },
+    "benchmarks/cases/12-refund-workflow/case.json": {
+      "raw": "2ef438528e881fb7686909fdae5e62faf33ea427f2070b3b70677a210779eed0",
+      "lf": "2ef438528e881fb7686909fdae5e62faf33ea427f2070b3b70677a210779eed0"
+    },
+    "benchmarks/cases/12-refund-workflow/fixture.json": {
+      "raw": "9a68463f6fd2bcdd3ccd8516af53a2050ea27f7ad3904722bebc6160b32d1c88",
+      "lf": "9a68463f6fd2bcdd3ccd8516af53a2050ea27f7ad3904722bebc6160b32d1c88"
+    },
+    "benchmarks/cases/12-refund-workflow/gate/evidence.json": {
+      "raw": "abe95ef85773bce1afe4fb36817afa773a84a74f87d99cb2ec5aae874e1afdc3",
+      "lf": "abe95ef85773bce1afe4fb36817afa773a84a74f87d99cb2ec5aae874e1afdc3"
+    },
+    "benchmarks/cases/12-refund-workflow/sealed-eval/evidence.json": {
+      "raw": "7e9ab5b7d3c06f4d0512c31e6b75deb993ff4652d7c20ade2068f1cd8e377e93",
+      "lf": "7e9ab5b7d3c06f4d0512c31e6b75deb993ff4652d7c20ade2068f1cd8e377e93"
+    },
+    "benchmarks/cases/12-refund-workflow/synthesis/evidence.json": {
+      "raw": "c17c081206c6e3dd7dd8c41096a44b9d32a92900ec70ff16cba7a94015b4de5b",
+      "lf": "c17c081206c6e3dd7dd8c41096a44b9d32a92900ec70ff16cba7a94015b4de5b"
+    },
+    "benchmarks/cases/12-refund-workflow/tasks.json": {
+      "raw": "b17557d6d66eb82f16403bab96f61afdae82060dea8478b6a161ea32a0a0b4e2",
+      "lf": "b17557d6d66eb82f16403bab96f61afdae82060dea8478b6a161ea32a0a0b4e2"
+    },
+    "benchmarks/cases/13-send-vs-draft/case.json": {
+      "raw": "092ebec4d93c2ba0829f59bc1d99a59713955fa1f2fb74ac94b598860c3b3c05",
+      "lf": "092ebec4d93c2ba0829f59bc1d99a59713955fa1f2fb74ac94b598860c3b3c05"
+    },
+    "benchmarks/cases/13-send-vs-draft/fixture.json": {
+      "raw": "030527a5e5c49d289db0fb28fd09b8aa537e411d2955f8fb8c61d7e5c446871c",
+      "lf": "030527a5e5c49d289db0fb28fd09b8aa537e411d2955f8fb8c61d7e5c446871c"
+    },
+    "benchmarks/cases/13-send-vs-draft/gate/evidence.json": {
+      "raw": "39f889e28dd2151c397b94b0fc989b99956ff0543e69c2d38c201d26d5c040ea",
+      "lf": "39f889e28dd2151c397b94b0fc989b99956ff0543e69c2d38c201d26d5c040ea"
+    },
+    "benchmarks/cases/13-send-vs-draft/sealed-eval/evidence.json": {
+      "raw": "32970d1a1a4bb9c076482983c456ac74b2e8f4cfeed83a5fc9ef1b049034bab4",
+      "lf": "32970d1a1a4bb9c076482983c456ac74b2e8f4cfeed83a5fc9ef1b049034bab4"
+    },
+    "benchmarks/cases/13-send-vs-draft/synthesis/evidence.json": {
+      "raw": "b62461dc07bf836bc7a50c3ac52ec2964c6f9477e2d9db648c0382102120281d",
+      "lf": "b62461dc07bf836bc7a50c3ac52ec2964c6f9477e2d9db648c0382102120281d"
+    },
+    "benchmarks/cases/13-send-vs-draft/tasks.json": {
+      "raw": "5c950aa006eb0cfb92f34c5eef5261c2ace0879968ea936a16681cc3d43a8276",
+      "lf": "5c950aa006eb0cfb92f34c5eef5261c2ace0879968ea936a16681cc3d43a8276"
+    },
+    "benchmarks/cases/14-delete-vs-deactivate/case.json": {
+      "raw": "b0b57882c1fa4bcdb5528defe489a788900eae5cb560fc70a2c5916944063452",
+      "lf": "b0b57882c1fa4bcdb5528defe489a788900eae5cb560fc70a2c5916944063452"
+    },
+    "benchmarks/cases/14-delete-vs-deactivate/fixture.json": {
+      "raw": "f6b8b82bd9419db252d2a1524e5475b6d93e2e219541872eae046e47730bae28",
+      "lf": "f6b8b82bd9419db252d2a1524e5475b6d93e2e219541872eae046e47730bae28"
+    },
+    "benchmarks/cases/14-delete-vs-deactivate/gate/evidence.json": {
+      "raw": "078a74f303ca186b3326055bf52221c24a6a31733f1ed3c9252d4bdf14ed45f3",
+      "lf": "078a74f303ca186b3326055bf52221c24a6a31733f1ed3c9252d4bdf14ed45f3"
+    },
+    "benchmarks/cases/14-delete-vs-deactivate/sealed-eval/evidence.json": {
+      "raw": "4014cd9b2b6b3e31eab1a381e293b818a329fda969cfd208efcfea0a018ba52c",
+      "lf": "4014cd9b2b6b3e31eab1a381e293b818a329fda969cfd208efcfea0a018ba52c"
+    },
+    "benchmarks/cases/14-delete-vs-deactivate/synthesis/evidence.json": {
+      "raw": "805d4a8773c059bc4a9c92718c7674ccec9f52e244636394724399cb0da45453",
+      "lf": "805d4a8773c059bc4a9c92718c7674ccec9f52e244636394724399cb0da45453"
+    },
+    "benchmarks/cases/14-delete-vs-deactivate/tasks.json": {
+      "raw": "e104e5e325a713afc09075a988214c24243d610ec90bd5104624415c6eda991f",
+      "lf": "e104e5e325a713afc09075a988214c24243d610ec90bd5104624415c6eda991f"
+    },
+    "benchmarks/cases/15-pagination-limit/case.json": {
+      "raw": "e5ab3a48f1777232a53f567e991f66f49cb242328f1bb8937aacd8274e5cfbb9",
+      "lf": "e5ab3a48f1777232a53f567e991f66f49cb242328f1bb8937aacd8274e5cfbb9"
+    },
+    "benchmarks/cases/15-pagination-limit/fixture.json": {
+      "raw": "7ec76189f1a624dacd260c94a605ce45cfea82fe2f61c28ba55538df8b934406",
+      "lf": "7ec76189f1a624dacd260c94a605ce45cfea82fe2f61c28ba55538df8b934406"
+    },
+    "benchmarks/cases/15-pagination-limit/gate/evidence.json": {
+      "raw": "51844b676d3d9bafc54258aa50f4a93d3a2b24c44f653b27ccd724c2815296f2",
+      "lf": "51844b676d3d9bafc54258aa50f4a93d3a2b24c44f653b27ccd724c2815296f2"
+    },
+    "benchmarks/cases/15-pagination-limit/sealed-eval/evidence.json": {
+      "raw": "b1adb3dc538da150cefdc5d59764fb655932aad330610c19874fbfbfceebc358",
+      "lf": "b1adb3dc538da150cefdc5d59764fb655932aad330610c19874fbfbfceebc358"
+    },
+    "benchmarks/cases/15-pagination-limit/synthesis/evidence.json": {
+      "raw": "3d4b97dff369d8107930b302f52d991c7931b3b1b7d296bc7a1540efa7cef1d6",
+      "lf": "3d4b97dff369d8107930b302f52d991c7931b3b1b7d296bc7a1540efa7cef1d6"
+    },
+    "benchmarks/cases/15-pagination-limit/tasks.json": {
+      "raw": "334aebe53950ca441ea904d5b1dd2ed75833e1d1ab5409f7b8c86dc8884a295b",
+      "lf": "334aebe53950ca441ea904d5b1dd2ed75833e1d1ab5409f7b8c86dc8884a295b"
+    },
+    "benchmarks/cases/15-stream-cap/case.json": {
+      "raw": "bad886d0b33c0f9cd3cfeed2851c7511624cafd6b98e587f510d573886cc83ea",
+      "lf": "bad886d0b33c0f9cd3cfeed2851c7511624cafd6b98e587f510d573886cc83ea"
+    },
+    "benchmarks/cases/15-stream-cap/fixture.json": {
+      "raw": "04d3b170e9526448586707d2aa69b353a3b74fcbe3a3cb36db61688d712ad8be",
+      "lf": "04d3b170e9526448586707d2aa69b353a3b74fcbe3a3cb36db61688d712ad8be"
+    },
+    "benchmarks/cases/15-stream-cap/gate/evidence.json": {
+      "raw": "a2942dc8b4d17a66d90244ffef661de9065bf17b51d999526ec6e4c9d7909c28",
+      "lf": "a2942dc8b4d17a66d90244ffef661de9065bf17b51d999526ec6e4c9d7909c28"
+    },
+    "benchmarks/cases/15-stream-cap/sealed-eval/evidence.json": {
+      "raw": "05603533bf9e3e65b7c56d3a4aed6c88476cd7363fabc5993758a31d7f335aa5",
+      "lf": "05603533bf9e3e65b7c56d3a4aed6c88476cd7363fabc5993758a31d7f335aa5"
+    },
+    "benchmarks/cases/15-stream-cap/synthesis/evidence.json": {
+      "raw": "d794bfe9e1fc053400659bde4e704ea2335055c5a13a0fddc79ab9a8c7dda8f3",
+      "lf": "d794bfe9e1fc053400659bde4e704ea2335055c5a13a0fddc79ab9a8c7dda8f3"
+    },
+    "benchmarks/cases/15-stream-cap/tasks.json": {
+      "raw": "873c02f69b15f5e79cce413f789d404333928f08f9bf1cc19eaab288463ac686",
+      "lf": "873c02f69b15f5e79cce413f789d404333928f08f9bf1cc19eaab288463ac686"
+    },
+    "benchmarks/cases/15-tightened-constraint/case.json": {
+      "raw": "d2f117e7be557aa9fb5b286434b2940c4bcda597c700d3e02e469fbd041d568e",
+      "lf": "d2f117e7be557aa9fb5b286434b2940c4bcda597c700d3e02e469fbd041d568e"
+    },
+    "benchmarks/cases/15-tightened-constraint/fixture.json": {
+      "raw": "7ec76189f1a624dacd260c94a605ce45cfea82fe2f61c28ba55538df8b934406",
+      "lf": "7ec76189f1a624dacd260c94a605ce45cfea82fe2f61c28ba55538df8b934406"
+    },
+    "benchmarks/cases/15-tightened-constraint/gate/evidence.json": {
+      "raw": "360eb4c8c6d3584b88bd7f7a17632754d44ee21f675e51fc7ce6a178aeb44f48",
+      "lf": "360eb4c8c6d3584b88bd7f7a17632754d44ee21f675e51fc7ce6a178aeb44f48"
+    },
+    "benchmarks/cases/15-tightened-constraint/sealed-eval/evidence.json": {
+      "raw": "f9b83ffded42cce4f436f261f17c68a6d2e79ada24d0b2215c0d6f0701ac0fc3",
+      "lf": "f9b83ffded42cce4f436f261f17c68a6d2e79ada24d0b2215c0d6f0701ac0fc3"
+    },
+    "benchmarks/cases/15-tightened-constraint/synthesis/evidence.json": {
+      "raw": "37e38c40a34231fe3c891bb4c0e5e0c4f365c41e09513a036703218c37f08755",
+      "lf": "37e38c40a34231fe3c891bb4c0e5e0c4f365c41e09513a036703218c37f08755"
+    },
+    "benchmarks/cases/15-tightened-constraint/tasks.json": {
+      "raw": "334aebe53950ca441ea904d5b1dd2ed75833e1d1ab5409f7b8c86dc8884a295b",
+      "lf": "334aebe53950ca441ea904d5b1dd2ed75833e1d1ab5409f7b8c86dc8884a295b"
+    },
+    "benchmarks/manifests/README.md": {
+      "raw": "c373b66b01540b642c26a866af4673405a27760dc2d3301c20579ee0c8aaa48f",
+      "lf": "c373b66b01540b642c26a866af4673405a27760dc2d3301c20579ee0c8aaa48f"
+    },
+    "benchmarks/manifests/development-acceptance-v3.json": {
+      "raw": "913a390f7e86edfee8a22a3e3292628375cc2e7a5e0bdaae21e9d469ef8148f1",
+      "lf": "913a390f7e86edfee8a22a3e3292628375cc2e7a5e0bdaae21e9d469ef8148f1"
+    },
+    "benchmarks/manifests/development-acceptance.json": {
+      "raw": "a90a3db83c0e3a2c7023d9064460abb85482f9f506ee7e7096d3349bf6512c95",
+      "lf": "a90a3db83c0e3a2c7023d9064460abb85482f9f506ee7e7096d3349bf6512c95"
+    },
+    "benchmarks/manifests/protocol-v1.json": {
+      "raw": "a48de06bfd93b5c255aa49c8eb3234f9afb98bf94e9a08a00958bff6b89a620d",
+      "lf": "a48de06bfd93b5c255aa49c8eb3234f9afb98bf94e9a08a00958bff6b89a620d"
+    },
+    "benchmarks/manifests/protocol-v2.json": {
+      "raw": "36129a1770aa577d064944e57a5400ac8e0087d7a0730e099f2a90178c9bb53a",
+      "lf": "36129a1770aa577d064944e57a5400ac8e0087d7a0730e099f2a90178c9bb53a"
+    },
+    "benchmarks/manifests/suite-v1.json": {
+      "raw": "7bd90ceb5f7c04ad68e79ebee00a34ef3d884be0aeacc446a178c189adfcecd7",
+      "lf": "7bd90ceb5f7c04ad68e79ebee00a34ef3d884be0aeacc446a178c189adfcecd7"
+    },
+    "benchmarks/manifests/suite-v2.json": {
+      "raw": "ca5096770bcf83c583c5e38d9d27901173f4d63ea7125212eb2ef3d234b5fa80",
+      "lf": "ca5096770bcf83c583c5e38d9d27901173f4d63ea7125212eb2ef3d234b5fa80"
+    },
+    "benchmarks/manifests/suite-v3.json": {
+      "raw": "da93d9fc02c6dce0a238342fa42e2d8bb9629bbaee3cd3b678f4d29dfb09a5a9",
+      "lf": "da93d9fc02c6dce0a238342fa42e2d8bb9629bbaee3cd3b678f4d29dfb09a5a9"
+    },
+    "benchmarks/oracles/README.md": {
+      "raw": "b3a190371ef69be929acacbc884475d32f90c8942511f3d5e54335eb43ce8f1c",
+      "lf": "b3a190371ef69be929acacbc884475d32f90c8942511f3d5e54335eb43ce8f1c"
+    },
+    "benchmarks/realworld-v1/DEFECTS.md": {
+      "raw": "2d08949c781a27c846234c345525a749a1a2ff56cfb1acd4f172fd755d8fbb6b",
+      "lf": "2d08949c781a27c846234c345525a749a1a2ff56cfb1acd4f172fd755d8fbb6b"
+    },
+    "benchmarks/realworld-v1/README.md": {
+      "raw": "50f3600643f7f554f18a682302b8aad86191380786bf975aacb50eb9ae8579d6",
+      "lf": "50f3600643f7f554f18a682302b8aad86191380786bf975aacb50eb9ae8579d6"
+    },
+    "benchmarks/realworld-v1/REPORT.md": {
+      "raw": "8ce1c007bc4dac22117e6861c3ffe23cde6e7aad9f600ebd98087e615f5e6791",
+      "lf": "8ce1c007bc4dac22117e6861c3ffe23cde6e7aad9f600ebd98087e615f5e6791"
+    },
+    "benchmarks/realworld-v1/acquire.mjs": {
+      "raw": "1473ec18d5273f1f0bf8967838684a7e76a884fd3b8ed0dd8a44e97656ff87a8",
+      "lf": "1473ec18d5273f1f0bf8967838684a7e76a884fd3b8ed0dd8a44e97656ff87a8"
+    },
+    "benchmarks/realworld-v1/budget.mjs": {
+      "raw": "12ae3563db2fc79aa310b68f3310407a921bda7ec472963890c50bfc1fc91342",
+      "lf": "12ae3563db2fc79aa310b68f3310407a921bda7ec472963890c50bfc1fc91342"
+    },
+    "benchmarks/realworld-v1/cases.mjs": {
+      "raw": "41da48d5e16a280aa48b1fcb39258f762c90d72e099ad5b92c0f433e41f26fa8",
+      "lf": "41da48d5e16a280aa48b1fcb39258f762c90d72e099ad5b92c0f433e41f26fa8"
+    },
+    "benchmarks/realworld-v1/fixture.mjs": {
+      "raw": "1ce109c7b4fadca67a8c336533f3ad39b9adeaf788d45ba80f259a10fa44fadc",
+      "lf": "1ce109c7b4fadca67a8c336533f3ad39b9adeaf788d45ba80f259a10fa44fadc"
+    },
+    "benchmarks/realworld-v1/flagship-integrity.json": {
+      "raw": "9fa292c238929d168228a642ef9cb72e24e32f00a7918d9365107b89486eeb02",
+      "lf": "9fa292c238929d168228a642ef9cb72e24e32f00a7918d9365107b89486eeb02"
+    },
+    "benchmarks/realworld-v1/freeze.mjs": {
+      "raw": "95a8ebe289cdc86538cdd2cd72a32186c53d0874827b8cacb5a3cdfa3346e2d9",
+      "lf": "95a8ebe289cdc86538cdd2cd72a32186c53d0874827b8cacb5a3cdfa3346e2d9"
+    },
+    "benchmarks/realworld-v1/integrity.mjs": {
+      "raw": "8a795fff1736e5b2eebf9b1add914fb7ef92035e2469862c148e06711293780f",
+      "lf": "8a795fff1736e5b2eebf9b1add914fb7ef92035e2469862c148e06711293780f"
+    },
+    "benchmarks/realworld-v1/mindwtr/README.md": {
+      "raw": "10e846d65a3365fcdd7f993baa3c5868afb61e68eea74dadb7eb7a01b876d678",
+      "lf": "10e846d65a3365fcdd7f993baa3c5868afb61e68eea74dadb7eb7a01b876d678"
+    },
+    "benchmarks/realworld-v1/mindwtr/case.json": {
+      "raw": "d6d10c5592b59150c57333a730a44bbd3141471be4aa9ad0c1bffc235bbfe262",
+      "lf": "d6d10c5592b59150c57333a730a44bbd3141471be4aa9ad0c1bffc235bbfe262"
+    },
+    "benchmarks/realworld-v1/mindwtr/change-evidence.md": {
+      "raw": "fa02aa57e4ca949f10cb12183bde92b9f8eaefcba13b38de4cebc7a134f09f0c",
+      "lf": "fa02aa57e4ca949f10cb12183bde92b9f8eaefcba13b38de4cebc7a134f09f0c"
+    },
+    "benchmarks/realworld-v1/mindwtr/docker/Dockerfile": {
+      "raw": "e8cb98ec442970dad27584dc2854d01a5db686610e229df6646c64de3d25be55",
+      "lf": "e8cb98ec442970dad27584dc2854d01a5db686610e229df6646c64de3d25be55"
+    },
+    "benchmarks/realworld-v1/mindwtr/docker/bootstrap.ts": {
+      "raw": "82cfb34bd9052a170b7cca7eaf3bf709902a22d90e753bfb8a9e647b572be98e",
+      "lf": "82cfb34bd9052a170b7cca7eaf3bf709902a22d90e753bfb8a9e647b572be98e"
+    },
+    "benchmarks/realworld-v1/mindwtr/docker/dependencies/new-bun.lock": {
+      "raw": "927aa2cff3680505b6573c7eacb3dc00463e4ba5066d2ac31d4a8d5755264056",
+      "lf": "79495151901c6412b4b005d54c2c18aa6a6ff1d41c799a04bd5fd7056510f640"
+    },
+    "benchmarks/realworld-v1/mindwtr/docker/dependencies/old-bun.lock": {
+      "raw": "927aa2cff3680505b6573c7eacb3dc00463e4ba5066d2ac31d4a8d5755264056",
+      "lf": "79495151901c6412b4b005d54c2c18aa6a6ff1d41c799a04bd5fd7056510f640"
+    },
+    "benchmarks/realworld-v1/mindwtr/fixtures/bootstrap-source.txt": {
+      "raw": "82cfb34bd9052a170b7cca7eaf3bf709902a22d90e753bfb8a9e647b572be98e",
+      "lf": "82cfb34bd9052a170b7cca7eaf3bf709902a22d90e753bfb8a9e647b572be98e"
+    },
+    "benchmarks/realworld-v1/mindwtr/gate-evidence/evidence.json": {
+      "raw": "9fc71e18db3a7fb5cbe757bebf1aac60cc732d4b9435c4916a11cfb33c9b2ae1",
+      "lf": "9fc71e18db3a7fb5cbe757bebf1aac60cc732d4b9435c4916a11cfb33c9b2ae1"
+    },
+    "benchmarks/realworld-v1/mindwtr/new-contract.json": {
+      "raw": "ca3413d7bdc139e5d9092ba3b7151698d5dcea3386a1ef91585840a21dcd6930",
+      "lf": "ca3413d7bdc139e5d9092ba3b7151698d5dcea3386a1ef91585840a21dcd6930"
+    },
+    "benchmarks/realworld-v1/mindwtr/new-tools-list.json": {
+      "raw": "ecb9df93229291bdcc39de1843e5493fb106fbe2cba97e53156b8a95c0d92415",
+      "lf": "ecb9df93229291bdcc39de1843e5493fb106fbe2cba97e53156b8a95c0d92415"
+    },
+    "benchmarks/realworld-v1/mindwtr/old-contract.json": {
+      "raw": "6115ffe68b286465863fceb1c20e7f32c638dfbc7ea1e0aa8a5afe0fd8fb8e18",
+      "lf": "6115ffe68b286465863fceb1c20e7f32c638dfbc7ea1e0aa8a5afe0fd8fb8e18"
+    },
+    "benchmarks/realworld-v1/mindwtr/old-tools-list.json": {
+      "raw": "34a25c60abd34a36b3ab3247902a3822d31d340aeebe21a048dfaeed224ec0ce",
+      "lf": "34a25c60abd34a36b3ab3247902a3822d31d340aeebe21a048dfaeed224ec0ce"
+    },
+    "benchmarks/realworld-v1/mindwtr/provenance.json": {
+      "raw": "49aac92a8192a09a2e3502cca0696339c93c84d44a789ad980f16c6a3590b5b0",
+      "lf": "49aac92a8192a09a2e3502cca0696339c93c84d44a789ad980f16c6a3590b5b0"
+    },
+    "benchmarks/realworld-v1/mindwtr/results/trial-001.json": {
+      "raw": "298ec4f291bb18e331636ef4c10e7e21538e2cbea2caebe32c88244496f8a06a",
+      "lf": "298ec4f291bb18e331636ef4c10e7e21538e2cbea2caebe32c88244496f8a06a"
+    },
+    "benchmarks/realworld-v1/mindwtr/results/trial-002.json": {
+      "raw": "2418784edfaf2386237f2ecfd7bb81c60dc301d4c7cfd442f0490afca24c1d0c",
+      "lf": "2418784edfaf2386237f2ecfd7bb81c60dc301d4c7cfd442f0490afca24c1d0c"
+    },
+    "benchmarks/realworld-v1/mindwtr/results/trial-003.json": {
+      "raw": "ad54a93be2182a267479bcf3d98d49ec186c59d07d4e6d8f015aff8dd8692eff",
+      "lf": "ad54a93be2182a267479bcf3d98d49ec186c59d07d4e6d8f015aff8dd8692eff"
+    },
+    "benchmarks/realworld-v1/mindwtr/sealed/evidence.json": {
+      "raw": "2e5fc32b0aa73745c8fa9b601bad6dcc3b772d618b8faf6f48157e7c23df7b39",
+      "lf": "2e5fc32b0aa73745c8fa9b601bad6dcc3b772d618b8faf6f48157e7c23df7b39"
+    },
+    "benchmarks/realworld-v1/mindwtr/synthesis-evidence/evidence.json": {
+      "raw": "4d30141e6f2c8bad348c677cd40231fe31e0bf49e78426064eac0711809bac1b",
+      "lf": "4d30141e6f2c8bad348c677cd40231fe31e0bf49e78426064eac0711809bac1b"
+    },
+    "benchmarks/realworld-v1/mindwtr/traces/direct-old-client-on-new.json": {
+      "raw": "3d93524bfc9bb9621a5d3ca3c8d9afdcf061ecf379095017eaaf39eec23b1d32",
+      "lf": "3d93524bfc9bb9621a5d3ca3c8d9afdcf061ecf379095017eaaf39eec23b1d32"
+    },
+    "benchmarks/realworld-v1/mindwtr/traces/old-success.json": {
+      "raw": "9a05f3ae00e252f428e82cb44e9923c8be053136f9c765c1b55f888c50e82897",
+      "lf": "9a05f3ae00e252f428e82cb44e9923c8be053136f9c765c1b55f888c50e82897"
+    },
+    "benchmarks/realworld-v1/nexus/README.md": {
+      "raw": "c610a7a656c521329c439ca5090f9724bf8cb4c1f5119de0129c9a8875e6073d",
+      "lf": "c610a7a656c521329c439ca5090f9724bf8cb4c1f5119de0129c9a8875e6073d"
+    },
+    "benchmarks/realworld-v1/nexus/case.json": {
+      "raw": "25a1d125bdb8c7916823fecd8e7c130fc259e9469db5432c4947bd37b22fbfa1",
+      "lf": "25a1d125bdb8c7916823fecd8e7c130fc259e9469db5432c4947bd37b22fbfa1"
+    },
+    "benchmarks/realworld-v1/nexus/change-evidence.md": {
+      "raw": "3e14a6c76baba25355e0f791a2d006d34b787552b74a75f59e8398596cf256c0",
+      "lf": "3e14a6c76baba25355e0f791a2d006d34b787552b74a75f59e8398596cf256c0"
+    },
+    "benchmarks/realworld-v1/nexus/docker/Dockerfile": {
+      "raw": "89edb3068ab3d7a9975009f3d922f1155aa7262fbd18f70f6cd6aa4d09db4c52",
+      "lf": "89edb3068ab3d7a9975009f3d922f1155aa7262fbd18f70f6cd6aa4d09db4c52"
+    },
+    "benchmarks/realworld-v1/nexus/docker/bootstrap.py": {
+      "raw": "ed29ce84ee244de820d951b2b4a5c2b6ebf03bf65feaa99ea8cb7ab1cc3f9ee4",
+      "lf": "ed29ce84ee244de820d951b2b4a5c2b6ebf03bf65feaa99ea8cb7ab1cc3f9ee4"
+    },
+    "benchmarks/realworld-v1/nexus/docker/dependencies/new-uv.lock": {
+      "raw": "7de9157ba4fa6e89ef8d4a8358e023c340fff8eff462e9eb83420ce717166729",
+      "lf": "067dfc1c85cef0a092c19da44e0a303708431a6540500a17521ed4f2b9bc8d5c"
+    },
+    "benchmarks/realworld-v1/nexus/docker/dependencies/old-uv.lock": {
+      "raw": "7de9157ba4fa6e89ef8d4a8358e023c340fff8eff462e9eb83420ce717166729",
+      "lf": "067dfc1c85cef0a092c19da44e0a303708431a6540500a17521ed4f2b9bc8d5c"
+    },
+    "benchmarks/realworld-v1/nexus/docker/requirements.lock": {
+      "raw": "5b729ebf664549a26d50b4c092dc29687e41e424a84114f48baf04535338e6a7",
+      "lf": "5b729ebf664549a26d50b4c092dc29687e41e424a84114f48baf04535338e6a7"
+    },
+    "benchmarks/realworld-v1/nexus/fixtures/bootstrap-source.txt": {
+      "raw": "ed29ce84ee244de820d951b2b4a5c2b6ebf03bf65feaa99ea8cb7ab1cc3f9ee4",
+      "lf": "ed29ce84ee244de820d951b2b4a5c2b6ebf03bf65feaa99ea8cb7ab1cc3f9ee4"
+    },
+    "benchmarks/realworld-v1/nexus/gate-evidence/evidence.json": {
+      "raw": "f3dfcb365794e3fc94f11aa937bc57438130dc781757c1c50e3743856fbbdab8",
+      "lf": "f3dfcb365794e3fc94f11aa937bc57438130dc781757c1c50e3743856fbbdab8"
+    },
+    "benchmarks/realworld-v1/nexus/new-contract.json": {
+      "raw": "d217647b2992599b183387ea14d36d67ea83fdcd06f6fd9a58b7f9c96af74fdf",
+      "lf": "d217647b2992599b183387ea14d36d67ea83fdcd06f6fd9a58b7f9c96af74fdf"
+    },
+    "benchmarks/realworld-v1/nexus/new-tools-list.json": {
+      "raw": "091a5ba8f5a769b2e9553af70ec5a2dc605d86f7e5f1632a73161da052a60764",
+      "lf": "091a5ba8f5a769b2e9553af70ec5a2dc605d86f7e5f1632a73161da052a60764"
+    },
+    "benchmarks/realworld-v1/nexus/old-contract.json": {
+      "raw": "0e6c69badf5de6f4885385103459670aefaa738077f3c56cc58905e50bec9be7",
+      "lf": "0e6c69badf5de6f4885385103459670aefaa738077f3c56cc58905e50bec9be7"
+    },
+    "benchmarks/realworld-v1/nexus/old-tools-list.json": {
+      "raw": "5735b81262205d4d7d7aad959c95ac7ada80ee8a32392e4bbcd432901ec6c16c",
+      "lf": "5735b81262205d4d7d7aad959c95ac7ada80ee8a32392e4bbcd432901ec6c16c"
+    },
+    "benchmarks/realworld-v1/nexus/provenance.json": {
+      "raw": "8f6720d2077ed158d042945f912ad2612de3ad58e04e33bda2139801b9111a77",
+      "lf": "8f6720d2077ed158d042945f912ad2612de3ad58e04e33bda2139801b9111a77"
+    },
+    "benchmarks/realworld-v1/nexus/results/trial-001.json": {
+      "raw": "f71b66764ceeb53ca3391d21c940671cb69c9e706e7e23bf34890fa0c9882c1e",
+      "lf": "f71b66764ceeb53ca3391d21c940671cb69c9e706e7e23bf34890fa0c9882c1e"
+    },
+    "benchmarks/realworld-v1/nexus/results/trial-002.json": {
+      "raw": "7fe31caff0421fd5949d037fa253f86edf4e58ab9662c27557d5e182ad2d37fb",
+      "lf": "7fe31caff0421fd5949d037fa253f86edf4e58ab9662c27557d5e182ad2d37fb"
+    },
+    "benchmarks/realworld-v1/nexus/results/trial-003.json": {
+      "raw": "5d2df5de88ad709d0337c7047c4a5000eb3b6fc493c07c74e3dac755f0562b1b",
+      "lf": "5d2df5de88ad709d0337c7047c4a5000eb3b6fc493c07c74e3dac755f0562b1b"
+    },
+    "benchmarks/realworld-v1/nexus/sealed/evidence.json": {
+      "raw": "92fe018806a526fd73879af039ce3b07965e8201c4ba6d6358ce88772cc8143f",
+      "lf": "92fe018806a526fd73879af039ce3b07965e8201c4ba6d6358ce88772cc8143f"
+    },
+    "benchmarks/realworld-v1/nexus/synthesis-evidence/evidence.json": {
+      "raw": "39a63147c80a79308cc7a112a9830a87363bdb1f5354de5751f5e1efe21848a6",
+      "lf": "39a63147c80a79308cc7a112a9830a87363bdb1f5354de5751f5e1efe21848a6"
+    },
+    "benchmarks/realworld-v1/nexus/traces/direct-old-client-on-new.json": {
+      "raw": "dcc44eb2f65968a5d4333435549179d8b0c9f73024da0c7db8ffe670412f8605",
+      "lf": "dcc44eb2f65968a5d4333435549179d8b0c9f73024da0c7db8ffe670412f8605"
+    },
+    "benchmarks/realworld-v1/nexus/traces/old-success.json": {
+      "raw": "8927b2c47c4dbe2555fd5ea4250342f7b8a4e16c110508883d2f210596325724",
+      "lf": "8927b2c47c4dbe2555fd5ea4250342f7b8a4e16c110508883d2f210596325724"
+    },
+    "benchmarks/realworld-v1/probe.mjs": {
+      "raw": "e64736dad404c8e2c66693ea77ff9f7b8df2382313d7c8ae2632ab56ad6e24da",
+      "lf": "e64736dad404c8e2c66693ea77ff9f7b8df2382313d7c8ae2632ab56ad6e24da"
+    },
+    "benchmarks/realworld-v1/report.mjs": {
+      "raw": "11e00bd4ce81c5e1aa169405ae73a7fa0bab291a3e7557deca1507925c3f4ddd",
+      "lf": "11e00bd4ce81c5e1aa169405ae73a7fa0bab291a3e7557deca1507925c3f4ddd"
+    },
+    "benchmarks/realworld-v1/results/summary.json": {
+      "raw": "f2c76160171c4709fcd676750190f68ad5c652653f5eaeb74dc358bce8e52468",
+      "lf": "f2c76160171c4709fcd676750190f68ad5c652653f5eaeb74dc358bce8e52468"
+    },
+    "benchmarks/realworld-v1/results/validation.json": {
+      "raw": "a86b2da195190918d6dd1fbde0f6ff2edf92ea5c6cd03e7b1bf4d1e578f46110",
+      "lf": "a86b2da195190918d6dd1fbde0f6ff2edf92ea5c6cd03e7b1bf4d1e578f46110"
+    },
+    "benchmarks/realworld-v1/run.mjs": {
+      "raw": "cd1ff08fe24e72ec6aea01e1b32bd7fa676214296a5d914bbc1e9492f33ee86b",
+      "lf": "cd1ff08fe24e72ec6aea01e1b32bd7fa676214296a5d914bbc1e9492f33ee86b"
+    },
+    "benchmarks/realworld-v1/sqlew/README.md": {
+      "raw": "761f60d436a5b9243b8ef3812fc135f4860d97c40fd780ed413fe0f10b2b6098",
+      "lf": "761f60d436a5b9243b8ef3812fc135f4860d97c40fd780ed413fe0f10b2b6098"
+    },
+    "benchmarks/realworld-v1/sqlew/case.json": {
+      "raw": "59ccdc33ae825f83cb882ce813eae06092f3a49c9091eaa32feac7aa4349a844",
+      "lf": "59ccdc33ae825f83cb882ce813eae06092f3a49c9091eaa32feac7aa4349a844"
+    },
+    "benchmarks/realworld-v1/sqlew/change-evidence.md": {
+      "raw": "e9fcebbe057f35151909eb2886d39ab572ead007c906f53c2c22a23f94f36de7",
+      "lf": "e9fcebbe057f35151909eb2886d39ab572ead007c906f53c2c22a23f94f36de7"
+    },
+    "benchmarks/realworld-v1/sqlew/docker/Dockerfile": {
+      "raw": "9e87e2d4e8038f6f724f748959e0ef0c5ac44e9872cc6fc42879b8d75938a666",
+      "lf": "9e87e2d4e8038f6f724f748959e0ef0c5ac44e9872cc6fc42879b8d75938a666"
+    },
+    "benchmarks/realworld-v1/sqlew/docker/bootstrap.mjs": {
+      "raw": "e2029c988a799a9c930c8c71b653067ae79889e4f9de16517f95494f47ba75b4",
+      "lf": "e2029c988a799a9c930c8c71b653067ae79889e4f9de16517f95494f47ba75b4"
+    },
+    "benchmarks/realworld-v1/sqlew/docker/dependencies/new-package-lock.json": {
+      "raw": "8b03c2dad90743131accc5232c9ddb2cae03a5da64ca3b83d1daf26e8a078e3f",
+      "lf": "7e69907b11d5af47a4587f9d42db570e75c6bfe9c895e9258e7a3f24ff077b05"
+    },
+    "benchmarks/realworld-v1/sqlew/docker/dependencies/old-package-lock.json": {
+      "raw": "8b03c2dad90743131accc5232c9ddb2cae03a5da64ca3b83d1daf26e8a078e3f",
+      "lf": "7e69907b11d5af47a4587f9d42db570e75c6bfe9c895e9258e7a3f24ff077b05"
+    },
+    "benchmarks/realworld-v1/sqlew/fixtures/bootstrap-source.txt": {
+      "raw": "e2029c988a799a9c930c8c71b653067ae79889e4f9de16517f95494f47ba75b4",
+      "lf": "e2029c988a799a9c930c8c71b653067ae79889e4f9de16517f95494f47ba75b4"
+    },
+    "benchmarks/realworld-v1/sqlew/gate-evidence/evidence.json": {
+      "raw": "25fe20e18013eb19ca1fd0f094bc4212add3f3ba0d57d20b5b89b62f300bae7a",
+      "lf": "25fe20e18013eb19ca1fd0f094bc4212add3f3ba0d57d20b5b89b62f300bae7a"
+    },
+    "benchmarks/realworld-v1/sqlew/new-contract.json": {
+      "raw": "85faa23488e4faefdf83b1cddc07719123f7159e4a1402beef7aa17f970e4c44",
+      "lf": "85faa23488e4faefdf83b1cddc07719123f7159e4a1402beef7aa17f970e4c44"
+    },
+    "benchmarks/realworld-v1/sqlew/new-tools-list.json": {
+      "raw": "a02b2617fb72b1b7d1357199e66ef53d61a2227e9edcc25e988bd400d083f703",
+      "lf": "a02b2617fb72b1b7d1357199e66ef53d61a2227e9edcc25e988bd400d083f703"
+    },
+    "benchmarks/realworld-v1/sqlew/old-contract.json": {
+      "raw": "45c1e10f7ea91697cf6673805d23f91140ac54a5a46164000b46d5a124877646",
+      "lf": "45c1e10f7ea91697cf6673805d23f91140ac54a5a46164000b46d5a124877646"
+    },
+    "benchmarks/realworld-v1/sqlew/old-tools-list.json": {
+      "raw": "58ad956e3e15c124efa3acde6e1ad9fe6a680258638fdbb4a4878ee575f09c0d",
+      "lf": "58ad956e3e15c124efa3acde6e1ad9fe6a680258638fdbb4a4878ee575f09c0d"
+    },
+    "benchmarks/realworld-v1/sqlew/provenance.json": {
+      "raw": "ac85ab412be1b63603fbe30bc8920f90def16262afcd58756820ff1aa9f7b628",
+      "lf": "ac85ab412be1b63603fbe30bc8920f90def16262afcd58756820ff1aa9f7b628"
+    },
+    "benchmarks/realworld-v1/sqlew/results/trial-001.json": {
+      "raw": "ca2939783a662aebf9edbce69fd2e56745f1ec0bb0d065370199a1271bc61400",
+      "lf": "ca2939783a662aebf9edbce69fd2e56745f1ec0bb0d065370199a1271bc61400"
+    },
+    "benchmarks/realworld-v1/sqlew/results/trial-002.json": {
+      "raw": "c1117887a7e7c440e16ca3d2a0ef5073f498c9ab907c4df16f66f260cba39150",
+      "lf": "c1117887a7e7c440e16ca3d2a0ef5073f498c9ab907c4df16f66f260cba39150"
+    },
+    "benchmarks/realworld-v1/sqlew/results/trial-003.json": {
+      "raw": "60209104ffcc90c3d478a511443e05f912654c3feebd9c2376300cd27d2d98c0",
+      "lf": "60209104ffcc90c3d478a511443e05f912654c3feebd9c2376300cd27d2d98c0"
+    },
+    "benchmarks/realworld-v1/sqlew/sealed/evidence.json": {
+      "raw": "1ddd52314e83871a3e03b25aa24dee0ac7a367974e6718d9c8135419586a23e4",
+      "lf": "1ddd52314e83871a3e03b25aa24dee0ac7a367974e6718d9c8135419586a23e4"
+    },
+    "benchmarks/realworld-v1/sqlew/synthesis-evidence/evidence.json": {
+      "raw": "3a7a5d6273fb6aff90a3e024497457b26615d183982cc87f6698a2b733a60d4a",
+      "lf": "3a7a5d6273fb6aff90a3e024497457b26615d183982cc87f6698a2b733a60d4a"
+    },
+    "benchmarks/realworld-v1/sqlew/traces/direct-old-client-on-new.json": {
+      "raw": "15d2744b2a9c8da4511c5ee1bef56cd5577b4db3ee0b04c12f8faa6f366bb635",
+      "lf": "15d2744b2a9c8da4511c5ee1bef56cd5577b4db3ee0b04c12f8faa6f366bb635"
+    },
+    "benchmarks/realworld-v1/sqlew/traces/old-success.json": {
+      "raw": "1aa4e8d719cf6112754bcdfce30bcf5941e585c7d8a2721dc5f370aaf365cea5",
+      "lf": "1aa4e8d719cf6112754bcdfce30bcf5941e585c7d8a2721dc5f370aaf365cea5"
+    },
+    "benchmarks/realworld-v1/test/budget.test.mjs": {
+      "raw": "6761f4ebda33cf0a34853daeb755ed7c88518e26aad76d64fb9230793f570c5f",
+      "lf": "6761f4ebda33cf0a34853daeb755ed7c88518e26aad76d64fb9230793f570c5f"
+    },
+    "benchmarks/realworld-v1/transport.mjs": {
+      "raw": "082f4cedbb43cfab03dc3125be5c9149034e67792926f72f433e855015e68211",
+      "lf": "082f4cedbb43cfab03dc3125be5c9149034e67792926f72f433e855015e68211"
+    },
+    "benchmarks/realworld-v2/README.md": {
+      "raw": "1fd0b57332a09823bdbe5c89798aaa7a81146e6c9594282b021333a799042f6f",
+      "lf": "1fd0b57332a09823bdbe5c89798aaa7a81146e6c9594282b021333a799042f6f"
+    },
+    "benchmarks/realworld-v2/REPORT.md": {
+      "raw": "177c57e4c0149f78cb38873f68b8ed67d6bef9546b92dc247126bbd1467197e1",
+      "lf": "177c57e4c0149f78cb38873f68b8ed67d6bef9546b92dc247126bbd1467197e1"
+    },
+    "benchmarks/realworld-v2/acquire.mjs": {
+      "raw": "5b278a51bdadbaab0e099862acee29406ba88a1162eacfe8c077f71e65d63622",
+      "lf": "5b278a51bdadbaab0e099862acee29406ba88a1162eacfe8c077f71e65d63622"
+    },
+    "benchmarks/realworld-v2/candidates.json": {
+      "raw": "a96f62f84fc2f1a848c7b967093acba4b893791a7db72ba62d17092ce3eddf33",
+      "lf": "a96f62f84fc2f1a848c7b967093acba4b893791a7db72ba62d17092ce3eddf33"
+    },
+    "benchmarks/realworld-v2/cases.mjs": {
+      "raw": "c9ae27fdcd63fd8a685d5a602a4f17961cc74c970cc7a9ee4c217e1e4855904c",
+      "lf": "c9ae27fdcd63fd8a685d5a602a4f17961cc74c970cc7a9ee4c217e1e4855904c"
+    },
+    "benchmarks/realworld-v2/diagnose.mjs": {
+      "raw": "a50dc3442718dcaa50f7bbf32fee17ec278ca6af4dd8dc85f9e2d5bdcbaa5cba",
+      "lf": "a50dc3442718dcaa50f7bbf32fee17ec278ca6af4dd8dc85f9e2d5bdcbaa5cba"
+    },
+    "benchmarks/realworld-v2/fabric/README.md": {
+      "raw": "3222560f570e7297cf84dd287fdd1c8aba158978cfc1036bd7d2c157efda38ed",
+      "lf": "3222560f570e7297cf84dd287fdd1c8aba158978cfc1036bd7d2c157efda38ed"
+    },
+    "benchmarks/realworld-v2/fabric/case.json": {
+      "raw": "d3ec245ba273b8c15ea641bc1990250002f7ba3d45ed3761472393f7746d061f",
+      "lf": "d3ec245ba273b8c15ea641bc1990250002f7ba3d45ed3761472393f7746d061f"
+    },
+    "benchmarks/realworld-v2/fabric/change-evidence.md": {
+      "raw": "c36979dab79b4b3b14bff8405de5e2255687b02aa9a0def4efb8216123216197",
+      "lf": "c36979dab79b4b3b14bff8405de5e2255687b02aa9a0def4efb8216123216197"
+    },
+    "benchmarks/realworld-v2/fabric/docker/Dockerfile": {
+      "raw": "55d3e809156ac695393b52bb7fa4b7624af67e2064f80dcbdd4930cfca52f6c8",
+      "lf": "55d3e809156ac695393b52bb7fa4b7624af67e2064f80dcbdd4930cfca52f6c8"
+    },
+    "benchmarks/realworld-v2/fabric/docker/new-release.json": {
+      "raw": "0af1ce461d018ff79f4d7592af6d6b34d5cd8a5471b365e444534f4883192c90",
+      "lf": "0af1ce461d018ff79f4d7592af6d6b34d5cd8a5471b365e444534f4883192c90"
+    },
+    "benchmarks/realworld-v2/fabric/docker/old-release.json": {
+      "raw": "777868edfe40362b4c4ed7740fc15c3f0d2e34ae060578853b09b6e2ca5c9f55",
+      "lf": "777868edfe40362b4c4ed7740fc15c3f0d2e34ae060578853b09b6e2ca5c9f55"
+    },
+    "benchmarks/realworld-v2/fabric/gate-evidence/evidence.json": {
+      "raw": "6d188d82931b6caac0feda5fd765f9dc9bea64b1ef8c9183a72e68b676abfd26",
+      "lf": "6d188d82931b6caac0feda5fd765f9dc9bea64b1ef8c9183a72e68b676abfd26"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-001/attempts/attempt-001/error.json": {
+      "raw": "b0753d40291abb30b59c5bcffcee10ea7da9936a64835b8dc3f2dc5e3b212259",
+      "lf": "b0753d40291abb30b59c5bcffcee10ea7da9936a64835b8dc3f2dc5e3b212259"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-001/attempts/attempt-001/request.json": {
+      "raw": "24c60af94c4c515bfaa1e9aee7279db2345dcf5af63371c045b1d52f70d8d5b5",
+      "lf": "24c60af94c4c515bfaa1e9aee7279db2345dcf5af63371c045b1d52f70d8d5b5"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-001/attempts/attempt-001/response.json": {
+      "raw": "8bb292427094e36422ee221a3dddfc2f790a295c9d39b6e4b5148779e9df22a6",
+      "lf": "8bb292427094e36422ee221a3dddfc2f790a295c9d39b6e4b5148779e9df22a6"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-001/request.json": {
+      "raw": "05b8b192fb135af94cef6e07b4d37dd1ab04293591f4be03236ac9b584ab4548",
+      "lf": "05b8b192fb135af94cef6e07b4d37dd1ab04293591f4be03236ac9b584ab4548"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-001/response.json": {
+      "raw": "8bb292427094e36422ee221a3dddfc2f790a295c9d39b6e4b5148779e9df22a6",
+      "lf": "8bb292427094e36422ee221a3dddfc2f790a295c9d39b6e4b5148779e9df22a6"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-001/run.json": {
+      "raw": "f6407f53bd55893ce639ff53ae89a8d8c5e31ee0904e7236c1accd0b38aa2fe2",
+      "lf": "f6407f53bd55893ce639ff53ae89a8d8c5e31ee0904e7236c1accd0b38aa2fe2"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-002/attempts/attempt-001/error.json": {
+      "raw": "b0753d40291abb30b59c5bcffcee10ea7da9936a64835b8dc3f2dc5e3b212259",
+      "lf": "b0753d40291abb30b59c5bcffcee10ea7da9936a64835b8dc3f2dc5e3b212259"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-002/attempts/attempt-001/request.json": {
+      "raw": "e7401ffe3c8a0e298b324be24c671e249a5a3d1df5b2315e76b13f4be24cd919",
+      "lf": "e7401ffe3c8a0e298b324be24c671e249a5a3d1df5b2315e76b13f4be24cd919"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-002/attempts/attempt-001/response.json": {
+      "raw": "2917afe4a849f805b892f867a0c0fc380949c31762501e910e4e47b445a4236f",
+      "lf": "2917afe4a849f805b892f867a0c0fc380949c31762501e910e4e47b445a4236f"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-002/request.json": {
+      "raw": "675c1c8d24285e89c0665fc9b16341beb32b50e6470e6c6474bd2bc8d66565b2",
+      "lf": "675c1c8d24285e89c0665fc9b16341beb32b50e6470e6c6474bd2bc8d66565b2"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-002/response.json": {
+      "raw": "2917afe4a849f805b892f867a0c0fc380949c31762501e910e4e47b445a4236f",
+      "lf": "2917afe4a849f805b892f867a0c0fc380949c31762501e910e4e47b445a4236f"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-002/run.json": {
+      "raw": "c823f9ddbd39363e91c0242089e282bfe4bf29b7879b0e9d5242ed6f52f9456d",
+      "lf": "c823f9ddbd39363e91c0242089e282bfe4bf29b7879b0e9d5242ed6f52f9456d"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-003/attempts/attempt-001/error.json": {
+      "raw": "b0753d40291abb30b59c5bcffcee10ea7da9936a64835b8dc3f2dc5e3b212259",
+      "lf": "b0753d40291abb30b59c5bcffcee10ea7da9936a64835b8dc3f2dc5e3b212259"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-003/attempts/attempt-001/request.json": {
+      "raw": "56842a2bab67bce69a669b89024eddc986ba8b96109b6faa2c34088d45086767",
+      "lf": "56842a2bab67bce69a669b89024eddc986ba8b96109b6faa2c34088d45086767"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-003/attempts/attempt-001/response.json": {
+      "raw": "8e596acd00b099189b67e51a4b054c2dd15d36b2046d92d2f07971458bb11954",
+      "lf": "8e596acd00b099189b67e51a4b054c2dd15d36b2046d92d2f07971458bb11954"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-003/request.json": {
+      "raw": "c6d8de1522d09aaefa77e548cea56516c2b16bbf9b62ade3cf674fd9c95cf8d3",
+      "lf": "c6d8de1522d09aaefa77e548cea56516c2b16bbf9b62ade3cf674fd9c95cf8d3"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-003/response.json": {
+      "raw": "8e596acd00b099189b67e51a4b054c2dd15d36b2046d92d2f07971458bb11954",
+      "lf": "8e596acd00b099189b67e51a4b054c2dd15d36b2046d92d2f07971458bb11954"
+    },
+    "benchmarks/realworld-v2/fabric/model-interactions/trial-003/run.json": {
+      "raw": "0043831895338d02838e298f6a34e31c64040b635f2cf157bb8705e86be8efa5",
+      "lf": "0043831895338d02838e298f6a34e31c64040b635f2cf157bb8705e86be8efa5"
+    },
+    "benchmarks/realworld-v2/fabric/new-contract.json": {
+      "raw": "1c7b1ccefd07827a3a4b98f469b9bad53758d0c7fe6be163087dfd6022aab8a2",
+      "lf": "1c7b1ccefd07827a3a4b98f469b9bad53758d0c7fe6be163087dfd6022aab8a2"
+    },
+    "benchmarks/realworld-v2/fabric/new-tools-list.json": {
+      "raw": "7369d6b26750e01f3fd2a4928d98a00b066a2cc04b1d192660b99ba55e993ce7",
+      "lf": "7369d6b26750e01f3fd2a4928d98a00b066a2cc04b1d192660b99ba55e993ce7"
+    },
+    "benchmarks/realworld-v2/fabric/old-contract.json": {
+      "raw": "c9f9fa9f77a74072feab6e297c0883281b3a3877b3875dc64122ea586e365954",
+      "lf": "c9f9fa9f77a74072feab6e297c0883281b3a3877b3875dc64122ea586e365954"
+    },
+    "benchmarks/realworld-v2/fabric/old-tools-list.json": {
+      "raw": "91cf5e740c5ec733169c8a99ca93562ff7d527e637a998e66e0a74d38e3a3ae8",
+      "lf": "91cf5e740c5ec733169c8a99ca93562ff7d527e637a998e66e0a74d38e3a3ae8"
+    },
+    "benchmarks/realworld-v2/fabric/oracle.mjs": {
+      "raw": "d8f8e945ae1c1b3898ca3ccdaefa9f45e340f4ff752fe23d88649ed566ac8ff5",
+      "lf": "d8f8e945ae1c1b3898ca3ccdaefa9f45e340f4ff752fe23d88649ed566ac8ff5"
+    },
+    "benchmarks/realworld-v2/fabric/provenance.json": {
+      "raw": "dc3d73888b6e6f69c3fa06f8dd35e73d8075fbf6ae6fa6bbf50d416e05aef2d4",
+      "lf": "dc3d73888b6e6f69c3fa06f8dd35e73d8075fbf6ae6fa6bbf50d416e05aef2d4"
+    },
+    "benchmarks/realworld-v2/fabric/results/trial-001.json": {
+      "raw": "20ba380cf7c178c7b8e48f9ea8e9aa20b9a5c4af3e5eb61dc0e315e8c7bd991b",
+      "lf": "20ba380cf7c178c7b8e48f9ea8e9aa20b9a5c4af3e5eb61dc0e315e8c7bd991b"
+    },
+    "benchmarks/realworld-v2/fabric/results/trial-002.json": {
+      "raw": "abf6ee3c10cea9ea81a60d501810bab61bf755a67dc859c2d87cce2c308dabb1",
+      "lf": "abf6ee3c10cea9ea81a60d501810bab61bf755a67dc859c2d87cce2c308dabb1"
+    },
+    "benchmarks/realworld-v2/fabric/results/trial-003.json": {
+      "raw": "399500f8d030e2b09f1730b6cc504ed11e812502ddbc09b2a753d3ea5e137714",
+      "lf": "399500f8d030e2b09f1730b6cc504ed11e812502ddbc09b2a753d3ea5e137714"
+    },
+    "benchmarks/realworld-v2/fabric/sealed/evidence.json": {
+      "raw": "b0ae0f919b72ec9182cb0c3564e4d90c2b4c33fc6bd1324f1cb06382e34e7e63",
+      "lf": "b0ae0f919b72ec9182cb0c3564e4d90c2b4c33fc6bd1324f1cb06382e34e7e63"
+    },
+    "benchmarks/realworld-v2/fabric/source-evidence/new-servers__Fabric.Mcp.Server__CHANGELOG.md.json": {
+      "raw": "2ae2bb17c1a0ba050b3c5d6944ca308d0d351e9514f7f9d0cb29979a725c742f",
+      "lf": "2ae2bb17c1a0ba050b3c5d6944ca308d0d351e9514f7f9d0cb29979a725c742f"
+    },
+    "benchmarks/realworld-v2/fabric/source-evidence/new-tools__Fabric.Mcp.Tools.Docs__src__FabricDocsSetup.cs.json": {
+      "raw": "e8dbd799023e8a758ab37004074825c04388ab7f8900475ac59cc4f189f23ea7",
+      "lf": "e8dbd799023e8a758ab37004074825c04388ab7f8900475ac59cc4f189f23ea7"
+    },
+    "benchmarks/realworld-v2/fabric/source-evidence/new-tools__Fabric.Mcp.Tools.Docs__src__Models__FabricModels.cs.json": {
+      "raw": "ff3513511170e7c84f725e61c573561c379f7a786e7824e9b0db9c37a589f0e9",
+      "lf": "ff3513511170e7c84f725e61c573561c379f7a786e7824e9b0db9c37a589f0e9"
+    },
+    "benchmarks/realworld-v2/fabric/source-evidence/new-tools__Fabric.Mcp.Tools.Docs__src__Services__FabricPublicApiService.cs.json": {
+      "raw": "3cc914fbb34560cde8142c5f094b0e4123c106ffea90e1faa6da12a76ded4497",
+      "lf": "3cc914fbb34560cde8142c5f094b0e4123c106ffea90e1faa6da12a76ded4497"
+    },
+    "benchmarks/realworld-v2/fabric/source-evidence/old-servers__Fabric.Mcp.Server__CHANGELOG.md.json": {
+      "raw": "9bdc2d432f6e67b96cb564d2501bc7199eeaade2d1479125909d7d399a019c3e",
+      "lf": "9bdc2d432f6e67b96cb564d2501bc7199eeaade2d1479125909d7d399a019c3e"
+    },
+    "benchmarks/realworld-v2/fabric/source-evidence/old-tools__Fabric.Mcp.Tools.Docs__src__Commands__PublicApis__GetWorkloadApisCommand.cs.json": {
+      "raw": "0fbc00d6f67a26c9c0205e2cee11da74521d261d9090c042fee41cb7407e555d",
+      "lf": "0fbc00d6f67a26c9c0205e2cee11da74521d261d9090c042fee41cb7407e555d"
+    },
+    "benchmarks/realworld-v2/fabric/source-evidence/old-tools__Fabric.Mcp.Tools.Docs__src__FabricDocsSetup.cs.json": {
+      "raw": "cf473adfce6577883c62da9a3db22fea115f70de697396a8ab38be0dc63c12c6",
+      "lf": "cf473adfce6577883c62da9a3db22fea115f70de697396a8ab38be0dc63c12c6"
+    },
+    "benchmarks/realworld-v2/fabric/source-evidence/old-tools__Fabric.Mcp.Tools.Docs__src__Models__FabricModels.cs.json": {
+      "raw": "a47bab4cb7512955b528f45be4c628d641fd7c8f4adc97ec6bf9564fd8d6c20f",
+      "lf": "a47bab4cb7512955b528f45be4c628d641fd7c8f4adc97ec6bf9564fd8d6c20f"
+    },
+    "benchmarks/realworld-v2/fabric/source-evidence/old-tools__Fabric.Mcp.Tools.Docs__src__Options__PublicApis__WorkloadCommandOptions.cs.json": {
+      "raw": "47ddb286ac63a6c0b5e71770419c70e56b5c41b6aa60d3d42202c3fcd05962de",
+      "lf": "47ddb286ac63a6c0b5e71770419c70e56b5c41b6aa60d3d42202c3fcd05962de"
+    },
+    "benchmarks/realworld-v2/fabric/source-evidence/old-tools__Fabric.Mcp.Tools.Docs__src__Services__FabricPublicApiService.cs.json": {
+      "raw": "9f5c502234f9934e96ace9bc8d8ed825c19ecccea8e0b7c46e7be21d1b9b6b33",
+      "lf": "9f5c502234f9934e96ace9bc8d8ed825c19ecccea8e0b7c46e7be21d1b9b6b33"
+    },
+    "benchmarks/realworld-v2/fabric/synthesis-evidence/evidence.json": {
+      "raw": "e60d1d0ce09c7454bd5f29340596e5fb39588373757fb181edd71f4fed7b0dca",
+      "lf": "e60d1d0ce09c7454bd5f29340596e5fb39588373757fb181edd71f4fed7b0dca"
+    },
+    "benchmarks/realworld-v2/fabric/traces/argument-rename-break.json": {
+      "raw": "b240851e55511e2435024fee9109ad81ffbb2bdb2dd7097194fce2902b467922",
+      "lf": "b240851e55511e2435024fee9109ad81ffbb2bdb2dd7097194fce2902b467922"
+    },
+    "benchmarks/realworld-v2/fabric/traces/direct-old-client-on-new.json": {
+      "raw": "2c6a07927f5ad2939e53e72d5f3cb84d4029323d73024f3f7aee003d748cae15",
+      "lf": "2c6a07927f5ad2939e53e72d5f3cb84d4029323d73024f3f7aee003d748cae15"
+    },
+    "benchmarks/realworld-v2/fabric/traces/list-response-change.json": {
+      "raw": "9ddc8b5896d9c351c0f2ff1fdaf46e8e0166f4414b38db2c5b225e9dc7afa2d6",
+      "lf": "9ddc8b5896d9c351c0f2ff1fdaf46e8e0166f4414b38db2c5b225e9dc7afa2d6"
+    },
+    "benchmarks/realworld-v2/fabric/traces/native-new-control.json": {
+      "raw": "60f8f72e3a4589bbc51206ac695afc3d45e98fa670c832abe71ecbf69940fd65",
+      "lf": "60f8f72e3a4589bbc51206ac695afc3d45e98fa670c832abe71ecbf69940fd65"
+    },
+    "benchmarks/realworld-v2/fabric/traces/old-success.json": {
+      "raw": "3a79012d0189ad7fc0b1966a37ab1c44ad2b7bfd219a54ae9ec899ba5cb5d602",
+      "lf": "3a79012d0189ad7fc0b1966a37ab1c44ad2b7bfd219a54ae9ec899ba5cb5d602"
+    },
+    "benchmarks/realworld-v2/fixture.mjs": {
+      "raw": "6fb87dcda5b95388335f4bea47d51f6e3ca7c10e2ab026bfa6206f7b4a21d8df",
+      "lf": "6fb87dcda5b95388335f4bea47d51f6e3ca7c10e2ab026bfa6206f7b4a21d8df"
+    },
+    "benchmarks/realworld-v2/freeze.mjs": {
+      "raw": "02a5b12d7b39f8e6ad0a6dd8ea6b6f9179d703346aff4265f8089c0e5b908891",
+      "lf": "02a5b12d7b39f8e6ad0a6dd8ea6b6f9179d703346aff4265f8089c0e5b908891"
+    },
+    "benchmarks/realworld-v2/frozen-files.json": {
+      "raw": "d8aea379ad73328605af6351e2ed2c59ee2a0d9bb51c62d95bb2c8430af380ec",
+      "lf": "d8aea379ad73328605af6351e2ed2c59ee2a0d9bb51c62d95bb2c8430af380ec"
+    },
+    "benchmarks/realworld-v2/integrity.mjs": {
+      "raw": "90fdad9357e1f33851c3186f72e93eeb97649e3d8ede995cfbe7e72d4dcb3e97",
+      "lf": "90fdad9357e1f33851c3186f72e93eeb97649e3d8ede995cfbe7e72d4dcb3e97"
+    },
+    "benchmarks/realworld-v2/mapbox/README.md": {
+      "raw": "6af924f1a609da3e0ff16da6d2536b75374fcb56c8cd26256b5bb2c3f28f17d2",
+      "lf": "6af924f1a609da3e0ff16da6d2536b75374fcb56c8cd26256b5bb2c3f28f17d2"
+    },
+    "benchmarks/realworld-v2/mapbox/case.json": {
+      "raw": "b4e2805a12b6f4545ef85b5a17ddc00e8d80bf36d5a7dd9388a8438e98b11482",
+      "lf": "b4e2805a12b6f4545ef85b5a17ddc00e8d80bf36d5a7dd9388a8438e98b11482"
+    },
+    "benchmarks/realworld-v2/mapbox/change-evidence.md": {
+      "raw": "893f9f4514c18112cd4064b5da6b152f13b97bcf337bd127f2f643ac09d9fec0",
+      "lf": "893f9f4514c18112cd4064b5da6b152f13b97bcf337bd127f2f643ac09d9fec0"
+    },
+    "benchmarks/realworld-v2/mapbox/docker/Dockerfile": {
+      "raw": "e7bd5dda7a0d3d0e748f5b856b57cc50a2fe767c1842b69f913ed249faed76bf",
+      "lf": "e7bd5dda7a0d3d0e748f5b856b57cc50a2fe767c1842b69f913ed249faed76bf"
+    },
+    "benchmarks/realworld-v2/mapbox/docker/dependencies/new-package-lock.json": {
+      "raw": "cd759e9c714900c1407b799a138e37ba3a40b2e788e43430771c02a738edf74b",
+      "lf": "cd759e9c714900c1407b799a138e37ba3a40b2e788e43430771c02a738edf74b"
+    },
+    "benchmarks/realworld-v2/mapbox/docker/dependencies/old-package-lock.json": {
+      "raw": "a79400abb22677142632848e4005cc8c6c080bc554b3d89c9ff4cc9fd8cde7a6",
+      "lf": "c6b1c83ca1dfe9d5433f0d521fd901089cb1de6655a4eac1eacdbf4c8baedc97"
+    },
+    "benchmarks/realworld-v2/mapbox/gate-evidence/evidence.json": {
+      "raw": "cbf676be115ecef78baf48a1b83350d26749537ea17ad1956871d6a9e1e90402",
+      "lf": "cbf676be115ecef78baf48a1b83350d26749537ea17ad1956871d6a9e1e90402"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-001/artifact.json": {
+      "raw": "6d17a5c221bbba15740f8197d6efd3647a2abfdee83f245fcc17fe1ea0629e85",
+      "lf": "6d17a5c221bbba15740f8197d6efd3647a2abfdee83f245fcc17fe1ea0629e85"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-001/attempts/attempt-001/request.json": {
+      "raw": "b5c7e53f1cffb2430a07c8928f430b372faa76f40990c79ce8a913222852f942",
+      "lf": "b5c7e53f1cffb2430a07c8928f430b372faa76f40990c79ce8a913222852f942"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-001/attempts/attempt-001/response.json": {
+      "raw": "f2a5a0223c6d24b320cb92fd28632b8c893e0bdf5c5c47aa8d19d6c32826359a",
+      "lf": "f2a5a0223c6d24b320cb92fd28632b8c893e0bdf5c5c47aa8d19d6c32826359a"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-001/request.json": {
+      "raw": "16dab91e7e1bdbf22255cf35abff9d7dc0fb908c451d6d94e754ac801bcef8c8",
+      "lf": "16dab91e7e1bdbf22255cf35abff9d7dc0fb908c451d6d94e754ac801bcef8c8"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-001/response.json": {
+      "raw": "f2a5a0223c6d24b320cb92fd28632b8c893e0bdf5c5c47aa8d19d6c32826359a",
+      "lf": "f2a5a0223c6d24b320cb92fd28632b8c893e0bdf5c5c47aa8d19d6c32826359a"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-001/run.json": {
+      "raw": "09c88e4bcfb99b80fff3092f7e4b1350e03344b90ca3c2459a179b85555f78e1",
+      "lf": "09c88e4bcfb99b80fff3092f7e4b1350e03344b90ca3c2459a179b85555f78e1"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-002/artifact.json": {
+      "raw": "81ea74e1b8b3321a5da633db0f7e1ed030e15d54b5c7fa665e5cf86411b92983",
+      "lf": "81ea74e1b8b3321a5da633db0f7e1ed030e15d54b5c7fa665e5cf86411b92983"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-002/attempts/attempt-001/request.json": {
+      "raw": "1afc39a92ce88abf62eb4df02aaffc05ee35db1735f6a45cfdc1b4e6002a159c",
+      "lf": "1afc39a92ce88abf62eb4df02aaffc05ee35db1735f6a45cfdc1b4e6002a159c"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-002/attempts/attempt-001/response.json": {
+      "raw": "ffaad9716ffc3dd3cfb17c421159a4f31eefff673bdae492bbd91cc323ee0709",
+      "lf": "ffaad9716ffc3dd3cfb17c421159a4f31eefff673bdae492bbd91cc323ee0709"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-002/request.json": {
+      "raw": "ea80c7749483da85168bac656e25a88a13100256fe34c9c580e4b8d194b2c22e",
+      "lf": "ea80c7749483da85168bac656e25a88a13100256fe34c9c580e4b8d194b2c22e"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-002/response.json": {
+      "raw": "ffaad9716ffc3dd3cfb17c421159a4f31eefff673bdae492bbd91cc323ee0709",
+      "lf": "ffaad9716ffc3dd3cfb17c421159a4f31eefff673bdae492bbd91cc323ee0709"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-002/run.json": {
+      "raw": "346f11ef9dd0b1ab23fe5e271338749b58e0fe2edf1ef379c16d1bc44c80c563",
+      "lf": "346f11ef9dd0b1ab23fe5e271338749b58e0fe2edf1ef379c16d1bc44c80c563"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-003/artifact.json": {
+      "raw": "88bf0583295bc5478e455a42be05a43c5b4b7a65160bf9d777f24dfd6d93d5c7",
+      "lf": "88bf0583295bc5478e455a42be05a43c5b4b7a65160bf9d777f24dfd6d93d5c7"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-003/attempts/attempt-001/request.json": {
+      "raw": "2b952d774cc4936581332fde05a0c44172ddf39c3b82596f2755f48f47416c71",
+      "lf": "2b952d774cc4936581332fde05a0c44172ddf39c3b82596f2755f48f47416c71"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-003/attempts/attempt-001/response.json": {
+      "raw": "034d7d106223330ee4ad9457adf131d8ed7d834348dc3cbdf15ee4bb1a5bc415",
+      "lf": "034d7d106223330ee4ad9457adf131d8ed7d834348dc3cbdf15ee4bb1a5bc415"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-003/request.json": {
+      "raw": "a9f0b2a78dbd2ab11e5d8690dd094e99ca6dab8e1bfaab58906e93ea52341217",
+      "lf": "a9f0b2a78dbd2ab11e5d8690dd094e99ca6dab8e1bfaab58906e93ea52341217"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-003/response.json": {
+      "raw": "034d7d106223330ee4ad9457adf131d8ed7d834348dc3cbdf15ee4bb1a5bc415",
+      "lf": "034d7d106223330ee4ad9457adf131d8ed7d834348dc3cbdf15ee4bb1a5bc415"
+    },
+    "benchmarks/realworld-v2/mapbox/model-interactions/trial-003/run.json": {
+      "raw": "314f817ea9ceded7d46be010b20a463d8f1d302c59e2ac0e4d5a27993897c95b",
+      "lf": "314f817ea9ceded7d46be010b20a463d8f1d302c59e2ac0e4d5a27993897c95b"
+    },
+    "benchmarks/realworld-v2/mapbox/new-contract.json": {
+      "raw": "a22d24ec5d1807c88a031e15454a42256f43e175945ee7fa5f2752b0a0319314",
+      "lf": "a22d24ec5d1807c88a031e15454a42256f43e175945ee7fa5f2752b0a0319314"
+    },
+    "benchmarks/realworld-v2/mapbox/new-tools-list.json": {
+      "raw": "7d0c2be64d1314e940033133d38a9b9ee40e03f71c6787839ddb768e090280af",
+      "lf": "7d0c2be64d1314e940033133d38a9b9ee40e03f71c6787839ddb768e090280af"
+    },
+    "benchmarks/realworld-v2/mapbox/old-contract.json": {
+      "raw": "01e12a02f4780d844d05a5bd33545e880f017ae2c96455b7e8d1fafa7f92885a",
+      "lf": "01e12a02f4780d844d05a5bd33545e880f017ae2c96455b7e8d1fafa7f92885a"
+    },
+    "benchmarks/realworld-v2/mapbox/old-tools-list.json": {
+      "raw": "68136d0e2fc6c1cfed90062e8a35c280f798790f562152a0f1e0f5d69f07a6e3",
+      "lf": "68136d0e2fc6c1cfed90062e8a35c280f798790f562152a0f1e0f5d69f07a6e3"
+    },
+    "benchmarks/realworld-v2/mapbox/oracle.mjs": {
+      "raw": "51ddbe6be9218e0e5b54f2c1b70d3d2d4aac788336005e1fdc564fbdc6c78d79",
+      "lf": "51ddbe6be9218e0e5b54f2c1b70d3d2d4aac788336005e1fdc564fbdc6c78d79"
+    },
+    "benchmarks/realworld-v2/mapbox/provenance.json": {
+      "raw": "3c86df64a83ca8a0b5acc6af518e25c37b0f23e659d3819cba6a596f81f87487",
+      "lf": "3c86df64a83ca8a0b5acc6af518e25c37b0f23e659d3819cba6a596f81f87487"
+    },
+    "benchmarks/realworld-v2/mapbox/results/trial-001.json": {
+      "raw": "c36e4a96e344ff4468379cc5ba8b4350267c4a6680f64ba565830c59e881e610",
+      "lf": "c36e4a96e344ff4468379cc5ba8b4350267c4a6680f64ba565830c59e881e610"
+    },
+    "benchmarks/realworld-v2/mapbox/results/trial-002.json": {
+      "raw": "b66dc96431981020bd889e8699b448f8d72ea0dd553fedce7cbf096d9d0d9da0",
+      "lf": "b66dc96431981020bd889e8699b448f8d72ea0dd553fedce7cbf096d9d0d9da0"
+    },
+    "benchmarks/realworld-v2/mapbox/results/trial-003.json": {
+      "raw": "4415c26c99ed4e2e48438065a06cad75e2bfacd9ebfece23ffd351f484593e8e",
+      "lf": "4415c26c99ed4e2e48438065a06cad75e2bfacd9ebfece23ffd351f484593e8e"
+    },
+    "benchmarks/realworld-v2/mapbox/sealed/evidence.json": {
+      "raw": "033e776dd75050b7ee17267c0bdaea5a690d67a83255af262ff9d99a2aad5867",
+      "lf": "033e776dd75050b7ee17267c0bdaea5a690d67a83255af262ff9d99a2aad5867"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/new-src__config__toolConfig.ts.json": {
+      "raw": "13806270b9a4e405472235c9d2aadbe94ae8eadca785e8abc10d26af4348514e",
+      "lf": "13806270b9a4e405472235c9d2aadbe94ae8eadca785e8abc10d26af4348514e"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/new-src__index.ts.json": {
+      "raw": "74bcd1f23dd2f31380af6bbf9bcaab4e99d1f1d3a6e468119b57653404ec3986",
+      "lf": "74bcd1f23dd2f31380af6bbf9bcaab4e99d1f1d3a6e468119b57653404ec3986"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/new-src__tools__points-within-polygon-tool__PointsWithinPolygonTool.input.schema.ts.json": {
+      "raw": "72d89334a25c42edb3f6cd7400b39dca2083765452d899fb540d555417fa9271",
+      "lf": "72d89334a25c42edb3f6cd7400b39dca2083765452d899fb540d555417fa9271"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/new-src__tools__points-within-polygon-tool__PointsWithinPolygonTool.output.schema.ts.json": {
+      "raw": "fef4a3560b3380448b1ffc171c9c7e4741a2ee0d79999ca703e3d54ef9973262",
+      "lf": "fef4a3560b3380448b1ffc171c9c7e4741a2ee0d79999ca703e3d54ef9973262"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/new-src__tools__points-within-polygon-tool__PointsWithinPolygonTool.ts.json": {
+      "raw": "4fc94f29e6cc89c34d9a3553397b96903360f4cc384aeb693659e5295b5dea3a",
+      "lf": "4fc94f29e6cc89c34d9a3553397b96903360f4cc384aeb693659e5295b5dea3a"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/new-src__tools__toolRegistry.ts.json": {
+      "raw": "6cd9ffa19ce5ccbf6cc49db55b35d99de8be05edbdc51d214d656de9fe851e5b",
+      "lf": "6cd9ffa19ce5ccbf6cc49db55b35d99de8be05edbdc51d214d656de9fe851e5b"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/old-src__config__toolConfig.ts.json": {
+      "raw": "204d076734f466bca70dc15349d8c0fae5aead6d264573ded8bc25d0d5cdf7ca",
+      "lf": "204d076734f466bca70dc15349d8c0fae5aead6d264573ded8bc25d0d5cdf7ca"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/old-src__index.ts.json": {
+      "raw": "19f1cc95e89cd21e0f6f2cbb4b91eb106687d8ecc3ae5ec2b61616265079470a",
+      "lf": "19f1cc95e89cd21e0f6f2cbb4b91eb106687d8ecc3ae5ec2b61616265079470a"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/old-src__tools__point-in-polygon-tool__PointInPolygonTool.input.schema.ts.json": {
+      "raw": "fcf2c40f6434d3281d91720b65f895011e670a80fded0f117b2141fba2b288fb",
+      "lf": "fcf2c40f6434d3281d91720b65f895011e670a80fded0f117b2141fba2b288fb"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/old-src__tools__point-in-polygon-tool__PointInPolygonTool.output.schema.ts.json": {
+      "raw": "fbd06958e52da84b7ee1d1cbd1a8e2d27a1666a589e2a6084fb1cc9f6d4e2225",
+      "lf": "fbd06958e52da84b7ee1d1cbd1a8e2d27a1666a589e2a6084fb1cc9f6d4e2225"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/old-src__tools__point-in-polygon-tool__PointInPolygonTool.ts.json": {
+      "raw": "185af5f39a010b9e77eafb70a930f3617f7a066b15c78fee3c7196d89f84eae1",
+      "lf": "185af5f39a010b9e77eafb70a930f3617f7a066b15c78fee3c7196d89f84eae1"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/old-src__tools__points-within-polygon-tool__PointsWithinPolygonTool.input.schema.ts.json": {
+      "raw": "be8995db3a288a9fb1afb112f23778ced30f128e68ef237adfb7cca378c7df40",
+      "lf": "be8995db3a288a9fb1afb112f23778ced30f128e68ef237adfb7cca378c7df40"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/old-src__tools__points-within-polygon-tool__PointsWithinPolygonTool.output.schema.ts.json": {
+      "raw": "047bd24357e36c71437a1bc2e891da288a84f5a1ced8021ee885ed900bc7199d",
+      "lf": "047bd24357e36c71437a1bc2e891da288a84f5a1ced8021ee885ed900bc7199d"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/old-src__tools__points-within-polygon-tool__PointsWithinPolygonTool.ts.json": {
+      "raw": "8d95e3fb8466840cf566af303cd6b9dd6eb66d3159d431956d581a3c06215aa7",
+      "lf": "8d95e3fb8466840cf566af303cd6b9dd6eb66d3159d431956d581a3c06215aa7"
+    },
+    "benchmarks/realworld-v2/mapbox/source-evidence/old-src__tools__toolRegistry.ts.json": {
+      "raw": "dd56b0cdcb284c4a6227be8a84b595f068785f6fc090bd7aed2aa1a001251db2",
+      "lf": "dd56b0cdcb284c4a6227be8a84b595f068785f6fc090bd7aed2aa1a001251db2"
+    },
+    "benchmarks/realworld-v2/mapbox/synthesis-evidence/evidence.json": {
+      "raw": "bbc2e7f913e92855ba81e460763df4d6fc31e65e55ff2e2c2f9dfca8fff408ac",
+      "lf": "bbc2e7f913e92855ba81e460763df4d6fc31e65e55ff2e2c2f9dfca8fff408ac"
+    },
+    "benchmarks/realworld-v2/mapbox/traces/direct-old-client-on-new.json": {
+      "raw": "b423998ac286c05762cddfd0322cce834874278155cc6a4239a1e6f31f374d9c",
+      "lf": "b423998ac286c05762cddfd0322cce834874278155cc6a4239a1e6f31f374d9c"
+    },
+    "benchmarks/realworld-v2/mapbox/traces/native-new-control.json": {
+      "raw": "1e77ba7a0bb9caa349cf070130cd42f154a658c622abe6e58cdb65927ad0bd11",
+      "lf": "1e77ba7a0bb9caa349cf070130cd42f154a658c622abe6e58cdb65927ad0bd11"
+    },
+    "benchmarks/realworld-v2/mapbox/traces/old-success.json": {
+      "raw": "9c1ca87ddbfb1a6b1afdf5eb91fda2926efc21b8de049b57a951dca64b71783c",
+      "lf": "9c1ca87ddbfb1a6b1afdf5eb91fda2926efc21b8de049b57a951dca64b71783c"
+    },
+    "benchmarks/realworld-v2/oracle.mjs": {
+      "raw": "44fa25cc65f62e04852aa0617bc3cdfd942c45844e405b02befd8ffb48ff0150",
+      "lf": "44fa25cc65f62e04852aa0617bc3cdfd942c45844e405b02befd8ffb48ff0150"
+    },
+    "benchmarks/realworld-v2/protected-before.json": {
+      "raw": "3c83968cb69e29841c6002ce065080fec0e49a428d0594b8898e7ed035bfcd22",
+      "lf": "3c83968cb69e29841c6002ce065080fec0e49a428d0594b8898e7ed035bfcd22"
+    },
+    "benchmarks/realworld-v2/protocol.json": {
+      "raw": "a8e977fb43737b94e687de10ca8a0734d149911c4daac3337543104d922579db",
+      "lf": "a8e977fb43737b94e687de10ca8a0734d149911c4daac3337543104d922579db"
+    },
+    "benchmarks/realworld-v2/replay.mjs": {
+      "raw": "a7f844bace9004d0806ec35b7c8a7b1de6e5ec645624bf557e2e083b6150e54c",
+      "lf": "a7f844bace9004d0806ec35b7c8a7b1de6e5ec645624bf557e2e083b6150e54c"
+    },
+    "benchmarks/realworld-v2/report.mjs": {
+      "raw": "4edb8041b80ace9ae4d25b2663d106b14789efeff774e9f935a9e0f36ab4b63f",
+      "lf": "4edb8041b80ace9ae4d25b2663d106b14789efeff774e9f935a9e0f36ab4b63f"
+    },
+    "benchmarks/realworld-v2/results/budget.json": {
+      "raw": "55ae43c7cc5414fe44cb438499d883deb447f7c81f0acf241d3242dd20f72e82",
+      "lf": "55ae43c7cc5414fe44cb438499d883deb447f7c81f0acf241d3242dd20f72e82"
+    },
+    "benchmarks/realworld-v2/results/generation-diagnostics.json": {
+      "raw": "64ba628285d4156ffdd5b358fe1dc32ca01abd8931722991688de1f9a4c3aaca",
+      "lf": "64ba628285d4156ffdd5b358fe1dc32ca01abd8931722991688de1f9a4c3aaca"
+    },
+    "benchmarks/realworld-v2/results/protected-audit.json": {
+      "raw": "d2245083a6faa8eb6ffc72fcf6eff27e570222b1ee37154491973c048ea874c4",
+      "lf": "d2245083a6faa8eb6ffc72fcf6eff27e570222b1ee37154491973c048ea874c4"
+    },
+    "benchmarks/realworld-v2/results/replay-validation.json": {
+      "raw": "9960596295eeb8c53ed5c575ef8a294eaa96cdb895d21544087c38f7eb1e26a3",
+      "lf": "9960596295eeb8c53ed5c575ef8a294eaa96cdb895d21544087c38f7eb1e26a3"
+    },
+    "benchmarks/realworld-v2/results/summary.json": {
+      "raw": "621d13455af528832f93dc85e41a1ec4eb073fdf431e2f86f929c0539a646449",
+      "lf": "621d13455af528832f93dc85e41a1ec4eb073fdf431e2f86f929c0539a646449"
+    },
+    "benchmarks/realworld-v2/run.mjs": {
+      "raw": "739e6f2e90ef5f9fd7ee28e17220eb7f1a1240082b1044cd75cc8ebd4a48dc62",
+      "lf": "739e6f2e90ef5f9fd7ee28e17220eb7f1a1240082b1044cd75cc8ebd4a48dc62"
+    },
+    "benchmarks/realworld-v2/supplemental-files.json": {
+      "raw": "3f4857c7d78e527d5e1681323eb5aea148e1daf8137adc607f0258e859b9df95",
+      "lf": "3f4857c7d78e527d5e1681323eb5aea148e1daf8137adc607f0258e859b9df95"
+    },
+    "benchmarks/realworld-v2/test/extension.test.mjs": {
+      "raw": "998453a56501b412213cc79fee1df58b351802e8a3361d14f15241935f73fe4f",
+      "lf": "998453a56501b412213cc79fee1df58b351802e8a3361d14f15241935f73fe4f"
+    },
+    "benchmarks/realworld-v2/test/results.test.mjs": {
+      "raw": "e4d564e84dfef811b0be431d5f15485f955798744afe93528219835c2438c0aa",
+      "lf": "e4d564e84dfef811b0be431d5f15485f955798744afe93528219835c2438c0aa"
+    },
+    "benchmarks/realworld-v2/transport.mjs": {
+      "raw": "9d624bf92dc45896492cd0a6cc8bae59d06bb9971593a1786537b07a4c60e9f1",
+      "lf": "9d624bf92dc45896492cd0a6cc8bae59d06bb9971593a1786537b07a4c60e9f1"
+    },
+    "benchmarks/results/development-v3.json": {
+      "raw": "b73e4ebea7ea26ffc2ac9a29d2fec6c593867eb534cee149834d451afd2a4287",
+      "lf": "b73e4ebea7ea26ffc2ac9a29d2fec6c593867eb534cee149834d451afd2a4287"
+    },
+    "benchmarks/results/final-v3.json": {
+      "raw": "63506d4f43317236b999c76323f9fec14f5c936952912562c62396a29ea05ec3",
+      "lf": "63506d4f43317236b999c76323f9fec14f5c936952912562c62396a29ea05ec3"
+    },
+    "benchmarks/templates/case/README.md": {
+      "raw": "e1225a089c6057d96223f5af8a3940676d3f577a7643cd8761ecc6150055a3a3",
+      "lf": "e1225a089c6057d96223f5af8a3940676d3f577a7643cd8761ecc6150055a3a3"
+    },
+    "benchmarks/templates/case/gate/README.md": {
+      "raw": "2f282566c2c1cf42cf21bbb9f69ec3ee8112938c2c17deca286a4a2ad3d8d8b9",
+      "lf": "2f282566c2c1cf42cf21bbb9f69ec3ee8112938c2c17deca286a4a2ad3d8d8b9"
+    },
+    "benchmarks/templates/case/sealed-eval/README.md": {
+      "raw": "e1c3bb27b11860c370c12b1531821b9bbb29283827e5c951e36fe80bc7f6c5aa",
+      "lf": "e1c3bb27b11860c370c12b1531821b9bbb29283827e5c951e36fe80bc7f6c5aa"
+    },
+    "benchmarks/templates/case/synthesis/README.md": {
+      "raw": "5d145838eaf30699136dc23ffc4f6c479e8088164b00105fe23bd6c1663363a1",
+      "lf": "5d145838eaf30699136dc23ffc4f6c479e8088164b00105fe23bd6c1663363a1"
+    },
+    "benchmarks/traces/README.md": {
+      "raw": "e2463d354f0b768841a218d364d39e05e4153e35ccda06f5fe6edf6742b07e69",
+      "lf": "e2463d354f0b768841a218d364d39e05e4153e35ccda06f5fe6edf6742b07e69"
+    },
+    "config/models.json": {
+      "raw": "4c1e822bff1da698e1035aa05654d55ca3bfa6098cf7d3e821856478bc88293f",
+      "lf": "4c1e822bff1da698e1035aa05654d55ca3bfa6098cf7d3e821856478bc88293f"
+    },
+    "config/sandbox.json": {
+      "raw": "0443d2571b801e334a00aadb1df3d8c7f2a8f1c43306a8f93612bf312c7f4484",
+      "lf": "0443d2571b801e334a00aadb1df3d8c7f2a8f1c43306a8f93612bf312c7f4484"
+    },
+    "docs/prd.md": {
+      "raw": "829fc7aacaa43cfe8ff3cf773287f625622d7c9bdcdf14024ae56d220622c02d",
+      "lf": "829fc7aacaa43cfe8ff3cf773287f625622d7c9bdcdf14024ae56d220622c02d"
+    },
+    "fixtures/real/README.md": {
+      "raw": "8a549c4ff85259ee039f0855fab0b0fc18d49cc2cecaf5eabae902ca45e5a3bb",
+      "lf": "8a549c4ff85259ee039f0855fab0b0fc18d49cc2cecaf5eabae902ca45e5a3bb"
+    },
+    "fixtures/synthetic/README.md": {
+      "raw": "d2a5f7072b64cf3a68c4e55c8b774410b71da7250fd742100cb7947e2c09cfad",
+      "lf": "d2a5f7072b64cf3a68c4e55c8b774410b71da7250fd742100cb7947e2c09cfad"
+    },
+    "fixtures/synthetic/refund/adapter.plan.json": {
+      "raw": "9edcdde883aee653e7967ab8c98045e2de85101727e79664956b2304928f27bb",
+      "lf": "9edcdde883aee653e7967ab8c98045e2de85101727e79664956b2304928f27bb"
+    },
+    "fixtures/synthetic/refund/change.md": {
+      "raw": "6c200b87afbe78fe33fd5ac5ee2b0e6ced2960328a1cf9af280c4caad2963831",
+      "lf": "6c200b87afbe78fe33fd5ac5ee2b0e6ced2960328a1cf9af280c4caad2963831"
+    },
+    "fixtures/synthetic/refund/contracts.ts": {
+      "raw": "6d5e77eabe31750073666d89425914b1c4187ade23ee8b02d5418ebc18512fed",
+      "lf": "6d5e77eabe31750073666d89425914b1c4187ade23ee8b02d5418ebc18512fed"
+    },
+    "fixtures/synthetic/refund/gate.ts": {
+      "raw": "f00b233b6fb2662ddd12f6cd018bb32ea14c9b042d20c2bda200aaeab3755eb1",
+      "lf": "f00b233b6fb2662ddd12f6cd018bb32ea14c9b042d20c2bda200aaeab3755eb1"
+    },
+    "fixtures/synthetic/refund/lifecycle.ts": {
+      "raw": "8c3b818d2ee3e8b54bb493d4e5f3db13d91ca8d034f3f3f03cf29834bad75798",
+      "lf": "8c3b818d2ee3e8b54bb493d4e5f3db13d91ca8d034f3f3f03cf29834bad75798"
+    },
+    "fixtures/synthetic/refund/sqlite.ts": {
+      "raw": "7d396836a47fe93dd5eb96e8f8fce21141e197804d32cce3053c1f217b80e34b",
+      "lf": "7d396836a47fe93dd5eb96e8f8fce21141e197804d32cce3053c1f217b80e34b"
+    },
+    "fixtures/synthetic/semantic/sqlite.ts": {
+      "raw": "089f3a2a73b05ce783a7da7ea2bda1fb6a0cb1f2a16fff2cb2474e5922e5b1fc",
+      "lf": "089f3a2a73b05ce783a7da7ea2bda1fb6a0cb1f2a16fff2cb2474e5922e5b1fc"
+    },
+    "fixtures/synthetic/weather/adapter.plan.json": {
+      "raw": "1a40a9f043ce7e98af6a318637781afec0a0f6b83513a94ca461bcc5d7d07236",
+      "lf": "1a40a9f043ce7e98af6a318637781afec0a0f6b83513a94ca461bcc5d7d07236"
+    },
+    "fixtures/synthetic/weather/change.md": {
+      "raw": "fb5d8605238f124a9692a6c3870dc0f05be8bc705a10bbc08bc2e3e29886c0bf",
+      "lf": "fb5d8605238f124a9692a6c3870dc0f05be8bc705a10bbc08bc2e3e29886c0bf"
+    },
+    "fixtures/synthetic/weather/fixture.ts": {
+      "raw": "fd6c119223557b6c17ab896e980f58163f3ee5032b39c149e364fde6a9733bc8",
+      "lf": "fd6c119223557b6c17ab896e980f58163f3ee5032b39c149e364fde6a9733bc8"
+    },
+    "fixtures/synthetic/weather/lifecycle.ts": {
+      "raw": "f5e2d789bd68432b331abc86d2bcbd0b5ee0f877d1abfd1ea5264d4437beeefc",
+      "lf": "f5e2d789bd68432b331abc86d2bcbd0b5ee0f877d1abfd1ea5264d4437beeefc"
+    },
+    "fixtures/synthetic/weather/new.contract.json": {
+      "raw": "f60bfe79ba57eb92d420d9b71d91e363932dd72d4bcc70e88e45163940387da1",
+      "lf": "f60bfe79ba57eb92d420d9b71d91e363932dd72d4bcc70e88e45163940387da1"
+    },
+    "fixtures/synthetic/weather/old.contract.json": {
+      "raw": "c71e9e0998daa78f5b71784f5defb242516c9fc042e7f31bd51844e8e8df578e",
+      "lf": "c71e9e0998daa78f5b71784f5defb242516c9fc042e7f31bd51844e8e8df578e"
+    },
+    "package.json": {
+      "raw": "47060a28b4130ad3b4b96c1cc726378cf8391982eeccbfb3751eeecabdffd9fe",
+      "lf": "47060a28b4130ad3b4b96c1cc726378cf8391982eeccbfb3751eeecabdffd9fe"
+    },
+    "pnpm-lock.yaml": {
+      "raw": "e019a162ac9d1613101f559c53387e2bb469dc0e43eeea3e81f99ba32acda54c",
+      "lf": "e019a162ac9d1613101f559c53387e2bb469dc0e43eeea3e81f99ba32acda54c"
+    },
+    "scripts/benchmark.ts": {
+      "raw": "f3fcae0194dfee05ce765b1fce445548c751393a818b5937d0f7ee74b29220cb",
+      "lf": "f3fcae0194dfee05ce765b1fce445548c751393a818b5937d0f7ee74b29220cb"
+    }
+  },
+  "pre_extension_core": {
+    "packages/benchmark/package.json": {
+      "raw": "ce598c1a691087bf2d60a6c63ffea0a4a3e5c1acabe4419c1b52b783ada3a7af",
+      "lf": "ce598c1a691087bf2d60a6c63ffea0a4a3e5c1acabe4419c1b52b783ada3a7af"
+    },
+    "packages/benchmark/src/baselines.ts": {
+      "raw": "8169629a3ed56508700cbefcbeceebc7ef5cd5f78e0db14dd9a02dda9fec61b4",
+      "lf": "8169629a3ed56508700cbefcbeceebc7ef5cd5f78e0db14dd9a02dda9fec61b4"
+    },
+    "packages/benchmark/src/cost.ts": {
+      "raw": "0c038120146e8d3de5284c1acf4b0f12b33b65f0380df49466363ba2333be3b4",
+      "lf": "0c038120146e8d3de5284c1acf4b0f12b33b65f0380df49466363ba2333be3b4"
+    },
+    "packages/benchmark/src/execution-epoch.ts": {
+      "raw": "79963ca0d88f3d13f0f38fbbc6b0814d1de4d29692574aaea8f6c9102bcbb833",
+      "lf": "79963ca0d88f3d13f0f38fbbc6b0814d1de4d29692574aaea8f6c9102bcbb833"
+    },
+    "packages/benchmark/src/fingerprint.ts": {
+      "raw": "23415f42ee4ccaaae1057e92ad1689870c9249a74b5ab069ba68227687fadf05",
+      "lf": "23415f42ee4ccaaae1057e92ad1689870c9249a74b5ab069ba68227687fadf05"
+    },
+    "packages/benchmark/src/fixtures-v2.ts": {
+      "raw": "a7c0bd2bbffb0c2cecd11f1f8005b63fc6f43a197f8f2535f6cd81bda2621b58",
+      "lf": "a7c0bd2bbffb0c2cecd11f1f8005b63fc6f43a197f8f2535f6cd81bda2621b58"
+    },
+    "packages/benchmark/src/fixtures-v3.ts": {
+      "raw": "8f486c3abace8e42edd3841ead8277195f5c623f91529ff45cf5afdaa9b1cba5",
+      "lf": "8f486c3abace8e42edd3841ead8277195f5c623f91529ff45cf5afdaa9b1cba5"
+    },
+    "packages/benchmark/src/fixtures.ts": {
+      "raw": "61f26e7273646ab77815e6a1d5a0d921723a3bee6d5e645c62aa1515c711be12",
+      "lf": "61f26e7273646ab77815e6a1d5a0d921723a3bee6d5e645c62aa1515c711be12"
+    },
+    "packages/benchmark/src/index.ts": {
+      "raw": "941c81d1cfaae22b2cc214100c061f7f4092a1e422fd8de6ca0f72a066dda637",
+      "lf": "941c81d1cfaae22b2cc214100c061f7f4092a1e422fd8de6ca0f72a066dda637"
+    },
+    "packages/benchmark/src/methods.ts": {
+      "raw": "2342990f52dba37e2b6dc48653edbb520f94ae12bf09117713f46db06ce0a653",
+      "lf": "2342990f52dba37e2b6dc48653edbb520f94ae12bf09117713f46db06ce0a653"
+    },
+    "packages/benchmark/src/metrics.ts": {
+      "raw": "260d9a1e096ef0b4d7fab4356ac77015edf88ec17e977e0f24106f5533bf24f5",
+      "lf": "260d9a1e096ef0b4d7fab4356ac77015edf88ec17e977e0f24106f5533bf24f5"
+    },
+    "packages/benchmark/src/runner.ts": {
+      "raw": "6ea8c17349d99ae7e77d2db6f3677f71aa1ab57dfd816bf6c73ca0da62a592a8",
+      "lf": "6ea8c17349d99ae7e77d2db6f3677f71aa1ab57dfd816bf6c73ca0da62a592a8"
+    },
+    "packages/benchmark/src/sandbox-runner.mjs": {
+      "raw": "82741399802190f42ab5374e43ca901a10fd94afb043f0b7ef99e10811472e0d",
+      "lf": "82741399802190f42ab5374e43ca901a10fd94afb043f0b7ef99e10811472e0d"
+    },
+    "packages/benchmark/src/sandbox.ts": {
+      "raw": "5143c205ce04b319337ece443c6b894b68c9b550e3333c6976b7976a6a7c6166",
+      "lf": "5143c205ce04b319337ece443c6b894b68c9b550e3333c6976b7976a6a7c6166"
+    },
+    "packages/benchmark/src/suite.ts": {
+      "raw": "b8c6db8f9317fd269b48172fae8fc00222c1aeb54947271c0560884dd5347ca3",
+      "lf": "b8c6db8f9317fd269b48172fae8fc00222c1aeb54947271c0560884dd5347ca3"
+    },
+    "packages/benchmark/src/usage.ts": {
+      "raw": "d24141d8bb23fab62bc4c51ef75ecd4579c217c450c777501ed8b47c9a26ea13",
+      "lf": "d24141d8bb23fab62bc4c51ef75ecd4579c217c450c777501ed8b47c9a26ea13"
+    },
+    "packages/benchmark/test/cost.test.ts": {
+      "raw": "77bc06f33055314b6677c226cfcaffe10e3f412085ddea7fb51160b8386da8c4",
+      "lf": "77bc06f33055314b6677c226cfcaffe10e3f412085ddea7fb51160b8386da8c4"
+    },
+    "packages/benchmark/test/epoch.test.ts": {
+      "raw": "212347cb2a05d4efffa6d090696c449ef65d3b1244493b2a9ba32716e433fbbc",
+      "lf": "212347cb2a05d4efffa6d090696c449ef65d3b1244493b2a9ba32716e433fbbc"
+    },
+    "packages/benchmark/test/resume.test.ts": {
+      "raw": "b7c6c02a6bd30fff1e7e9ba8dc994be7bee87aba9aab01159f89df2f90adb8b9",
+      "lf": "b7c6c02a6bd30fff1e7e9ba8dc994be7bee87aba9aab01159f89df2f90adb8b9"
+    },
+    "packages/benchmark/test/retrieval.test.ts": {
+      "raw": "1a9e66e1203a5b4f84f8b55a9b71825623f7b12594ef6d403efbd7246852d03a",
+      "lf": "1a9e66e1203a5b4f84f8b55a9b71825623f7b12594ef6d403efbd7246852d03a"
+    },
+    "packages/benchmark/test/sandbox.test.ts": {
+      "raw": "3b8bceb72b4eaa97abcdcfd444e6e1f7590b81073e998e8b1e1580a8f1837618",
+      "lf": "3b8bceb72b4eaa97abcdcfd444e6e1f7590b81073e998e8b1e1580a8f1837618"
+    },
+    "packages/benchmark/test/suite.test.ts": {
+      "raw": "b0cbda4952d8308fd4b75d674d21592838f3dc95b3eb3f9a583ad45092bbcbe7",
+      "lf": "b0cbda4952d8308fd4b75d674d21592838f3dc95b3eb3f9a583ad45092bbcbe7"
+    },
+    "packages/cli/example-server.ts": {
+      "raw": "4d8028a2fe56b751b45c89dff4096bc8f1bfcaa107b9c867b9ab6978f8aa7966",
+      "lf": "4d8028a2fe56b751b45c89dff4096bc8f1bfcaa107b9c867b9ab6978f8aa7966"
+    },
+    "packages/cli/package.json": {
+      "raw": "3159a4794d3d3098527c94bc72da6e0c98ece8c57eb75127499dbf99a34b4249",
+      "lf": "3159a4794d3d3098527c94bc72da6e0c98ece8c57eb75127499dbf99a34b4249"
+    },
+    "packages/cli/product-context.ts": {
+      "raw": "38ae033e2b2a15d93e5d4c192a516eaee7df58cec40ad9c700cd28e004297536",
+      "lf": "38ae033e2b2a15d93e5d4c192a516eaee7df58cec40ad9c700cd28e004297536"
+    },
+    "packages/cli/product.ts": {
+      "raw": "3994606d5a98d4bfaa6ed4aebf28dfac1ef7f84b7b10e8010b4f663eb89ef250",
+      "lf": "3994606d5a98d4bfaa6ed4aebf28dfac1ef7f84b7b10e8010b4f663eb89ef250"
+    },
+    "packages/cli/src/index.ts": {
+      "raw": "f892589bc57475924ac1822bdf0286c5954046f67db89b130648d7fb4f470dc0",
+      "lf": "f892589bc57475924ac1822bdf0286c5954046f67db89b130648d7fb4f470dc0"
+    },
+    "packages/cli/src/serve-fixture.ts": {
+      "raw": "8f606d5db817ff9d3631cf607e0c6b4e50809c1360f44e0ba4f932d7aeccc0e4",
+      "lf": "8f606d5db817ff9d3631cf607e0c6b4e50809c1360f44e0ba4f932d7aeccc0e4"
+    },
+    "packages/cli/test/product.test.ts": {
+      "raw": "342237b5fee653b43d1bea4b8fc736f3ed0f6b532c5c94ac123c634ab918681a",
+      "lf": "342237b5fee653b43d1bea4b8fc736f3ed0f6b532c5c94ac123c634ab918681a"
+    },
+    "packages/compiler/package.json": {
+      "raw": "01f0cb757415631684a9c9c0c0a7f37e5c988ed7ae64b9511efd39964ef35dac",
+      "lf": "01f0cb757415631684a9c9c0c0a7f37e5c988ed7ae64b9511efd39964ef35dac"
+    },
+    "packages/compiler/src/index.ts": {
+      "raw": "0356f9dd7fe3d3bde5662138441bff8dbd860f8cce1152b32453e0caf48458d2",
+      "lf": "0356f9dd7fe3d3bde5662138441bff8dbd860f8cce1152b32453e0caf48458d2"
+    },
+    "packages/compiler/test/composition.test.ts": {
+      "raw": "b1a41cfa427b67347efa58c6cb0da80bca5a0f9b834d6a4ba5c213ad222adfa8",
+      "lf": "b1a41cfa427b67347efa58c6cb0da80bca5a0f9b834d6a4ba5c213ad222adfa8"
+    },
+    "packages/compiler/test/primitives.test.ts": {
+      "raw": "840edae544d7c2df56b13d612ec0e367be1c684c1ec880822c6715bdb49eddea",
+      "lf": "840edae544d7c2df56b13d612ec0e367be1c684c1ec880822c6715bdb49eddea"
+    },
+    "packages/compiler/test/properties.test.ts": {
+      "raw": "00053c45e6a7dc4e425a2da6f6c16f20da6d8cad2d1df73395fad17f191f13c3",
+      "lf": "00053c45e6a7dc4e425a2da6f6c16f20da6d8cad2d1df73395fad17f191f13c3"
+    },
+    "packages/compiler/test/weather.test.ts": {
+      "raw": "c1c7128b06162279a26d62934fdd82097528aef7b1aaef7e4dcf2eb2ef4327a2",
+      "lf": "c1c7128b06162279a26d62934fdd82097528aef7b1aaef7e4dcf2eb2ef4327a2"
+    },
+    "packages/contracts/package.json": {
+      "raw": "fc3576b5f1d7f1e015559701db6d604473b539bbc377a1f8f929e3f68ca3e0d6",
+      "lf": "fc3576b5f1d7f1e015559701db6d604473b539bbc377a1f8f929e3f68ca3e0d6"
+    },
+    "packages/contracts/src/artifacts.ts": {
+      "raw": "588e511595193bc4d961380b5077987c8e9717c9cf991e21a7c4b1863956c7da",
+      "lf": "588e511595193bc4d961380b5077987c8e9717c9cf991e21a7c4b1863956c7da"
+    },
+    "packages/contracts/src/evidence.ts": {
+      "raw": "062bca44dba0d1df95b36101c469b36708e6adf5e0500406ac1404cdcb6ea65f",
+      "lf": "062bca44dba0d1df95b36101c469b36708e6adf5e0500406ac1404cdcb6ea65f"
+    },
+    "packages/contracts/src/index.ts": {
+      "raw": "74a1bcefc221e6d323e61ca94478b8c652ea96624bdb9bc1a12ad93c599a5cd9",
+      "lf": "74a1bcefc221e6d323e61ca94478b8c652ea96624bdb9bc1a12ad93c599a5cd9"
+    },
+    "packages/contracts/src/partition-worker.mjs": {
+      "raw": "749ed53d1e5d9115d2c2f963a0091b321a0ab8109889a90ad9f74ec1169dcf99",
+      "lf": "749ed53d1e5d9115d2c2f963a0091b321a0ab8109889a90ad9f74ec1169dcf99"
+    },
+    "packages/contracts/src/policy.ts": {
+      "raw": "f8a4114bcc6168627ff1636501449ef21c84ffe908a4cc90cf2b4d5547eb8d9f",
+      "lf": "f8a4114bcc6168627ff1636501449ef21c84ffe908a4cc90cf2b4d5547eb8d9f"
+    },
+    "packages/contracts/src/sandbox.ts": {
+      "raw": "5ef990f876cc0f057c6b94e4f906f416012551a9d8b0464e6ba94db805f1343a",
+      "lf": "5ef990f876cc0f057c6b94e4f906f416012551a9d8b0464e6ba94db805f1343a"
+    },
+    "packages/contracts/src/worker.ts": {
+      "raw": "bdbfb29e898ed6cce7873f190a0186db1a87c1c2adebef8f2e1c85c59e8f6778",
+      "lf": "bdbfb29e898ed6cce7873f190a0186db1a87c1c2adebef8f2e1c85c59e8f6778"
+    },
+    "packages/contracts/test/artifacts.test.ts": {
+      "raw": "1e605dd518a0b049871f0a7bbff5dae330afc0203de71df4f429c12f37b09ced",
+      "lf": "1e605dd518a0b049871f0a7bbff5dae330afc0203de71df4f429c12f37b09ced"
+    },
+    "packages/contracts/test/contracts.test.ts": {
+      "raw": "60396bb9626140721b81ddc2ab7a9ed73eb37bc9a8eecf2776c8593900ee2ac8",
+      "lf": "60396bb9626140721b81ddc2ab7a9ed73eb37bc9a8eecf2776c8593900ee2ac8"
+    },
+    "packages/contracts/test/evidence.test.ts": {
+      "raw": "ab64cc7f98ee9ede82219402f7dfadba3d3521296f5be95e4698c0dec932e595",
+      "lf": "ab64cc7f98ee9ede82219402f7dfadba3d3521296f5be95e4698c0dec932e595"
+    },
+    "packages/dsl/package.json": {
+      "raw": "a350b1384d68b0682ad98761a888688a7e5d65b21e8b013626e84e2041556229",
+      "lf": "a350b1384d68b0682ad98761a888688a7e5d65b21e8b013626e84e2041556229"
+    },
+    "packages/dsl/src/index.ts": {
+      "raw": "711b3337d3db4de9472f53b406c0728da8c7c501462c06832c59d1b26ebcb35f",
+      "lf": "711b3337d3db4de9472f53b406c0728da8c7c501462c06832c59d1b26ebcb35f"
+    },
+    "packages/dsl/test/validation.test.ts": {
+      "raw": "9d91281f1fdbcdaa4dc49531d7edc0d80aef4b72109f039e042a56effa378eba",
+      "lf": "9d91281f1fdbcdaa4dc49531d7edc0d80aef4b72109f039e042a56effa378eba"
+    },
+    "packages/mcp/package.json": {
+      "raw": "6a1725d72d3a1069196bbb26c2ad77236028ef561f3d13a0232343f4f2c02485",
+      "lf": "6a1725d72d3a1069196bbb26c2ad77236028ef561f3d13a0232343f4f2c02485"
+    },
+    "packages/mcp/src/fixture-server.ts": {
+      "raw": "254260a7de292c589f24df003e709d0d293b386b03529d4b5b6fc5897dc03543",
+      "lf": "254260a7de292c589f24df003e709d0d293b386b03529d4b5b6fc5897dc03543"
+    },
+    "packages/mcp/src/index.ts": {
+      "raw": "90104c0011e7590a69f71e0949c5d26e8c588086470993bbc6f06d39f6f15a81",
+      "lf": "90104c0011e7590a69f71e0949c5d26e8c588086470993bbc6f06d39f6f15a81"
+    },
+    "packages/mcp/src/proxy.ts": {
+      "raw": "0bc6d0a366e1f011a2352b1e8f4daa3ee6684dce97e7a26735e3f99dfd0a8bd3",
+      "lf": "0bc6d0a366e1f011a2352b1e8f4daa3ee6684dce97e7a26735e3f99dfd0a8bd3"
+    },
+    "packages/mcp/src/testing.ts": {
+      "raw": "ac05c7f0de545d9f631c2a15d9ff4c3868d6fcbc976db61952f5f0c7527b4ec9",
+      "lf": "ac05c7f0de545d9f631c2a15d9ff4c3868d6fcbc976db61952f5f0c7527b4ec9"
+    },
+    "packages/mcp/test/proxy.test.ts": {
+      "raw": "5e5ee307e464e4785fb0d3b3171b63f5ddff4d85f120d620165d558a0685b984",
+      "lf": "5e5ee307e464e4785fb0d3b3171b63f5ddff4d85f120d620165d558a0685b984"
+    },
+    "packages/mcp/test/refund.test.ts": {
+      "raw": "fe3f25af59e4bbfe52f6946d592e48294dc75d2bb1cfe3b2e1f42654390e8b83",
+      "lf": "fe3f25af59e4bbfe52f6946d592e48294dc75d2bb1cfe3b2e1f42654390e8b83"
+    },
+    "packages/mcp/test/snapshot.test.ts": {
+      "raw": "5b14c91cf0c60be3dc366db37b01bafe61660559a0498ffa4b9655e0c3cd0e29",
+      "lf": "5b14c91cf0c60be3dc366db37b01bafe61660559a0498ffa4b9655e0c3cd0e29"
+    },
+    "packages/mcp/test/stdio.test.ts": {
+      "raw": "fa9292ce9a2ebef0c4110232abbe03d2608e23065fb59c3bf1558e4782986f48",
+      "lf": "fa9292ce9a2ebef0c4110232abbe03d2608e23065fb59c3bf1558e4782986f48"
+    },
+    "packages/runtime/package.json": {
+      "raw": "f25f03108bd6b6f072352b872a85cc762b1cc09c8ea8af8fa295c4f2dc8ed3ce",
+      "lf": "f25f03108bd6b6f072352b872a85cc762b1cc09c8ea8af8fa295c4f2dc8ed3ce"
+    },
+    "packages/runtime/src/index.ts": {
+      "raw": "5cadb7eb77eaeda76f0390f591278d88282270fac5308986c1c3dd1afd4f9756",
+      "lf": "5cadb7eb77eaeda76f0390f591278d88282270fac5308986c1c3dd1afd4f9756"
+    },
+    "packages/runtime/test/lifecycle.test.ts": {
+      "raw": "042346a81bb367c271e15e65c98406d2b387de760e979192d50b6d725185f110",
+      "lf": "042346a81bb367c271e15e65c98406d2b387de760e979192d50b6d725185f110"
+    },
+    "packages/runtime/test/promotion.test.ts": {
+      "raw": "738ddc1f842eba936932978e5b5ba741181a619860efb61b2663672d5e0a70b2",
+      "lf": "738ddc1f842eba936932978e5b5ba741181a619860efb61b2663672d5e0a70b2"
+    },
+    "packages/synthesizer/package.json": {
+      "raw": "b29710ee2259b3aec9985e2064f148534b1a83f88662fc412764961b5790bffc",
+      "lf": "b29710ee2259b3aec9985e2064f148534b1a83f88662fc412764961b5790bffc"
+    },
+    "packages/synthesizer/src/concurrency.ts": {
+      "raw": "15a9b28fe1f005466f2b6ebcf722774829307c0d44a13d2f66ea125a8cdaf826",
+      "lf": "15a9b28fe1f005466f2b6ebcf722774829307c0d44a13d2f66ea125a8cdaf826"
+    },
+    "packages/synthesizer/src/config.ts": {
+      "raw": "1ddaad09647717a5aeaede80dcd89cc912d20b2b6e79e7e16ee4334309a602fe",
+      "lf": "1ddaad09647717a5aeaede80dcd89cc912d20b2b6e79e7e16ee4334309a602fe"
+    },
+    "packages/synthesizer/src/index.ts": {
+      "raw": "af478bd5f9a8810018ebd7b37a653547ed544e96ffe789c69f9d0baa7483c522",
+      "lf": "af478bd5f9a8810018ebd7b37a653547ed544e96ffe789c69f9d0baa7483c522"
+    },
+    "packages/synthesizer/src/isolated.ts": {
+      "raw": "f4adbafa7d638a8f7aeb3bac20536d3989661465b7dba467c39109a0d9c41caa",
+      "lf": "f4adbafa7d638a8f7aeb3bac20536d3989661465b7dba467c39109a0d9c41caa"
+    },
+    "packages/synthesizer/src/isolation-worker.ts": {
+      "raw": "075723b923e4b9d9603b239b521cf0a5383eae4ebd25e4beadf2c55f7b988500",
+      "lf": "075723b923e4b9d9603b239b521cf0a5383eae4ebd25e4beadf2c55f7b988500"
+    },
+    "packages/synthesizer/src/model.ts": {
+      "raw": "3507ae3f08360ca71643bf414e426b2757db21d43c6d8ea6df5fd7e47c59c523",
+      "lf": "3507ae3f08360ca71643bf414e426b2757db21d43c6d8ea6df5fd7e47c59c523"
+    },
+    "packages/synthesizer/src/scheduler.ts": {
+      "raw": "adf48458df0fbbf3965040e85885f79654af4de07dc4b2b6d4ea64100f30dd7d",
+      "lf": "adf48458df0fbbf3965040e85885f79654af4de07dc4b2b6d4ea64100f30dd7d"
+    },
+    "packages/synthesizer/src/synthesis.ts": {
+      "raw": "da5dbcdaa4412fcf31b0c99ce07e4feea707ed0767393669cb028c8d6ebeb483",
+      "lf": "da5dbcdaa4412fcf31b0c99ce07e4feea707ed0767393669cb028c8d6ebeb483"
+    },
+    "packages/synthesizer/test/concurrency.test.ts": {
+      "raw": "f48929c6f8314b6f218fc54d276ee93e45709c7cf4047f3dc57d418fe491310e",
+      "lf": "f48929c6f8314b6f218fc54d276ee93e45709c7cf4047f3dc57d418fe491310e"
+    },
+    "packages/synthesizer/test/isolation.test.ts": {
+      "raw": "a3bc4511b10206bdf733844134028b6568973f9d850fdcfa33cababfcfe1e598",
+      "lf": "a3bc4511b10206bdf733844134028b6568973f9d850fdcfa33cababfcfe1e598"
+    },
+    "packages/synthesizer/test/persistence.test.ts": {
+      "raw": "cbcf9080d54c4882368d1e998da9250b88bdabb8596411d3fd0f361617005070",
+      "lf": "cbcf9080d54c4882368d1e998da9250b88bdabb8596411d3fd0f361617005070"
+    },
+    "packages/synthesizer/test/scheduler.test.ts": {
+      "raw": "27881ee3d1b3be1bed2af6d48827d05a2be254a722c50671201d46a56425cacc",
+      "lf": "27881ee3d1b3be1bed2af6d48827d05a2be254a722c50671201d46a56425cacc"
+    },
+    "packages/synthesizer/test/synthesis.test.ts": {
+      "raw": "4e9c86f4a94dc3add736deb756475d76a85c3bca57ad7e0c0a46def69da71ffb",
+      "lf": "4e9c86f4a94dc3add736deb756475d76a85c3bca57ad7e0c0a46def69da71ffb"
+    },
+    "packages/traces/package.json": {
+      "raw": "c8ad046a03de19ec9a304ca7bb75b0460b15592b65a51449716906d250ed66c5",
+      "lf": "c8ad046a03de19ec9a304ca7bb75b0460b15592b65a51449716906d250ed66c5"
+    },
+    "packages/traces/src/index.ts": {
+      "raw": "4577bb95d635301914233cdddcd44d1e025b5de2886ccb5ce209c46ebe51f010",
+      "lf": "4577bb95d635301914233cdddcd44d1e025b5de2886ccb5ce209c46ebe51f010"
+    },
+    "packages/traces/test/traces.test.ts": {
+      "raw": "e62820c240a9b30fddaa8a2ffedf6d60c7fb3fa20d0b58177aa3c2f1f6f9a2ad",
+      "lf": "e62820c240a9b30fddaa8a2ffedf6d60c7fb3fa20d0b58177aa3c2f1f6f9a2ad"
+    },
+    "packages/verifier/package.json": {
+      "raw": "2bf348717a61cadde9503f851ec252790ed8b30b59a7901827054a9d2d33e39a",
+      "lf": "2bf348717a61cadde9503f851ec252790ed8b30b59a7901827054a9d2d33e39a"
+    },
+    "packages/verifier/src/index.ts": {
+      "raw": "a1b567a015baed1062af57b7699e072feb8e424b9c85a0465b4f6e1a6eb2d145",
+      "lf": "a1b567a015baed1062af57b7699e072feb8e424b9c85a0465b4f6e1a6eb2d145"
+    },
+    "packages/verifier/src/isolated.ts": {
+      "raw": "5fc4d179d1b20c561d62efb8065a0c7cdbff814979c107ee5874f8f8bab1a154",
+      "lf": "5fc4d179d1b20c561d62efb8065a0c7cdbff814979c107ee5874f8f8bab1a154"
+    },
+    "packages/verifier/src/isolation-worker.ts": {
+      "raw": "81af91f4a73ac3033962f5f4059a9db13789b32f424b37d91deec526964e9d50",
+      "lf": "81af91f4a73ac3033962f5f4059a9db13789b32f424b37d91deec526964e9d50"
+    },
+    "packages/verifier/src/wrapper-worker.ts": {
+      "raw": "5b1032d9a5517a2f4ffd738fc0353d219f58777d6404b3ebdfc5c4453dbb2045",
+      "lf": "5b1032d9a5517a2f4ffd738fc0353d219f58777d6404b3ebdfc5c4453dbb2045"
+    },
+    "packages/verifier/test/isolation.test.ts": {
+      "raw": "a30a3f85765696e98da0841a8584dc7c01d0db2c39dcf448a2422a62ead40b4d",
+      "lf": "a30a3f85765696e98da0841a8584dc7c01d0db2c39dcf448a2422a62ead40b4d"
+    },
+    "packages/verifier/test/semantic.test.ts": {
+      "raw": "73071a4819051f0b3b052a4905b41034a88e01090c3d4bd3546fdf3c0827f2de",
+      "lf": "73071a4819051f0b3b052a4905b41034a88e01090c3d4bd3546fdf3c0827f2de"
+    },
+    "packages/verifier/test/stateful.test.ts": {
+      "raw": "6d2f4aa2aef09b79b4172d69688bd1b7ba4cb7b794ce498fc41a8da6f8cd8f94",
+      "lf": "6d2f4aa2aef09b79b4172d69688bd1b7ba4cb7b794ce498fc41a8da6f8cd8f94"
+    },
+    "packages/verifier/test/verification.test.ts": {
+      "raw": "5dd9c97b87fbab71a9cc3f83a52d2eed2511c727919f0200cd35d190c5aac52d",
+      "lf": "5dd9c97b87fbab71a9cc3f83a52d2eed2511c727919f0200cd35d190c5aac52d"
+    },
+    "packages/verifier/test/wrapper.test.ts": {
+      "raw": "a0ec40c67c2c015f6360caadd1ac6bcd7dac6ddd396435c44103e3a9b7cf1848",
+      "lf": "a0ec40c67c2c015f6360caadd1ac6bcd7dac6ddd396435c44103e3a9b7cf1848"
+    }
+  }
+}

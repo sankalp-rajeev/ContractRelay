@@ -1,0 +1,1 @@
+{"call":{"arguments":{"files":["/project/free.ts"],"session_id":"fixture-reader"},"name":"collab_check"},"error":null,"response":{"content":[{"text":"Unknown tool: collab_check","type":"text"}],"isError":true}}

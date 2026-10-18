@@ -1,0 +1,1 @@
+{"commit":"4828227fcf11fcae80794ff4620897160d32d583","path":"tools/Fabric.Mcp.Tools.Docs/src/Models/FabricModels.cs","text":"// Copyright (c) Microsoft Corporation.\n// Licensed under the MIT License.\n\nnamespace Fabric.Mcp.Tools.Docs.Models;\n\npublic record FabricWorkloadPublicApi(\n    string apiSpecification,\n    IDictionary<string, string> apiModelDefinitions);\n"}

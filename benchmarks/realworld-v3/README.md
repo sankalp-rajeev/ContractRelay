@@ -1,0 +1,11 @@
+# Historical migration evaluation v3
+
+This additive evaluation preserves every v1/v2 result and all 195 controlled benchmark records. Mapbox and Fabric use the same historical SHAs as v2 and will be reported as **post-fix regression**, with fresh candidates. Session-collab is the separately frozen unseen migration and must be evaluated last.
+
+Before any DSL/compiler change, both native session-collab servers were built using their committed npm locks and run through the existing MCP client. The selected unchanged `collab_check` invocation succeeds on old package 0.9.0 (`09faa20ad831ebb570490a785003a1c020f6fbfa`) and breaks on new package 2.0.0 (`5b486324b5836cef4f5d547b4f1fb616c4c9a4ed`). The native replacement `collab_claim(action="check", ...)` succeeds and has a genuinely changed JSON response. Exact native tools/list, source evidence and old/new controls are retained.
+
+The unseen workflow is fixed: whole-file conflict checks against a synthetic SQLite fixture, with safe and blocked inputs in the gate and mixed, wholly blocked, own/inactive-owner inputs sealed. The oracle independently derives membership and active ownership from SQLite facts; exact old responses are also required. Native schemas are retained, including the absence of outputSchema. The consolidated target permits writes, so the unchanged stateful-fixture-v1 gate and mutation audit triggers apply. No migration-specific adapter logic is supplied.
+
+`pre-capability-freeze.json` binds all evidence, case definitions and oracles before implementation. `protected-before.json` preserves original historical files separately from the explicitly authorized core extension. The original implementation is retained at commit `4d307b21c8a964bd7f59c28e807afe6b5956b922` for legacy replay; old Fabric failures must never be reinterpreted using the extended parser.
+
+Evaluation is not yet complete. Three independent synthesis trials per case are planned, under a shared $1 Gemini hard cap. No sealed-driven implementation or prompt changes are permitted.

@@ -1,0 +1,1 @@
+{"call":{"arguments":{"points":[{"latitude":1,"longitude":1}],"polygon":[[[0,0],[8,0],[8,8],[0,8],[0,0]]]},"name":"points_within_polygon_tool"},"response":{"content":[{"text":"1 of 1 points are inside the polygon.\n  [1, 1]","type":"text"}],"isError":false,"structuredContent":{"count":1,"points_within":[{"latitude":1,"longitude":1}],"total":1}}}
