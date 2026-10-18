@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "baseline_commit": "21f27384129be43b11e86fba864de48b063a4b30",
+  "authorization": "README editorial cleanup, PRD relocation and encoding repairs requested by repository owner",
+  "files": [
+    {
+      "original_path": "prd.md",
+      "current_path": "docs/prd.md",
+      "before_raw_sha256": "829fc7aacaa43cfe8ff3cf773287f625622d7c9bdcdf14024ae56d220622c02d",
+      "after_raw_sha256": "829fc7aacaa43cfe8ff3cf773287f625622d7c9bdcdf14024ae56d220622c02d",
+      "before_lf_sha256": "829fc7aacaa43cfe8ff3cf773287f625622d7c9bdcdf14024ae56d220622c02d",
+      "after_lf_sha256": "829fc7aacaa43cfe8ff3cf773287f625622d7c9bdcdf14024ae56d220622c02d"
+    },
+    {
+      "original_path": "benchmarks/realworld-v1/REPORT.md",
+      "current_path": "benchmarks/realworld-v1/REPORT.md",
+      "before_raw_sha256": "074f9bc37f59d4f64c877411c718b2c1624ba68eb3b3be0007e57b964903bedb",
+      "after_raw_sha256": "8ce1c007bc4dac22117e6861c3ffe23cde6e7aad9f600ebd98087e615f5e6791",
+      "before_lf_sha256": "074f9bc37f59d4f64c877411c718b2c1624ba68eb3b3be0007e57b964903bedb",
+      "after_lf_sha256": "8ce1c007bc4dac22117e6861c3ffe23cde6e7aad9f600ebd98087e615f5e6791"
+    },
+    {
+      "original_path": "benchmarks/realworld-v1/flagship-integrity.json",
+      "current_path": "benchmarks/realworld-v1/flagship-integrity.json",
+      "before_raw_sha256": "2d811c170fb3c5737fac5052f9862fbe2b8cf52862a30a6041f1d6628d08fd50",
+      "after_raw_sha256": "9fa292c238929d168228a642ef9cb72e24e32f00a7918d9365107b89486eeb02",
+      "before_lf_sha256": "2d811c170fb3c5737fac5052f9862fbe2b8cf52862a30a6041f1d6628d08fd50",
+      "after_lf_sha256": "9fa292c238929d168228a642ef9cb72e24e32f00a7918d9365107b89486eeb02"
+    }
+  ]
+}

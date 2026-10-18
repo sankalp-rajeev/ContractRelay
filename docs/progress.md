@@ -153,7 +153,7 @@ records, accounting, the original manifest and the operational epoch receipt.
 all frozen scientific artifacts remain unchanged after the measured run.
 
 
-## Separate real-world external-validity evaluation ? complete
+## Separate real-world external-validity evaluation - complete
 
 The extension under `benchmarks/realworld-v1/` reproduces exact old/new public
 Mindwtr, Nexus-MCP and mcp-sqlew revisions with synthetic fixtures. All old
@@ -163,7 +163,7 @@ paid synthesis. Core source and all frozen flagship artifacts remain unchanged.
 
 Nine independent trials produce Mindwtr 3/3 recovery, Nexus-MCP 3/3 recovery
 and sqlew 0/3 recovery with 3/3 fail-closed rejections. The existing compiler
-refuses sqlew?s valid union-type schema; no core fix, schema narrowing, retuning
+refuses sqlew's valid union-type schema; no core fix, schema narrowing, retuning
 or replacement generation was performed. The separate report documents this
 limitation, the genuinely parsed preseeded Nexus graph, and upstream quirks.
 
@@ -214,3 +214,55 @@ heuristics, model/quota settings, core sources and the root lockfile are unchang
 
 Run `pnpm ui:install` once, then `pnpm dev`. The [UI guide](inspector.md) documents
 architecture, schema, routes, artifact provenance, validation and portable hashes.
+
+## README editorial pass and public demo
+
+I rewrote the README around the breaking-tool problem, the refund example and the
+measured results. The opening defines the comparison without baseline acronyms,
+states the ceiling result and schema-compiler failure, and reports known API cost
+with its unknown-usage caveat. CI badges and a 90-second walkthrough replace the
+phase-status opening. The earlier README is archived under `docs/history/`.
+
+The original PRD moved to `docs/prd.md` without a byte change; the root design-tool
+configuration was removed. I repaired the three lost-punctuation occurrences found
+in prose and checked tracked text for valid UTF-8. The three scoped protected-file
+changes have explicit before/after receipts in `docs/editorial-changes.json`.
+Original integrity baselines, all trial records, prompts, gates and scoring remain
+preserved; the audit accounts for the move rather than accepting a new baseline.
+
+The public deployment uses the existing inspector and GraphQL service through a
+Sites/Vinext hosting adapter. An allowlisted bundle of public versioned artifacts
+replaces local filesystem reads; credentials, ignored runs and model/runtime
+execution are excluded. All six desktop/mobile browser checks pass on the Worker.
+Public version 1 deployed successfully at
+https://contractrelay-inspector.fondsky12.chatgpt.site. [Hosting notes](hosting.md)
+retain the exact source commit, saved version and archive hash.
+The same six checks also pass against the public URL in fresh anonymous browser
+contexts, confirming that a recruiter can open and navigate it without sign-in.
+
+## Minimal product CLI
+
+I added `contractrelay migrate --old ... --new ... --out ...`,
+`contractrelay verify --plan ...`, and `contractrelay serve --plan ...` through a
+local executable and `pnpm contractrelay` alias. The implementation wraps existing
+snapshot ingestion, isolated synthesis, gates, registry and MCP proxy. It adds no
+DSL, verifier, scoring or generated-code execution. The first product path is
+read-only; the original isolated weather/refund fixture commands are unchanged.
+
+Operator evidence and target settings travel in a companion context. Synthesis
+cannot see the gate or target-launch data. Verification and serving require no
+key; serving refuses unverified or changed artifacts and target drift. A failed
+explicit re-verification revokes a prior CLI promotion through the registry.
+
+Twelve focused CLI tests pass, including isolated synthesis with a controlled
+provider, a real stdio MCP round trip, rejection, overwrites, drift, tampering and
+revocation and disagreement during independently repeated promotion checks.
+The checked-in weather example works without a model call. No paid
+synthesis or benchmark evaluation was run. The original core sources and benchmark
+execution fingerprint remain unchanged; new CLI entry points are outside the
+frozen `src` directories. [Commands and examples](cli.md) document the workflow.
+
+Final validation: all **158 tests across 32 files**, root lint and strict
+TypeScript pass. The inspector's ten tests, protected-file audit and six browser
+checks on the hosting Worker also pass. Historical evidence partition validation
+passes for all three projects. No benchmark trial or paid API call was run.

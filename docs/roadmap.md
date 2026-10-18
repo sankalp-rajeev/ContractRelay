@@ -1,6 +1,6 @@
 # Implementation milestones
 
-Use `prd.md` sections 34, 42–45 and 49 for full acceptance criteria.
+Use [the original PRD](prd.md) sections 34, 42–45 and 49 for full acceptance criteria.
 
 ## Foundation — implemented
 

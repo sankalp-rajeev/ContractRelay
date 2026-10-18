@@ -28,7 +28,7 @@ Acquire/build: `node --import=tsx benchmarks/realworld-v1/acquire.mjs --case <pr
 
 ## Existing compiler limitation: sqlew
 
-All three sqlew candidates were rejected at V0 because the unchanged compiler refuses the native union type on the consolidated tool?s `value` property. Recovery is **0/3**, with **3/3 fail-closed rejections** and **0 promoted candidates**. The core was not patched, the real schema was not narrowed, and no candidate was replaced. See [the documented defect](DEFECTS.md). Mindwtr and Nexus each recover **3/3**; thus **2 of 3 migrations** are recovered.
+All three sqlew candidates were rejected at V0 because the unchanged compiler refuses the native union type on the consolidated tool's `value` property. Recovery is **0/3**, with **3/3 fail-closed rejections** and **0 promoted candidates**. The core was not patched, the real schema was not narrowed, and no candidate was replaced. See [the documented defect](DEFECTS.md). Mindwtr and Nexus each recover **3/3**; thus **2 of 3 migrations** are recovered.
 
 
 Validation: lint/typechecking, 146 unchanged core tests and two budget tests pass.

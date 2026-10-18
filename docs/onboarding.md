@@ -1,6 +1,6 @@
 # PRD onboarding
 
-Source: `prd.md`, version 1.3, dated 2026-10-17. It remains unchanged.
+Source: [the original PRD](prd.md), version 1.3, dated 2026-10-17. It remains unchanged.
 
 ## Product lifecycle
 

@@ -1,5 +1,9 @@
 # Read-only ContractRelay inspector
 
+The [public inspector](https://contractrelay-inspector.fondsky12.chatgpt.site)
+shows the same artifacts without installation. [Hosting notes](hosting.md) record
+the deployment identity, compatibility adapter and reproduction steps.
+
 The portfolio interface lives in `apps/inspector/`, outside the frozen workspace
 packages. It uses Next.js, React, strict TypeScript, Node.js, GraphQL and ordinary
 CSS. Server Components handle data and rendering; client components handle
@@ -158,6 +162,16 @@ The local benchmark execution fingerprint remains:
 ```text
 ad4a35c05d8c2aba38e303fec9bdf12ee0e7c20c00bf0d278c43787e2546c299
 ```
+
+After the README editorial pass, the audit projects three explicitly recorded
+documentation changes onto those original baselines: moving the byte-identical
+PRD to `docs/prd.md`, restoring an apostrophe in the historical report, and updating
+only the PRD location in the original guard catalog. The original baseline files
+were not reset. [The scoped receipt](editorial-changes.json) records before/after
+hashes; the audit checks the corrected files and reports their current aggregate
+separately. Every scientific artifact remains unchanged. The historical extension
+source fingerprint changes because its catalog path changed; saved trial identities
+retain the original fingerprint and are not rewritten or regenerated.
 
 Original suite/protocol hashes and all 195 final records remain identical.
 Core source, frozen prompts, gates, scoring, heuristics, model/quota configuration
