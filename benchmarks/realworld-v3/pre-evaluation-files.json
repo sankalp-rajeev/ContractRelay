@@ -11,9 +11,9 @@
     "packages/synthesizer/src/synthesis.ts": "da5dbcdaa4412fcf31b0c99ce07e4feea707ed0767393669cb028c8d6ebeb483",
     "packages/synthesizer/src/structural.ts": "1a6b2012a72cf870f4c0a4013714a0d1d8733a608728f171621c4cfe1945acec",
     "packages/verifier/src/index.ts": "1874b63ae41d066fac1a6420dd50d6e0eb05f49723b619a139b4aec639a249fc",
-    "benchmarks/realworld-v3/evaluate.mjs": "6f9d6981ec55f7373206574e8ad47f455b893345a7140673a7819fbd08dedd82",
+    "benchmarks/realworld-v3/evaluate.mjs": "02f192650fea56de32f761bbb7016db5906e12938faede33c3bba53fbb20e4ae",
     "benchmarks/realworld-v3/evaluation-integrity.mjs": "94540eea1d79565d1114d27badd84f44cd1f1d763dc657f1f8d8fc0206034944",
-    "benchmarks/realworld-v3/protocol.json": "4ae97fcdd2fc5e80f9a4688d90de6e58c536fea2940594b0e000b66791365a4c",
+    "benchmarks/realworld-v3/protocol.json": "6f99a17fbd8ffd95ffe32bbaa3a0d8ed07da276c716f3bee58eda3ef079391de",
     "benchmarks/realworld-v3/core-extension.json": "779947c02cbee1393fce2c5c281a01bd2fdf5957d8a75074fdfa461a8235db0a",
     "benchmarks/realworld-v3/pre-capability-freeze.json": "cc6618b6e42e180201dfdd38496e28e644313559147ffa402203ced4802cc078"
   }

@@ -28,7 +28,7 @@ let scheduler,budget;
 if(evaluate){
   const require=createRequire(new URL('../../packages/synthesizer/package.json',import.meta.url));
   const {GoogleGenAI}=await import(pathToFileURL(require.resolve('@google/genai')).href);
-  const client=new GoogleGenAI({apiKey:process.env.GEMINI_API_KEY??'',vertexai:false,httpOptions:{timeout:60000}});
+  const client=new GoogleGenAI({apiKey:process.env.GEMINI_API_KEY??'',vertexai:false,httpOptions:{timeout:60000,retryOptions:{attempts:1}}});
   let usage=null;
   const inner=new GeminiProvider(process.env.GEMINI_API_KEY??'',async request=>{
     const response=await client.models.generateContent(request);
