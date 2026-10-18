@@ -48,8 +48,8 @@ Use `prd.md` sections 34, 42–45 and 49 for full acceptance criteria.
 - [x] Implement B0/B1/B2/B2-V/B3 with matched synthesis information.
 - [x] Sandbox B2 with no external network, secrets or host access.
 - [x] Tiny-quota resume tests and full development-model regression.
-- [ ] Three independent final-model trials per stochastic case across quota days.
-- [x] Count-first report implementation and versioned development snapshot (final results pending).
-- [ ] Limitations, reproducible demo and fresh literature/direct-competitor audit.
+- [x] Three independent final-model trials per stochastic case with quota-safe execution.
+- [x] Count-first reports and versioned development/final snapshots; API-free summary regeneration.
+- [x] Limitations, reproducible demo and fresh literature/direct-competitor audit.
 
 No UI, hosted service, new protocols or expanded DSL should displace these gates.

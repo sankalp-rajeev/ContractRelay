@@ -21,6 +21,7 @@
     "bench:freeze": "tsx --experimental-sqlite scripts/freeze-benchmark-v3.ts",
     "bench": "tsx --experimental-sqlite --env-file-if-exists=.env scripts/benchmark.ts",
     "bench:continue": "tsx scripts/continue-final.ts",
+    "bench:report": "tsx scripts/report-final.ts",
     "test:sandbox": "tsx scripts/check-sandbox.ts",
     "cli": "tsx --experimental-sqlite packages/cli/src/index.ts"
   },

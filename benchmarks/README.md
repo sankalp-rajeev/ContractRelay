@@ -1,10 +1,15 @@
-# Benchmark workspace — not executed yet
+# Benchmark workspace
 
-The final suite starts at 15 controlled executable migrations. Definitions,
-partitions, sandbox, methods and scoring remain to be implemented. No results
-are included. `pnpm test:smoke` is a deterministic compiler integration check,
-not a comparative benchmark.
+The frozen suite contains 15 executable cases and three held-out cases.
+Synthesis, gate and sealed evaluation partitions have enforced access boundaries.
+Protocol v2 and suite v3 remain unchanged after final evaluation.
 
-Use `templates/case/` as an authoring guide; freeze case manifests and hashes only
-when executable fixtures and independent gate/sealed oracles are complete.
-Directory layout alone does not enforce sealed access.
+`results/development-v3.json` preserves the single-trial development regression,
+including invalid artifacts and hidden failures. `results/final-v3.json` records
+195 final evaluations: B0/B2/B2-V/B3 each run three trials per case; B1 runs once.
+The final stochastic methods reach a ceiling on this small controlled suite;
+the results do not demonstrate a quality advantage for B3 or B2-V.
+
+Run `pnpm bench:report` to regenerate the primary final summary without an API key.
+See `docs/benchmark.md` for evidence parity, sandboxing, cost accounting and
+checkpoint/resume. Raw model artifacts and quota ledgers remain in ignored `runs/`.

@@ -131,3 +131,23 @@ Tier 1 validation: lint and strict typechecking pass; all **146 tests in 31
 files** pass. The five real Docker sandbox acceptance checks pass, as does a
 four-container parallel smoke check. A Git audit confirms no changes to frozen
 benchmark data, prompts, heuristics, gates, scoring, protocol or dependencies.
+
+### Phase 5 final evaluation - complete
+
+All **195 records** completed on the frozen final model with zero infrastructure,
+model-generation or execution failures. B0/B2/B2-V/B3 each recover **33/33
+compatible trials**, safely reject **12/12 must-reject trials** and record zero
+hidden false successes. B1 recovers **9/11 compatible cases** and safely rejects
+**4/4 must-reject cases**. All 45 B2-V wrappers match their paired B2 hashes.
+These ceiling results provide no measured quality advantage for B3 or B2-V;
+development-model failures are not substituted for the final comparison.
+
+The corrected run reserves 229 HTTP attempts (228 responses plus the retained
+504); commissioning retains five earlier 503 attempts. The shared ledger has
+234 requests. Known usage is 211,447 input and 137,573 output/thinking tokens,
+with a standard-rate estimate of $0.674484; six outage attempts remain unknown.
+Completed-run resume changes neither result hashes nor the quota ledger and
+issues **zero new model calls**. The versioned final snapshot preserves counts,
+records, accounting, the original manifest and the operational epoch receipt.
+`pnpm bench:report` regenerates the summary without a key. Runtime source and
+all frozen scientific artifacts remain unchanged after the measured run.

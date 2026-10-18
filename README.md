@@ -7,12 +7,22 @@ the backend contract changes. It proposes a bounded declarative `AdapterPlan`,
 executes trusted deterministic translation, and independently verifies the
 candidate before promotion. Insufficient evidence must result in rejection.
 
-**Status: Phases 1–4 complete; final repeated trials pending.** Live Gemini
+**Status: final three-trial evaluation complete.** Live Gemini
 generation, evidence-gated promotion, MCP stdio compatibility, bounded composed
 workflows and isolated SQLite state/side-effect checks pass acceptance tests.
 The 15-case benchmark, matched baseline runner and hostile-code sandbox are
-implemented. The full development comparison is complete, including preserved
-failures. Final repeated-trial results have not been measured.
+implemented. All **195 final records** are saved: 15 cases, three trials per
+stochastic method, B1 once per case, and three held-out cases. All **146 tests**,
+lint, typechecking, real Docker acceptance and GitHub CI pass.
+
+The [final snapshot](benchmarks/results/final-v3.json) records B0, B2, B2-V and
+B3 each recovering **33/33 compatible trials**, safely rejecting **12/12
+must-reject trials**, and producing **0 hidden false successes**. B1 recovers
+**9/11 compatible cases** and safely rejects **4/4 must-reject cases**. This
+controlled suite reaches a ceiling for the final model: it provides no measured
+quality advantage for B3 over the stochastic baselines. Development-model
+failures remain separate observations. Run `pnpm bench:report` to regenerate
+the measured summary from versioned records without an API key.
 
 ## Quick start
 
@@ -172,8 +182,8 @@ This generates one controlled synthetic weather plan through the quota scheduler
 independently verifies it, retains artifacts under `runs/development/`, and writes
 `reports/weather-live-verification.json`. Completed trials are skipped on resume.
 The refund command generates and verifies a composed plan with real MCP and
-SQLite fixtures. Final-model use is blocked until later benchmark prerequisites
-are implemented. The live development-model check passed on 2026-10-17, including
+SQLite fixtures. Final-model evaluation requires the frozen development
+acceptance manifest. The live development-model check passed on 2026-10-17, including
 promotion, separate sealed-fixture scoring and retained-response resume. This is
 not a comparative benchmark result. Ordinary tests still use controlled transports.
 
@@ -215,8 +225,12 @@ The [development snapshot](benchmarks/results/development-v3.json) is a single
 Flash-Lite trial per stochastic case, including invalid artifacts and hidden
 failures. It is not the final comparison. See [the demo](docs/demo.md) and
 [related systems check](docs/related-work.md) for reproduction and claim boundaries.
+The final snapshot includes retained request/token/cost accounting and verified
+completed-run resume with **zero new model calls**. Known final usage is estimated
+at **$0.674484** using the published standard rates; six retained outage attempts
+have unknown usage and are excluded from that estimate.
 
 See [onboarding](docs/onboarding.md), [build milestones](docs/roadmap.md), and
 [architecture decisions](docs/adr/README.md). Phase 2's local and live acceptance
-checks pass, as do Phase 3's composed MCP/SQLite checks. Phase 4 now follows the
-frozen-case, sandbox and matched-baseline gates.
+checks pass, as do Phase 3's composed MCP/SQLite checks, Phase 4's matched
+development regression and Phase 5's frozen repeated-trial evaluation.

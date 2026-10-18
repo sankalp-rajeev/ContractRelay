@@ -143,3 +143,21 @@ controlled. A separate SQLite provenance fault demonstrates gate promotion
 followed by sealed failure. Unseen oracle inputs/assertions matter: gate pass is
 never counted directly as hidden recovery. A refusal after B0 has already
 performed side effects is excluded from safe-rejection counts.
+
+## Final measured results
+
+The final comparison is complete: all 195 records, 45 exact B2/B2-V pairs and
+zero infrastructure/generation/execution failures. The versioned snapshot is
+`benchmarks/results/final-v3.json`. B0/B2/B2-V/B3 each recover 33/33 compatible
+trials and safely reject 12/12 must-reject trials, with zero hidden false
+successes. B1 recovers 9/11 compatible cases and safely rejects 4/4 must-reject
+cases. The final model reaches a ceiling on this suite; these counts provide
+no measured quality advantage for B3 or filtering benefit for B2-V.
+
+Run `pnpm bench:report` to regenerate `reports/final-summary.json` from the
+versioned records without a key or model calls. A completed `pnpm bench --resume`
+was also verified to leave all result hashes and quota reservations unchanged.
+The corrected run reserved 229 attempts, including one retained 504; the five
+commissioning 503s remain separate. Known usage totals 211,447 input and 137,573
+output/thinking tokens. Its standard-rate estimate is $0.674484; the six outage
+attempts have unknown usage, so this is not a complete billing invoice.
