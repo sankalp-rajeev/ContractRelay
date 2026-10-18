@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "dataClass": "controlled-synthetic",
+  "policy": "read-only-v1",
+  "sourceTool": "get_weather",
+  "oldMetadata": {
+    "get_weather": {
+      "sideEffect": "READ_ONLY",
+      "idempotency": "IDEMPOTENT"
+    }
+  },
+  "newMetadata": {
+    "fetch_forecast": {
+      "sideEffect": "READ_ONLY",
+      "idempotency": "IDEMPOTENT"
+    }
+  },
+  "documents": [
+    {
+      "id": "change.md#tool",
+      "text": "get_weather became fetch_forecast. city became location. Old output uses Fahrenheit; set units=imperial. Project current.temperature to temperature and current.summary to conditions."
+    },
+    {
+      "id": "change.md#location",
+      "text": "get_weather became fetch_forecast. city became location. Old output uses Fahrenheit; set units=imperial. Project current.temperature to temperature and current.summary to conditions."
+    },
+    {
+      "id": "change.md#units",
+      "text": "get_weather became fetch_forecast. city became location. Old output uses Fahrenheit; set units=imperial. Project current.temperature to temperature and current.summary to conditions."
+    },
+    {
+      "id": "change.md#response",
+      "text": "get_weather became fetch_forecast. city became location. Old output uses Fahrenheit; set units=imperial. Project current.temperature to temperature and current.summary to conditions."
+    }
+  ],
+  "gate": {
+    "version": 1,
+    "traces": [
+      {
+        "traceId": "ann-arbor",
+        "tool": "get_weather",
+        "input": {
+          "city": "Ann Arbor"
+        },
+        "output": {
+          "temperature": 64,
+          "conditions": "Clear"
+        }
+      }
+    ],
+    "predicates": [
+      {
+        "id": "fahrenheit",
+        "trace_id": "ann-arbor",
+        "kind": "equals",
+        "path": "temperature",
+        "expected": 64
+      },
+      {
+        "id": "conditions",
+        "trace_id": "ann-arbor",
+        "kind": "equals",
+        "path": "conditions",
+        "expected": "Clear"
+      }
+    ],
+    "metamorphic": [],
+    "evidence_refs": [
+      "change.md#tool",
+      "change.md#location",
+      "change.md#units",
+      "change.md#response"
+    ],
+    "supported_defaults": [
+      {
+        "arg": "units",
+        "value": "imperial",
+        "evidence_ref": "change.md#units"
+      }
+    ]
+  },
+  "target": {
+    "command": "node",
+    "args": [
+      "--import",
+      "tsx",
+      "../../../packages/cli/example-server.ts"
+    ],
+    "cwd": "."
+  }
+}

@@ -14,6 +14,12 @@ reports/*
 !reports/README.md
 .DS_Store
 Thumbs.db
+test-results/
+*.json.context.json
+*.json.verified.json
+*.json.registry/
+*.json.synthesis/
+!examples/cli/weather/adapter.json.context.json
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal

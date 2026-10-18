@@ -6,7 +6,9 @@
   "type": "module",
   "packageManager": "pnpm@10.20.0",
   "engines": { "node": ">=22.12.0" },
+  "bin": { "contractrelay": "./bin/contractrelay.mjs" },
   "scripts": {
+    "contractrelay": "node bin/contractrelay.mjs",
     "dev": "npm --prefix apps/inspector run dev",
     "ui:install": "npm --prefix apps/inspector ci",
     "ui:check": "npm --prefix apps/inspector run check",

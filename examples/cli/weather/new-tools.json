@@ -1,0 +1,54 @@
+{
+  "tools": [
+    {
+      "name": "fetch_forecast",
+      "description": "Return the current forecast. Imperial means Fahrenheit; metric means Celsius.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "string",
+            "minLength": 1
+          },
+          "units": {
+            "type": "string",
+            "enum": [
+              "metric",
+              "imperial"
+            ]
+          }
+        },
+        "required": [
+          "location",
+          "units"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "current": {
+            "type": "object",
+            "properties": {
+              "temperature": {
+                "type": "number"
+              },
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "temperature",
+              "summary"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "current"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}
