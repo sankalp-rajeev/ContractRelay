@@ -1,0 +1,12 @@
+[
+  {
+    "case": "mapbox-v3",
+    "trial": 3,
+    "error_code": "INVALID_MODEL_OUTPUT",
+    "issues": [
+      {
+        "message": "Expected property name or '}' in JSON at position 688 (line 32 column 13)"
+      }
+    ]
+  }
+]

@@ -2,7 +2,7 @@
 
 The v3 capability iteration adds generic data operations to the version 1 AdapterPlan. Trusted TypeScript interprets the plan; the model supplies JSON data only. Existing plan serialization has no new defaults, and existing plan hashes remain unchanged.
 
-Literal MCP/JSON property names support hyphens, spaces and Unicode within a 128-character limit. Empty names, control characters and `__proto__`, `prototype`, `constructor` are refused. Internal call identifiers retain the original identifier grammar. Dotted reference paths remain bounded to 16 segments and 2,048 characters, prohibit bracket/backslash syntax, and traverse only own object properties. A dot in a literal property name is accepted by RenameArg but cannot be addressed through dotted-path syntax.
+Literal MCP/JSON property names support hyphens, spaces and Unicode within a 128-character limit. Empty names, ASCII control characters and `__proto__`, `prototype`, `constructor` are refused. Internal call identifiers retain the original identifier grammar. Dotted reference paths remain bounded to 16 segments and 2,048 characters, prohibit bracket/backslash syntax, and traverse only own object properties. A dot in a literal property name is accepted by RenameArg but cannot be addressed through dotted-path syntax.
 
 ## Singleton arrays
 

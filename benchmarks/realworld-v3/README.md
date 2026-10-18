@@ -8,4 +8,4 @@ The unseen workflow is fixed: whole-file conflict checks against a synthetic SQL
 
 `pre-capability-freeze.json` binds all evidence, case definitions and oracles before implementation. `protected-before.json` preserves original historical files separately from the explicitly authorized core extension. The original implementation is retained at commit `4d307b21c8a964bd7f59c28e807afe6b5956b922` for legacy replay; old Fabric failures must never be reinterpreted using the extended parser.
 
-Evaluation is not yet complete. Three independent synthesis trials per case are planned, under a shared $1 Gemini hard cap. No sealed-driven implementation or prompt changes are permitted.
+The [measured report and combined historical index](REPORT.md) records all nine fresh trials: Mapbox 2/3 recovered with one generation failure, Fabric 3/3 recovered, and session-collab 3/3 explicit rejections. Gemini usage was $0.08476875 under the $1 cap. The additive evaluator is evaluate.mjs; the pre-change run.mjs and all frozen evidence remain immutable. No sealed-driven implementation or prompt changes were made.

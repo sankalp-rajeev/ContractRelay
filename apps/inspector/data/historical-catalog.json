@@ -1,4 +1,4 @@
 {
   "version": 1,
-  "roots": ["benchmarks/realworld-v1", "benchmarks/realworld-v2"]
+  "roots": ["benchmarks/realworld-v1", "benchmarks/realworld-v2", "benchmarks/realworld-v3"]
 }

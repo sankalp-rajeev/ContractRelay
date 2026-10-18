@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "implementation_commit": "19906a53057d03e981fd68699de6ea8efeb21651",
+  "evaluation_transport_commit": "8a8f5c6efd7b43e8284d8c829fadb368c95267aa",
+  "pre_capability_freeze_commit": "d1658407df25d6ac728e3936652e7c1925395b3f",
+  "core_cli_tests": {
+    "passed": 169,
+    "files": 36
+  },
+  "new_focused_core_tests": 11,
+  "historical_original_code_guard_tests": 9,
+  "new_historical_guard_tests": 6,
+  "inspector_tests": 12,
+  "next_browser_checks": 10,
+  "hosting_worker_browser_checks": 10,
+  "root_lint": "PASS",
+  "root_typecheck": "PASS",
+  "inspector_checks": "PASS",
+  "next_production_build": "PASS",
+  "hosting_typecheck": "PASS",
+  "hosting_worker_build": "PASS",
+  "new_native_replay": {
+    "trials": 9,
+    "matched": true,
+    "api_calls": 0
+  },
+  "legacy_native_replay": {
+    "v1_trials": 9,
+    "v2_trials": 6,
+    "matched": true,
+    "api_calls": 0
+  },
+  "original_scientific_files": 363,
+  "original_scientific_raw_aggregate_sha256": "363e27c9c8d788c4fb79c43c870ad7c76b1f809c229c9b069b61832e404e47ea",
+  "original_scientific_lf_aggregate_sha256": "b30a9f0614010040ba81a02ab3f9396fc7787825af2f9f24b819757c3ef361aa",
+  "original_scientific_bytes_unchanged": true,
+  "pre_capability_frozen_files": 89,
+  "pre_capability_bytes_equal_git_freeze": true,
+  "controlled_records": 195,
+  "post_evaluation_source_changes": false,
+  "core_existing_files_changed": 6,
+  "new_core_source_modules": 1,
+  "notes": [
+    "No paid controlled benchmark reruns.",
+    "All legacy replay writes are confined to the isolated original-code checkout.",
+    "Windows Next preview teardown required stopping its owned server after all browser assertions passed.",
+    "The first hosting build had an npm shim PATH error; the existing Windows shim corrected it without an application change."
+  ]
+}

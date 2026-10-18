@@ -17,7 +17,7 @@ const service = new ArtifactService(realRead);
 describe('Read-only artifact GraphQL', () => {
   it('loads the full catalog and every completed controlled/historical detail', async () => {
     const { migrations } = await query(CatalogDocument, {}, service);
-    expect(migrations).toHaveLength(20);
+    expect(migrations).toHaveLength(23);
     expect(Object.getPrototypeOf(migrations[0])).toBe(Object.prototype);
     for (const entry of migrations) {
       const data = await query(InspectMigrationDocument, { id: entry.id }, service);
@@ -73,6 +73,9 @@ describe('Read-only artifact GraphQL', () => {
       ['sqlew', 0, 3, 0, 3],
       ['mapbox', 0, 3, 0, 3],
       ['fabric', 0, 0, 0, 3],
+      ['mapbox-v3', 2, 0, 2, 3],
+      ['fabric-v3', 3, 0, 3, 3],
+      ['session-collab-v3', 0, 3, 0, 3],
     ]);
     expect(realWorldResults.every((m) => m.directOutcome === 'BREAKS')).toBe(true);
   });

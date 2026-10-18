@@ -1,5 +1,18 @@
 import { test, expect } from '@playwright/test';
 
+test('keeps pre-fix failures visible alongside new regression and unseen trial records', async ({ page }) => {
+  await page.goto('/real-world');
+  for (const id of ['mapbox', 'fabric', 'mapbox-v3', 'fabric-v3', 'session-collab-v3'])
+    await expect(page.locator(`a[href="/migrations/${id}"]`).first()).toBeVisible();
+  await page.goto('/migrations/mapbox-v3');
+  await expect(page.getByRole('heading', { name: /mapbox-v3/i }).first()).toBeVisible();
+  await page.goto('/migrations/mapbox-v3?trial=3');
+  await page.getByRole('link', { name: '03 Verification', exact: true }).click();
+  await expect(page.getByText('INVALID_MODEL_OUTPUT', { exact: false }).first()).toBeVisible();
+  await page.goto('/migrations/session-collab-v3');
+  await expect(page.getByText('REJECTED', { exact: true }).first()).toBeVisible();
+});
+
 test('overview, refund inspection and persisted results work without model access', async ({
   page,
 }) => {
@@ -66,7 +79,7 @@ test('search is accessible and pages fit the viewport', async ({ page }) => {
   await search.fill('rejected');
   await expect(
     page.getByRole('complementary', { name: 'Migration selection' }).getByRole('link'),
-  ).toHaveCount(6);
+  ).toHaveCount(7);
   await search.fill('nothing matches');
   await expect(page.getByText('No migration matches')).toBeVisible();
 });

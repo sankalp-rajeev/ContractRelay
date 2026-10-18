@@ -9,7 +9,7 @@ only after independent checks of server behavior pass. Otherwise, it refuses.
 exact dollars-to-cents conversion. In the SQLite fixture, retrying the same request
 does not duplicate either write.
 
-[Live inspector](https://contractrelay-inspector.fondsky12.chatgpt.site) · [90-second walkthrough](docs/demo.md) · [Historical migration report](benchmarks/realworld-v1/REPORT.md)
+[Live inspector](https://contractrelay-inspector.fondsky12.chatgpt.site) · [90-second walkthrough](docs/demo.md) · [Historical migration report](benchmarks/realworld-v3/REPORT.md)
 
 [![Core checks](https://github.com/sankalp-rajeev/ContractRelay/actions/workflows/ci.yml/badge.svg)](https://github.com/sankalp-rajeev/ContractRelay/actions/workflows/ci.yml)
 [![Inspector checks](https://github.com/sankalp-rajeev/ContractRelay/actions/workflows/inspector.yml/badge.svg)](https://github.com/sankalp-rajeev/ContractRelay/actions/workflows/inspector.yml)
@@ -23,19 +23,24 @@ does not duplicate either write.
   compatible cases and safely rejected **4/4** must-reject cases. The final model
   saturated this suite: these results do not show that the adapter language or
   gate beats a plain model-generated wrapper.
-- **Five historical migrations from public MCP projects: two recovered, two
-  safely rejected, one failed to produce a valid plan.** Mindwtr and Nexus-MCP
-  each recovered **3/3** trials. sqlew and Mapbox each safely rejected **3/3**.
-  Mapbox requires wrapping a point in an array and reconstructing a changed response,
-  which my current DSL cannot express. Fabric's combined tool/argument rename
-  produced **3/3 invalid candidates** because the DSL forbids its real hyphenated
-  argument names; these are generation failures, not safe rejections. The
-  [v1 report](benchmarks/realworld-v1/REPORT.md) and
-  [v2 report](benchmarks/realworld-v2/REPORT.md) preserve exact commits and failures.
-- **Known API cost: about $0.75.** The final controlled run accounts for
-  $0.674484, the first historical extension for $0.04337325, and the harder
-  extension for $0.03602175. Six retained earlier outage attempts have unknown
-  usage and are excluded; development runs are outside these totals.
+- **Six distinct historical migrations from public MCP projects, across three
+  versioned evaluations.** Earlier tests recovered Mindwtr and Nexus-MCP in **3/3**
+  trials each and refused sqlew in **3/3**. Fresh **post-fix regression** trials
+  recovered Mapbox in **2/3** (one malformed-JSON generation failure) and Fabric in
+  **3/3**. The separately frozen unseen session-collab migration was explicitly
+  refused in **3/3** because of missing response information and unsupported
+  reconstruction. The [combined report](benchmarks/realworld-v3/REPORT.md) keeps
+  every result and describes the unseen fixture's verification limitations.
+- **Known API cost: about $0.84.** The final controlled run accounts for
+  $0.674484; the historical evaluations add $0.04337325, $0.03602175 and
+  $0.08476875. Six retained earlier outage attempts have unknown usage and are
+  excluded; development runs are outside these totals.
+
+Real-world failures led me to add [safe literal field names, singleton arrays and
+bounded response construction](docs/bounded-structural-v1.md). The original
+Mapbox **3/3 rejections** and Fabric **3/3 generation failures** remain unchanged
+in the [pre-fix v2 report](benchmarks/realworld-v2/REPORT.md). The sqlew compiler
+limitation remains preserved. No controlled benchmark results were replaced.
 
 The useful distinction here is a saved translation that runs deterministically
 without recurring model calls after promotion. Finite tests do not prove semantic
