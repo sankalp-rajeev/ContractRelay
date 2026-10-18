@@ -1,0 +1,25 @@
+name: External-validity guard checks
+on:
+  push:
+    paths:
+      - 'benchmarks/realworld-v1/**'
+      - '.github/workflows/realworld.yml'
+  pull_request:
+    paths:
+      - 'benchmarks/realworld-v1/**'
+      - '.github/workflows/realworld.yml'
+permissions:
+  contents: read
+jobs:
+  external-guards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: node --import=tsx --test benchmarks/realworld-v1/test/budget.test.mjs
+      - run: node --import=tsx benchmarks/realworld-v1/run.mjs --validate

@@ -151,3 +151,31 @@ issues **zero new model calls**. The versioned final snapshot preserves counts,
 records, accounting, the original manifest and the operational epoch receipt.
 `pnpm bench:report` regenerates the summary without a key. Runtime source and
 all frozen scientific artifacts remain unchanged after the measured run.
+
+
+## Separate real-world external-validity evaluation ? complete
+
+The extension under `benchmarks/realworld-v1/` reproduces exact old/new public
+Mindwtr, Nexus-MCP and mcp-sqlew revisions with synthetic fixtures. All old
+workflows pass and unchanged old calls directly on new versions genuinely break.
+The selected SHAs and preauthored evidence were presented and committed before
+paid synthesis. Core source and all frozen flagship artifacts remain unchanged.
+
+Nine independent trials produce Mindwtr 3/3 recovery, Nexus-MCP 3/3 recovery
+and sqlew 0/3 recovery with 3/3 fail-closed rejections. The existing compiler
+refuses sqlew?s valid union-type schema; no core fix, schema narrowing, retuning
+or replacement generation was performed. The separate report documents this
+limitation, the genuinely parsed preseeded Nexus graph, and upstream quirks.
+
+External usage: 9 calls, 12,726 input tokens, 985 visible output tokens and
+8,036 thinking tokens; estimated spend $0.04337325 against a $1 hard cap,
+with no unknown usage. Budget/partition checks and the 146-test core gate pass.
+The original 195-record final benchmark is preserved and has not been rerun.
+
+
+Validation: lint/typechecking, 146 unchanged core tests and two budget tests pass.
+The final local test run serialized file workers to avoid Windows I/O timeouts;
+no test timeouts or core sources were changed. All nine API-free replay outcomes
+match the measured records, with zero additional Gemini calls. The 221 protected
+files remain byte-for-byte unchanged. Separate CI checks cover the budget guard
+and evidence-partition denial behavior without paid calls.

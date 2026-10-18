@@ -234,3 +234,15 @@ See [onboarding](docs/onboarding.md), [build milestones](docs/roadmap.md), and
 [architecture decisions](docs/adr/README.md). Phase 2's local and live acceptance
 checks pass, as do Phase 3's composed MCP/SQLite checks, Phase 4's matched
 development regression and Phase 5's frozen repeated-trial evaluation.
+
+
+## Separate real-world external validity
+
+A separate [historical MCP evaluation](benchmarks/realworld-v1/REPORT.md) reproduces
+three public old/new migrations without changing the controlled flagship suite.
+Mindwtr and Nexus-MCP each recover 3/3 trials; mcp-sqlew is rejected in all three
+because of an [existing compiler schema limitation](benchmarks/realworld-v1/DEFECTS.md).
+The nine synthesis calls cost an estimated $0.04337325 under a separate $1 cap.
+These are selected, primarily read-only workflows with synthetic data; the Nexus
+case uses a preseeded real parsed graph and does not validate full embedding/indexing.
+Exact SHAs, provenance, sealed scoring and API-free replay commands are included.

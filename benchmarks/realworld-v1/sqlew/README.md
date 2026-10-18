@@ -13,3 +13,7 @@ Reproduce after acquisition: `node --import=tsx benchmarks/realworld-v1/run.mjs 
 - Historical console startup diagnostics are redirected to stderr by an external bootstrap to keep the real MCP stream valid; historical tool logic is unchanged.
 
 Synthesis receives only synthesis-evidence. Gate and sealed evidence are separate and hashed. The trusted coordinator stages the existing core layout in ignored runs and permits sealed access only after durable decision commit.
+
+## Measured outcome
+
+Old server with old client: PASS. Direct unchanged old client on new: BREAKS. ContractRelay recovery: **0/3**; safe rejection: **3/3**; hidden false compatibility: **0/0 promoted**. See [the separate report](../REPORT.md) and [the unmodified core limitation](../DEFECTS.md).

@@ -12,3 +12,7 @@ Reproduce after acquisition: `node --import=tsx benchmarks/realworld-v1/run.mjs 
 - The upstream contentless-FTS search returns no rows for the seeded example on both revisions; search is outside the selected status/pagination workflow and is not patched.
 
 Synthesis receives only synthesis-evidence. Gate and sealed evidence are separate and hashed. The trusted coordinator stages the existing core layout in ignored runs and permits sealed access only after durable decision commit.
+
+## Measured outcome
+
+Old server with old client: PASS. Direct unchanged old client on new: BREAKS. ContractRelay recovery: **3/3**; safe rejection: **0/3**; hidden false compatibility: **0/3 promoted**. See [the separate report](../REPORT.md).
