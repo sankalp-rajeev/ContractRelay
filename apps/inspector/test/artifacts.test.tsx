@@ -9,7 +9,7 @@ import {
   InspectMigrationDocument,
   ResultsDocument,
 } from '../src/generated/graphql';
-import { VerificationView, TraceView } from '../src/components/inspection';
+import { AdapterView, VerificationView, TraceView } from '../src/components/inspection';
 import { POST } from '../src/app/api/graphql/route';
 
 const realRead = (path: string) => readFile(resolve(repositoryRoot, path), 'utf8');
@@ -23,6 +23,12 @@ describe('Read-only artifact GraphQL', () => {
       const data = await query(InspectMigrationDocument, { id: entry.id }, service);
       expect(data.migration?.status).toBe(entry.status);
       expect(data.migration?.adapterHash).toMatch(/^[a-f0-9]{64}$/);
+      if (!data.migration) throw new Error('Missing catalog item');
+      const adapter = renderToStaticMarkup(<AdapterView migration={data.migration} />);
+      expect(adapter).not.toContain('undefined');
+      if (entry.id === '06-money-scale') expect(adapter).toContain('amount_cents × 100 → integer');
+      if (entry.id === '05-string-number') expect(adapter).toContain('value → integer');
+      if (entry.id === '07-input-enum') expect(adapter).toContain('urgent');
     }
   });
   it('looks up recorded historical trials and returns null for unknown IDs/trials', async () => {

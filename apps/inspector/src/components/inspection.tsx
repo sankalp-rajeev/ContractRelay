@@ -12,6 +12,16 @@ function binding(value: Json | undefined): string {
   if (v.kind === 'convert') return `${binding(v.source)} × ${v.scale ?? 1} → ${v.to}`;
   return JSON.stringify(value);
 }
+
+// Labels only: the UI never applies these operations to an invocation.
+function stepLabel(step: { [key: string]: Json }): string {
+  if (step.op === 'RenameTool' || step.op === 'RenameArg') return `${step.from} → ${step.to}`;
+  if (step.op === 'ConvertType')
+    return `${step.arg}${step.scale !== undefined ? ` × ${step.scale}` : ''} → ${step.to}`;
+  if (step.op === 'AddConstantDefault') return `${step.arg} = ${JSON.stringify(step.value)}`;
+  if (step.op === 'MapEnum') return `${step.arg ?? step.field}: ${JSON.stringify(step.mapping)}`;
+  return JSON.stringify(step);
+}
 export function AdapterView({ migration }: { migration: Migration }) {
   const plan = object(migration.adapterPlan);
   const target = object(plan.target);
@@ -50,13 +60,7 @@ export function AdapterView({ migration }: { migration: Migration }) {
               <div className="operation" key={i}>
                 <span className="opIndex">{String(i + 1).padStart(2, '0')}</span>
                 <strong>{string(s.op)}</strong>
-                <code>
-                  {s.from !== undefined
-                    ? `${s.from} → ${s.to}`
-                    : s.arg !== undefined
-                      ? `${s.arg} = ${JSON.stringify(s.value)}`
-                      : JSON.stringify(s)}
-                </code>
+                <code>{stepLabel(s)}</code>
               </div>
             );
           })}
