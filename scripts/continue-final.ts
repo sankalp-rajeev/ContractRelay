@@ -4,7 +4,7 @@ import { openSync, closeSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { atomicWriteJson, readJson } from '../packages/contracts/src/artifacts.js';
-import { quotaDay } from '../packages/synthesizer/src/index.js';
+import { quotaDay, loadModelConfig } from '../packages/synthesizer/src/index.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const control = join(root, '.contractrelay');
@@ -14,6 +14,7 @@ const statusPath = join(control, 'final-runner.json');
 const stopPath = join(control, 'final-runner.stop');
 const logPath = join(control, 'final-runner.log');
 const summaryPath = join(root, 'runs/benchmark-v3-final-recovery/summary.json');
+const config = await loadModelConfig({ ...process.env, CONTRACTRELAY_MODEL_MODE: 'final' });
 let lock;
 try { lock = await open(lockPath, 'wx'); }
 catch (error) {
@@ -27,7 +28,8 @@ catch (error) {
 await lock.writeFile(JSON.stringify({ pid: process.pid, root })); await lock.close();
 const stopped = async () => { try { await access(stopPath); return true; } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; return false; } };
 const status = (state: string, extra: Record<string, unknown> = {}) => atomicWriteJson(statusPath,
-  { version: 1, pid: process.pid, state, updated_at: new Date().toISOString(), quota_day: quotaDay(Date.now()), summary_path: summaryPath, log_path: logPath, ...extra });
+  { version: 1, pid: process.pid, state, updated_at: new Date().toISOString(), quota_day: quotaDay(Date.now()),
+    budget: config.budget, max_concurrency: config.maxConcurrency, summary_path: summaryPath, log_path: logPath, ...extra });
 try {
   let priorRetry = 0;
   try {

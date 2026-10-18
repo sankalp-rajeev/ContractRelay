@@ -24,12 +24,13 @@ try {
   const { suite } = await loadSuite(suiteRoot);
   const protocol = await readJson(join(suiteRoot, 'manifests/protocol-v2.json')) as Record<string, unknown>;
   if (hashJson(sandboxConfig) !== protocol.sandbox_config_hash) throw new Error('SANDBOX_CONFIG_DRIFT');
-  if (mode === 'final' && (config.budget.model !== protocol.final_model || config.budget.rpdSoft > 18)) throw new Error('FINAL_MODEL_OR_BUDGET_DRIFT');
+  if (mode === 'final' && config.budget.model !== protocol.final_model) throw new Error('FINAL_MODEL_OR_BUDGET_DRIFT');
   if (mode === 'dev' && config.budget.model !== protocol.development_model) throw new Error('DEVELOPMENT_MODEL_DRIFT');
   const settings: BenchmarkSettings = { suiteRoot, runRoot, mode, model: mode === 'api-free' ? 'none' : config.budget.model,
-    trials, resume: values.resume ?? false, includeHeldOut: mode === 'final' || (mode === 'api-free' && (values['include-held-out'] ?? false)),
+    trials, maxConcurrency: config.maxConcurrency, resume: values.resume ?? false, includeHeldOut: mode === 'final' || (mode === 'api-free' && (values['include-held-out'] ?? false)),
     ...(mode === 'api-free' ? {} : { scheduler: new QuotaScheduler(join(root, mode === 'dev' ? 'runs/development' : 'runs/final'),
-      new GeminiProvider(process.env.GEMINI_API_KEY ?? ''), config.budget, { cache: false, retainFailed: true, retryTransient: true }), sandbox: new DockerSandbox(sandboxConfig) }) };
+      new GeminiProvider(process.env.GEMINI_API_KEY ?? ''), config.budget, { cache: false, retainFailed: true, retryTransient: true,
+        maxConcurrency: config.maxConcurrency, pauseOnTransient: true }), sandbox: new DockerSandbox(sandboxConfig) }) };
   let result = await runBenchmark(settings);
   if (mode === 'dev' && values['include-held-out'] && result.summary.complete) {
     // Keep the already-recorded development trials intact when adding held-out scoring.

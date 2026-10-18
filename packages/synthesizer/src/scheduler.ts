@@ -7,6 +7,7 @@ import { atomicWriteJson, readJson, writeOnceJson } from '@contractrelay/contrac
 import { ModelRequestError, normalizeModelError, isTransientModelFailure } from './model.js';
 import type { ModelProvider, ModelRequest, ModelResponse } from './model.js';
 import type { ModelBudget } from './config.js';
+import { Mutex, Semaphore } from './concurrency.js';
 
 export interface SchedulerClock { now(): number; sleep(milliseconds: number): Promise<void> }
 const wallClock: SchedulerClock = { now: () => Date.now(), sleep: (ms) => new Promise((done) => setTimeout(done, ms)) };
@@ -38,29 +39,50 @@ export function quotaDay(milliseconds: number): string {
 export class QuotaScheduler {
   private readonly root: string;
   private readonly clock: SchedulerClock;
-  private chain: Promise<void> = Promise.resolve();
+  private readonly slots: Semaphore;
+  private readonly leaseMutex = new Mutex();
+  private readonly ledgerMutex = new Mutex();
+  private leaseUsers = 0;
+  private releaseLease: (() => Promise<void>) | undefined;
+  private readonly activeJobs = new Set<string>();
+  private providerPause: ModelRequestError | undefined;
   constructor(directory: string, private readonly provider: ModelProvider, private readonly budget: ModelBudget,
-    private readonly options: { cache?: boolean; maxRetries?: number; clock?: SchedulerClock; retainFailed?: boolean; retryTransient?: boolean } = {}) {
+    private readonly options: { cache?: boolean; maxRetries?: number; clock?: SchedulerClock; retainFailed?: boolean; retryTransient?: boolean;
+      maxConcurrency?: number; pauseOnTransient?: boolean } = {}) {
     this.root = resolve(directory);
     this.clock = options.clock ?? wallClock;
+    this.slots = new Semaphore(options.maxConcurrency ?? 1);
     if (![budget.rpm, budget.tpm, budget.rpdHard, budget.rpdSoft].every((n) => Number.isSafeInteger(n) && n > 0)
       || budget.rpdSoft > budget.rpdHard || !Number.isSafeInteger(options.maxRetries ?? 2) || (options.maxRetries ?? 2) < 0) {
       throw new Error('Invalid model budget/retry policy');
     }
   }
 
-  /** Serialize in-process and lock across processes; final jobs never use response caching. */
+  /** Bounded calls share one process lease; quota reservations remain atomic. */
   async run<T>(job: ModelJob, parse: (value: unknown) => T, options: { resume?: boolean } = {}): Promise<ScheduledResult<T>> {
-    let releaseQueue!: () => void;
-    const previous = this.chain;
-    this.chain = new Promise<void>((done) => { releaseQueue = done; });
-    await previous;
+    const releaseSlot = await this.slots.acquire();
+    let leased = false;
+    let ownsJob = false;
     try {
-      await mkdir(this.root, { recursive: true });
-      const release = await lock(this.root, { realpath: true, retries: 0, stale: 30_000, update: 10_000 });
-      try { return await this.runLocked(job, parse, options); }
-      finally { await release(); }
-    } finally { releaseQueue(); }
+      if (this.activeJobs.has(job.id)) throw new ModelRequestError('JOB_ALREADY_RUNNING');
+      this.activeJobs.add(job.id); ownsJob = true;
+      await this.leaseMutex.run(async () => {
+        if (this.leaseUsers === 0) {
+          await mkdir(this.root, { recursive: true });
+          this.releaseLease = await lock(this.root, { realpath: true, retries: 0, stale: 30_000, update: 10_000 });
+        }
+        this.leaseUsers++; leased = true;
+      });
+      return await this.runLocked(job, parse, options);
+    } finally {
+      if (ownsJob) this.activeJobs.delete(job.id);
+      try {
+        if (leased) await this.leaseMutex.run(async () => {
+          this.leaseUsers--;
+          if (this.leaseUsers === 0) { await this.releaseLease?.(); this.releaseLease = undefined; }
+        });
+      } finally { releaseSlot(); }
+    }
   }
 
   private async ledger(): Promise<Ledger> {
@@ -81,20 +103,23 @@ export class QuotaScheduler {
   private async reserve(tokens: number): Promise<number | null> {
     if (tokens > this.budget.tpm) throw new ModelRequestError('REQUEST_EXCEEDS_TPM');
     for (;;) {
-      const ledger = await this.ledger();
-      if (ledger.blocked || ledger.requests >= this.budget.rpdSoft) return null;
-      const now = this.clock.now();
-      ledger.window = ledger.window.filter((entry) => entry.at > now - 60_000);
-      if (ledger.window.length >= this.budget.rpm || ledger.window.reduce((sum, entry) => sum + entry.tokens, 0) + tokens > this.budget.tpm) {
-        const first = ledger.window[0];
-        if (!first) throw new Error('Invalid token reservation');
-        await this.clock.sleep(Math.min(50_000, Math.max(1, first.at + 60_001 - now)));
-        continue;
-      }
-      ledger.requests++;
-      ledger.window.push({ at: now, tokens });
-      await this.saveLedger(ledger); // Reserve durably BEFORE sending a request.
-      return ledger.requests;
+      const reservation = await this.ledgerMutex.run(async () => {
+        if (this.providerPause) throw this.providerPause;
+        const ledger = await this.ledger();
+        if (ledger.blocked || ledger.requests >= Math.min(this.budget.rpdSoft, this.budget.rpdHard)) return { index: null, wait: 0 };
+        const now = this.clock.now();
+        ledger.window = ledger.window.filter((entry) => entry.at > now - 60_000);
+        if (ledger.window.length >= this.budget.rpm || ledger.window.reduce((sum, entry) => sum + entry.tokens, 0) + tokens > this.budget.tpm) {
+          const first = ledger.window[0];
+          if (!first) throw new Error('Invalid token reservation');
+          return { index: null, wait: Math.min(50_000, Math.max(1, first.at + 60_001 - now)) };
+        }
+        ledger.requests++; ledger.window.push({ at: now, tokens });
+        await this.saveLedger(ledger); // Reserve durably BEFORE sending a request.
+        return { index: ledger.requests, wait: 0 };
+      });
+      if (reservation.wait === 0) return reservation.index;
+      await this.clock.sleep(reservation.wait);
     }
   }
 
@@ -192,11 +217,12 @@ export class QuotaScheduler {
         return result;
       } catch (error) {
         const failure = normalizeModelError(error);
+        if (this.options.pauseOnTransient && isTransientModelFailure(failure.code)) this.providerPause = failure;
         await writeOnceJson(join(attemptDir, 'error.json'), { code: failure.code, retry_after_ms: failure.retryAfterMs, daily_quota: failure.dailyQuota });
         run.error_code = failure.code; run.attempts.push({ at: new Date(this.clock.now()).toISOString(), code: failure.code });
         if (failure.code === 'RESOURCE_EXHAUSTED') {
           if (failure.dailyQuota || attempt === (this.options.maxRetries ?? 2) || failure.retryAfterMs > 60_000) {
-            const ledger = await this.ledger(); ledger.blocked = true; await this.saveLedger(ledger);
+            await this.ledgerMutex.run(async () => { const ledger = await this.ledger(); ledger.blocked = true; await this.saveLedger(ledger); });
             return blocked();
           }
           run.retry_count++; run.status = 'pending'; await atomicWriteJson(runPath, run);

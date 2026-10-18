@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "source": "prd.md v1.3, account quota snapshot 2026-10-17; verify before model-backed runs",
+  "source": "User-authorized Phase 5 Tier 1 upgrade: 1000 RPM, 2M TPM, 10000 RPD; PRD development snapshot retained",
   "provider": "google",
-  "requiredExternalSpendUsd": 0,
+  "finalBillingTier": "tier1",
   "paidFallback": false,
-  "maxConcurrency": 1,
+  "maxConcurrency": 4,
   "dailyResetTimezone": "America/Los_Angeles",
   "modes": {
     "dev": {
@@ -16,10 +16,10 @@
     },
     "final": {
       "model": "gemini-3.8-flash",
-      "rpm": 5,
-      "tpm": 250000,
-      "rpdHard": 20,
-      "rpdSoft": 18,
+      "rpm": 1000,
+      "tpm": 2000000,
+      "rpdHard": 10000,
+      "rpdSoft": 10000,
       "responseCache": false,
       "trialsPerCase": 3
     }

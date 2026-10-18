@@ -20,9 +20,10 @@ import type { TrialResult } from './metrics.js';
 import type { DockerSandbox } from './sandbox.js';
 import type { BaselineId } from './index.js';
 import { executionFingerprint } from './fingerprint.js';
+import { ensureRunIdentity } from './execution-epoch.js';
 
 export interface BenchmarkSettings { suiteRoot: string; runRoot: string; mode: 'dev' | 'final' | 'api-free'; model: string;
-  trials: number; resume: boolean; scheduler?: QuotaScheduler; sandbox?: DockerSandbox; includeHeldOut?: boolean; methods?: BaselineId[]; caseIds?: string[] }
+  trials: number; resume: boolean; scheduler?: QuotaScheduler; sandbox?: DockerSandbox; includeHeldOut?: boolean; methods?: BaselineId[]; caseIds?: string[]; maxConcurrency?: number }
 
 const get = (value: JsonValue, key: string): JsonValue | undefined => value && typeof value === 'object' && !Array.isArray(value) ? value[key] : undefined;
 function matchesState(expected: Record<string, JsonValue>, actual: JsonValue): boolean {
@@ -36,6 +37,8 @@ const rejectArtifact = (reason: string) => ({ version: 1, op: 'Reject', reason, 
 
 /** Deterministic orchestration; only the scheduler is permitted to call a model. */
 export async function runBenchmark(settings: BenchmarkSettings) {
+  const concurrency = settings.maxConcurrency ?? 1;
+  if (!Number.isSafeInteger(concurrency) || concurrency < 1 || concurrency > 5) throw new Error('INVALID_CONCURRENCY');
   if (!Number.isSafeInteger(settings.trials) || settings.trials < 1 || settings.trials > 5) throw new Error('INVALID_TRIAL_COUNT');
   if (settings.mode === 'api-free' && (settings.methods ?? ['b1']).some((method) => method !== 'b1')) throw new Error('API_FREE_METHOD');
   if (settings.mode !== 'api-free' && !settings.scheduler) throw new Error('MISSING_SCHEDULER');
@@ -52,23 +55,25 @@ export async function runBenchmark(settings: BenchmarkSettings) {
   const runIdentity = { version: 1, suite_hash: suiteHash, protocol_hash: suite.protocol_hash, mode: settings.mode, model: settings.model,
     trials: settings.trials, methods, cases: settings.caseIds ?? 'all', include_held_out: settings.includeHeldOut ?? false, sandbox: settings.sandbox?.config ?? null,
     ...(settings.mode === 'final' ? { execution_fingerprint: await executionFingerprint() } : {}) };
-  await writeOnceJson(join(settings.runRoot, 'run-manifest.json'), runIdentity);
+  await ensureRunIdentity(settings.runRoot, runIdentity, settings.resume);
   const results: TrialResult[] = [];
   let quotaBlocked = false;
   let providerBlocked = false;
   let providerError: string | null = null;
   let interrupted = false;
+  let fatal = false;
   const interrupt = () => { interrupted = true; };
   process.once('SIGINT', interrupt); process.once('SIGTERM', interrupt);
   try {
-    outer: for (const entry of suite.cases.filter((item) => (settings.includeHeldOut || !item.held_out) && (!settings.caseIds || settings.caseIds.includes(item.id)))) {
+    const entries = suite.cases.filter((item) => (settings.includeHeldOut || !item.held_out) && (!settings.caseIds || settings.caseIds.includes(item.id)));
+    const runCase = async (entry: typeof entries[number]) => {
       for (let trial = 1; trial <= settings.trials; trial++) {
         let b2: WrapperArtifact | undefined;
         let b2Failed = false;
         let b2ArtifactHash: string | undefined;
         for (const method of methods) {
           if (method === 'b1' && trial > 1) continue;
-          if (interrupted) break outer;
+          if (interrupted || quotaBlocked || providerBlocked || fatal) return;
           const trialId = `${entry.id}/${method}/trial-${String(trial).padStart(3, '0')}`;
           const directory = join(settings.runRoot, trialId);
           let saved: TrialResult | undefined;
@@ -178,9 +183,9 @@ export async function runBenchmark(settings: BenchmarkSettings) {
               }
             } else report = { plan_hash: hashJson(artifact), gate_evidence_hash: hashJson(data.gate), verdict: explicitRejection ? 'REJECTED' : 'INCONCLUSIVE', ungated: true };
           } catch (error) {
-            if (error instanceof Error && (error.message === 'QUOTA_BLOCKED' || ('code' in error && error.code === 'QUOTA_BLOCKED'))) { quotaBlocked = true; fixture.close(); break outer; }
+            if (error instanceof Error && (error.message === 'QUOTA_BLOCKED' || ('code' in error && error.code === 'QUOTA_BLOCKED'))) { quotaBlocked = true; fixture.close(); return; }
             const failureCode = error instanceof Error && 'code' in error && typeof error.code === 'string' ? error.code : 'GENERATION_OR_GATE_FAILED';
-            if (isTransientModelFailure(failureCode)) { providerBlocked = true; providerError = failureCode; fixture.close(); break outer; }
+            if (isTransientModelFailure(failureCode)) { providerBlocked = true; providerError = failureCode; fixture.close(); return; }
             if (settings.mode === 'final' && /^(?:HTTP_|DOCKER_|ISOLATED_WORKER)/.test(failureCode)) { fixture.close(); throw error; }
             generationFailed = true; accepted = false; explicitRejection = false;
             errorCode = error instanceof Error && 'code' in error && typeof error.code === 'string' && /^[A-Z][A-Z0-9_]{0,63}$/.test(error.code)
@@ -229,8 +234,20 @@ export async function runBenchmark(settings: BenchmarkSettings) {
           } finally { fixture.close(); }
         }
       }
-    }
+    };
+    let cursor = 0;
+    const workers = await Promise.allSettled(Array.from({ length: Math.min(concurrency, entries.length) }, async () => {
+      while (!interrupted && !quotaBlocked && !providerBlocked && !fatal) {
+        const entry = entries[cursor++];
+        if (!entry) return;
+        try { await runCase(entry); } catch (error) { fatal = true; throw error; }
+      }
+    }));
+    const failed = workers.find((worker) => worker.status === 'rejected');
+    if (failed?.status === 'rejected') throw failed.reason;
   } finally { process.removeListener('SIGINT', interrupt); process.removeListener('SIGTERM', interrupt); }
+  results.sort((a, b) => suite.cases.findIndex((entry) => entry.id === a.case_id) - suite.cases.findIndex((entry) => entry.id === b.case_id)
+    || a.trial - b.trial || methods.indexOf(a.baseline) - methods.indexOf(b.baseline));
   const summary = { ...summarize(results), suite_hash: suiteHash, mode: settings.mode, model: settings.model,
     quota_blocked: quotaBlocked, provider_blocked: providerBlocked, provider_error_code: providerError,
     interrupted, complete: !quotaBlocked && !providerBlocked && !interrupted, trials: results.length };

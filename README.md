@@ -145,13 +145,16 @@ operators are rejected by the schema.
 
 ## Budget and evidence policy
 
-The source of truth is [prd.md](prd.md), version 1.3. Required external spend for
-v1 is **$0**. Local infrastructure and account-approved Gemini free-tier usage
-are the intended execution path; paid fallback is forbidden.
+The source of truth is [prd.md](prd.md), version 1.3. Its original required spend
+is **$0**. The user subsequently authorized Tier 1 billing for Phase 5's selected
+`gemini-3.8-flash` model and project limits of 1,000 RPM, 2M TPM and 10,000 RPD.
+Paid fallback to another model remains forbidden. Development retains its earlier
+configuration; frozen benchmark prompts, cases, heuristics, scoring and protocol
+remain unchanged.
 
 [.env.example](.env.example) documents provider/scheduler configuration.
-[config/models.json](config/models.json) records the PRD's model IDs and account
-quota snapshot. Official [model documentation](https://ai.google.dev/gemini-api/docs/models)
+[config/models.json](config/models.json) records model IDs, the development quota
+snapshot and the user-authorized final quotas. Official [model documentation](https://ai.google.dev/gemini-api/docs/models)
 and [pricing](https://ai.google.dev/gemini-api/docs/pricing) were checked on
 2026-10-17; actual project quotas must still be checked in AI Studio.
 Never commit `.env`, credentials, private traces or generated model run artifacts.
@@ -175,11 +178,19 @@ promotion, separate sealed-fixture scoring and retained-response resume. This is
 not a comparative benchmark result. Ordinary tests still use controlled transports.
 
 Budgets and model IDs can be overridden with the documented environment names.
-Scheduling is sequential; the current implementation requires concurrency 1.
+Final evaluation defaults to four concurrent independent cases and at most four
+model calls; development defaults to one. Overrides allow 1–5 slots and cannot
+exceed the authorized final quotas. Daily reservations and rolling RPM/TPM windows
+are atomic, and a process lease excludes competing schedulers.
 `CONTRACTRELAY_CACHE_MODE=dev` enables development-only caching; final trials
 always bypass it. Daily exhaustion stops cleanly; there is no paid fallback.
 The scheduler uses a cross-process lock; after a crash a stale lease can take
 up to 30 seconds to expire before resume succeeds.
+HTTP 503/504 pauses new work while inflight work checkpoints; continuation retries
+after an hour. Token accounting includes invalid responses and thinking tokens.
+Final usage reports estimate known token costs from the published standard rates;
+missing responses remain explicit unknown usage. An audited execution epoch
+preserves the original Phase 5 manifest and retained attempts during this upgrade.
 
 Every frozen benchmark case separates synthesis evidence, gate evidence, and
 sealed final evaluation. The evaluator may open sealed evidence only after the

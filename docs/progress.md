@@ -109,3 +109,25 @@ pending request after an hourly backoff. The 18-request daily cap still counts
 every attempt. Permanent infrastructure failures stop for review. An independent
 test covers outage interruption, preserved attempts, recovery and completed-trial
 resume. Final three-trial results remain pending.
+
+### Phase 5 Tier 1 operational upgrade
+
+The user authorized `gemini-3.8-flash` Tier 1 limits of 1,000 RPM, 2M TPM and
+10,000 RPD, replacing the historical 18-request soft cap. Final execution uses
+four concurrent independent cases and four model slots, with atomic durable
+quota reservations and a shared process lease. Development defaults remain
+unchanged. HTTP 503/504 still pauses admission and retries after hourly backoff;
+inflight work drains and checkpoints. Completed and invalid model artifacts,
+prior attempts, quota ledgers and original run manifests remain intact.
+
+An explicit execution-epoch receipt audits operational changes against the
+previous checkpoint and binds resume to the current executable fingerprint.
+Frozen prompts, cases, heuristics, gates, scoring and protocol are unchanged.
+Retained token accounting now includes published standard Tier 1 cost estimates
+for known final-model usage; unknown responses are reported separately. Final
+three-trial evaluation remains pending until all 195 result records complete.
+
+Tier 1 validation: lint and strict typechecking pass; all **146 tests in 31
+files** pass. The five real Docker sandbox acceptance checks pass, as does a
+four-container parallel smoke check. A Git audit confirms no changes to frozen
+benchmark data, prompts, heuristics, gates, scoring, protocol or dependencies.

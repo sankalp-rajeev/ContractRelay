@@ -80,26 +80,36 @@ remain legitimate failed trials; they are not replaced to improve scores.
 
 Final execution requires that manifest, the frozen final model and all methods,
 cases and at least three trials. Set `CONTRACTRELAY_MODEL_MODE=final` for
-`pnpm bench --resume`. The soft daily budget cannot exceed 18; exhaustion exits
+`pnpm bench --resume`. The user-authorized Phase 5 Tier 1 configuration is
+1,000 RPM, 2M TPM and 10,000 RPD, with four concurrent independent cases and
+at most four simultaneous model calls. Atomic reservations enforce the caps; exhaustion exits
 with `quota_blocked`. The same command resumes on a later Pacific quota day.
 Do not delete runs or reset quota ledgers to bypass the cap. No paid fallback.
 Final run identity also fingerprints runtime/gate source, the dependency lock,
 configuration and the local Node platform/version. A changed implementation
 cannot silently resume into the same final experiment.
+The Tier 1 operational upgrade uses `scripts/authorize-tier1-epoch.ts` to audit
+changes against commit `9cf0753`, reject changes outside scheduling/accounting,
+and freeze an explicit local execution-epoch receipt. Resume checks that receipt
+against both the original manifest and the current executable fingerprint.
+Original job IDs, manifests, quota ledgers, attempts and result artifacts remain
+intact. The frozen scientific protocol is unchanged; the user authorized the
+quota/billing override separately.
 
 Results live in ignored `runs/benchmark-v3-*/`: immutable candidates, decisions,
 gate reports, observations and trial results; `summary.json`/`full-summary.json`
 contain counts by method, change class, case and held-out status. Model request
 artifacts and quota ledgers are shared with the development synthesis scripts.
-`model-usage.json` counts retained attempts, tokens and unknown-usage attempts,
+`model-usage.json` counts retained attempts, tokens, known-usage cost estimates and unknown-usage attempts,
 including invalid model outputs. Logical model jobs and actual HTTP attempts
 are distinct quantities.
 
-`pnpm bench:continue` runs the final comparison sequentially across Pacific quota
+`pnpm bench:continue` runs the final comparison with bounded concurrency across Pacific quota
 days after the acceptance gate. It does not reset ledgers, replace failed trials
 or publish results. Transient provider outages stop the batch before a model-quality
 result is frozen; the helper waits an hour before resuming that pending request.
-Every attempted request remains in the quota ledger and retained attempt files.
+Inflight work drains and checkpoints before the batch ends; queued model calls
+pause after a transient error. Every attempted request remains in the quota ledger and retained attempt files.
 Completed or invalid model artifacts are never regenerated. A singleton lock
 prevents two continuation processes; an unexpected permanent batch error stops
 the process. Status and logs are in ignored

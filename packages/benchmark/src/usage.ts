@@ -4,11 +4,13 @@ import { z } from 'zod';
 import { readJson } from '@contractrelay/contracts/artifacts';
 import { modelRunSchema } from '@contractrelay/synthesizer';
 import type { BaselineId } from './index.js';
+import { estimatedTier1Cost, pricingSource } from './cost.js';
 
 /** Count retained attempts, including invalid generated artifacts and partial runs. */
 export async function collectModelUsage(directory: string, model: string, mode: 'dev' | 'final', caseIds: string[],
   namespace = mode === 'final' ? 'benchmark-final-v1' : 'benchmark-v2') {
-  const totals = () => ({ jobs: 0, requests_reserved: 0, responses_with_usage: 0, input_tokens: 0, output_tokens: 0, attempts_without_usage: 0, cache_hits: 0 });
+  const totals = () => ({ jobs: 0, requests_reserved: 0, responses_with_usage: 0, input_tokens: 0, output_tokens: 0, attempts_without_usage: 0, cache_hits: 0,
+    estimated_known_usage_usd: 0, responses_without_price: 0 });
   const byMethod = Object.fromEntries((['b0', 'b1', 'b2', 'b2v', 'b3'] as BaselineId[]).map((method) => [method, totals()]));
   const modelVersions: Record<string, number> = {};
   const response = z.object({ text: z.string(), inputTokens: z.number().int().nonnegative(), outputTokens: z.number().int().nonnegative(), modelVersion: z.string().optional() }).strict();
@@ -27,6 +29,11 @@ export async function collectModelUsage(directory: string, model: string, mode: 
           try {
             const value = response.parse(await readJson(join(path, 'attempts', `attempt-${String(index).padStart(3, '0')}`, 'response.json')));
             usage.responses_with_usage++; usage.input_tokens += value.inputTokens; usage.output_tokens += value.outputTokens;
+            let at = '';
+            try { at = z.object({ at: z.string() }).parse(await readJson(join(path, 'attempts', `attempt-${String(index).padStart(3, '0')}`, 'request.json'))).at; }
+            catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+            const cost = mode === 'final' ? estimatedTier1Cost(model, at, value.inputTokens, value.outputTokens) : null;
+            if (cost === null) usage.responses_without_price++; else usage.estimated_known_usage_usd += cost;
             const version = value.modelVersion ?? 'unreported'; modelVersions[version] = (modelVersions[version] ?? 0) + 1;
           } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; usage.attempts_without_usage++; }
         }
@@ -35,5 +42,6 @@ export async function collectModelUsage(directory: string, model: string, mode: 
   };
   await walk(join(directory, namespace));
   return { version: 1, model, mode, by_method: byMethod, resolved_model_versions: modelVersions,
+    pricing: { source: pricingSource, verified_at: '2026-10-17', basis: 'Standard uncached text; paid Tier 1 estimates only for the final model, including thinking tokens. Unknown attempts are excluded, not priced at zero.' },
     note: 'Requests are durably reserved before sending; crashes may leave reserved attempts without a response. Unknown token usage is not counted as zero consumption.' };
 }

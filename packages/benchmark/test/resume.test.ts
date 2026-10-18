@@ -20,6 +20,28 @@ class ControlledSandbox extends DockerSandbox {
   }
 }
 describe('matched comparison interruption and pairing (TC-020/021/023)', () => {
+  it('executes four independent cases concurrently with stable pairing, ordering and resume', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'contractrelay-case-pool-')); dirs.push(root);
+    let active = 0; let peak = 0; let release!: () => void;
+    const ready = new Promise<void>((resolve) => { release = resolve; });
+    const generate = vi.fn(async () => {
+      active++; peak = Math.max(active, peak); if (active === 4) release();
+      await ready; active--;
+      return { text: JSON.stringify({ decision: 'reject', code: '', reason: 'Controlled refusal', rationale: '' }), inputTokens: 10, outputTokens: 20 };
+    });
+    const scheduler = new QuotaScheduler(join(root, 'scheduler'), { generate }, { model: 'controlled', rpm: 1000, tpm: 2000000, rpdSoft: 10000, rpdHard: 10000 },
+      { maxConcurrency: 4 });
+    const settings = { suiteRoot, runRoot: join(root, 'run'), mode: 'dev' as const, model: 'controlled', trials: 1, resume: true, maxConcurrency: 4,
+      scheduler, sandbox: new ControlledSandbox(config), methods: ['b2', 'b2v'] as ('b2' | 'b2v')[],
+      caseIds: ['01-tool-rename', '02-arg-rename', '03-weather-default', '04-unknown-default'] };
+    const result = await runBenchmark(settings);
+    expect(result.summary.complete).toBe(true); expect(result.results).toHaveLength(8); expect(peak).toBe(4);
+    for (let index = 0; index < result.results.length; index += 2) {
+      expect(result.results[index]?.baseline).toBe('b2');
+      expect(result.results[index + 1]?.paired_b2_artifact_hash).toBe(result.results[index]?.artifact_hash);
+    }
+    expect((await runBenchmark(settings)).results).toEqual(result.results); expect(generate).toHaveBeenCalledTimes(4);
+  }, 15000);
   it('pauses on provider outage before freezing a model-quality result and resumes the retained request', async () => {
     const root = await mkdtemp(join(tmpdir(), 'contractrelay-provider-stop-')); dirs.push(root);
     const candidate = { version: 1, source_tool: 'search', target: { kind: 'single', tool: 'search_catalog' },
