@@ -97,12 +97,23 @@ are distinct quantities.
 
 `pnpm bench:continue` runs the final comparison sequentially across Pacific quota
 days after the acceptance gate. It does not reset ledgers, replace failed trials
-or publish results. A singleton lock prevents two continuation processes; an
-unexpected batch error stops the process. Status and logs are in ignored
+or publish results. Transient provider outages stop the batch before a model-quality
+result is frozen; the helper waits an hour before resuming that pending request.
+Every attempted request remains in the quota ledger and retained attempt files.
+Completed or invalid model artifacts are never regenerated. A singleton lock
+prevents two continuation processes; an unexpected permanent batch error stops
+the process. Status and logs are in ignored
 `.contractrelay/final-runner.json` and `.contractrelay/final-runner.log`. Create
 `.contractrelay/final-runner.stop` to stop after the current batch. The computer
 must remain running; after a restart, remove the stop file if present and launch
 the same command. The scheduler resumes completed work without regeneration.
+
+Final commissioning encountered HTTP 503 before any valid final-model response.
+Those five reserved requests and their diagnostics remain under the original
+final run folders; they are infrastructure attempts, not model-quality trials.
+The corrected run uses `runs/benchmark-v3-final-recovery/` and a separate model
+job namespace. `commissioning-usage.json` reports the original requests alongside
+the corrected run's accounting. Both share the same per-model quota ledger.
 
 ## Sandbox and limitations
 

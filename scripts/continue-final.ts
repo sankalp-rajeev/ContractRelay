@@ -13,7 +13,7 @@ const lockPath = join(control, 'final-runner.lock');
 const statusPath = join(control, 'final-runner.json');
 const stopPath = join(control, 'final-runner.stop');
 const logPath = join(control, 'final-runner.log');
-const summaryPath = join(root, 'runs/benchmark-v3-final/summary.json');
+const summaryPath = join(root, 'runs/benchmark-v3-final-recovery/summary.json');
 let lock;
 try { lock = await open(lockPath, 'wx'); }
 catch (error) {
@@ -29,7 +29,16 @@ const stopped = async () => { try { await access(stopPath); return true; } catch
 const status = (state: string, extra: Record<string, unknown> = {}) => atomicWriteJson(statusPath,
   { version: 1, pid: process.pid, state, updated_at: new Date().toISOString(), quota_day: quotaDay(Date.now()), summary_path: summaryPath, log_path: logPath, ...extra });
 try {
+  let priorRetry = 0;
+  try {
+    const prior = await readJson(statusPath) as { state: string; retry_at?: string };
+    if (prior.state === 'waiting_for_provider' && prior.retry_at) priorRetry = Date.parse(prior.retry_at);
+  } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
   await status('starting');
+  if (priorRetry > Date.now()) {
+    await status('waiting_for_provider', { retry_at: new Date(priorRetry).toISOString() });
+    while (Date.now() < priorRetry && !await stopped()) await new Promise((done) => setTimeout(done, 60000));
+  }
   while (!await stopped()) {
     await status('running');
     const env: NodeJS.ProcessEnv = { CONTRACTRELAY_MODEL_MODE: 'final' };
@@ -44,8 +53,14 @@ try {
       child.once('error', reject); child.once('exit', resolve);
     }).finally(() => closeSync(fd));
     if (code !== 0) throw new Error('FINAL_BATCH_FAILED_CHECK_LOG');
-    const summary = await readJson(summaryPath) as { complete: boolean; quota_blocked: boolean; trials: number };
+    const summary = await readJson(summaryPath) as { complete: boolean; quota_blocked: boolean; provider_blocked: boolean; provider_error_code: string | null; trials: number };
     if (summary.complete) { await status('completed', { trials: summary.trials }); break; }
+    if (summary.provider_blocked) {
+      const retryAt = Date.now() + 60 * 60 * 1000;
+      await status('waiting_for_provider', { trials: summary.trials, error_code: summary.provider_error_code, retry_at: new Date(retryAt).toISOString() });
+      while (Date.now() < retryAt && !await stopped()) await new Promise((done) => setTimeout(done, 60000));
+      continue;
+    }
     if (!summary.quota_blocked) throw new Error('FINAL_BATCH_INCOMPLETE_WITHOUT_QUOTA_STOP');
     const blockedDay = quotaDay(Date.now());
     await status('waiting_for_quota_day', { trials: summary.trials });

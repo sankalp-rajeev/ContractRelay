@@ -98,3 +98,14 @@ Docker sandbox acceptance passes, and the previous checkpoint's core and sandbox
 CI are green. Final evaluation requires three trials per stochastic case, retains
 failed trials, caps requests at 18 per Pacific day and fingerprints executable
 source/dependencies to prevent silently mixing implementations on resume.
+
+## Phase 5 — provider outage; resumable continuation
+
+The initial final-model commissioning received HTTP 503 on five reserved
+requests, before any valid model response. The batch was stopped and its
+diagnostics retained; no model-quality conclusion is drawn from those errors.
+Outage handling now pauses before freezing a trial result and resumes the
+pending request after an hourly backoff. The 18-request daily cap still counts
+every attempt. Permanent infrastructure failures stop for review. An independent
+test covers outage interruption, preserved attempts, recovery and completed-trial
+resume. Final three-trial results remain pending.

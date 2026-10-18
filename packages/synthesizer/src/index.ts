@@ -22,7 +22,7 @@ export interface PlanSynthesizer {
   synthesize(evidence: SynthesisEvidence): Promise<AdapterPlan>;
 }
 
-export { GeminiProvider, ModelRequestError, retryAfterMilliseconds } from './model.js';
+export { GeminiProvider, ModelRequestError, retryAfterMilliseconds, isTransientModelFailure } from './model.js';
 export type { ModelProvider, ModelRequest, ModelResponse } from './model.js';
 export { loadModelConfig } from './config.js';
 export type { ModelBudget, ModelConfig } from './config.js';

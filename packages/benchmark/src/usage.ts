@@ -6,7 +6,8 @@ import { modelRunSchema } from '@contractrelay/synthesizer';
 import type { BaselineId } from './index.js';
 
 /** Count retained attempts, including invalid generated artifacts and partial runs. */
-export async function collectModelUsage(directory: string, model: string, mode: 'dev' | 'final', caseIds: string[]) {
+export async function collectModelUsage(directory: string, model: string, mode: 'dev' | 'final', caseIds: string[],
+  namespace = mode === 'final' ? 'benchmark-final-v1' : 'benchmark-v2') {
   const totals = () => ({ jobs: 0, requests_reserved: 0, responses_with_usage: 0, input_tokens: 0, output_tokens: 0, attempts_without_usage: 0, cache_hits: 0 });
   const byMethod = Object.fromEntries((['b0', 'b1', 'b2', 'b2v', 'b3'] as BaselineId[]).map((method) => [method, totals()]));
   const modelVersions: Record<string, number> = {};
@@ -32,7 +33,7 @@ export async function collectModelUsage(directory: string, model: string, mode: 
       }
     }
   };
-  await walk(join(directory, 'benchmark-v2'));
+  await walk(join(directory, namespace));
   return { version: 1, model, mode, by_method: byMethod, resolved_model_versions: modelVersions,
     note: 'Requests are durably reserved before sending; crashes may leave reserved attempts without a response. Unknown token usage is not counted as zero consumption.' };
 }

@@ -4,7 +4,7 @@ import { lock } from 'proper-lockfile';
 import { z } from 'zod';
 import { canonicalJson, hashJson } from '@contractrelay/contracts';
 import { atomicWriteJson, readJson, writeOnceJson } from '@contractrelay/contracts/artifacts';
-import { ModelRequestError, normalizeModelError } from './model.js';
+import { ModelRequestError, normalizeModelError, isTransientModelFailure } from './model.js';
 import type { ModelProvider, ModelRequest, ModelResponse } from './model.js';
 import type { ModelBudget } from './config.js';
 
@@ -40,7 +40,7 @@ export class QuotaScheduler {
   private readonly clock: SchedulerClock;
   private chain: Promise<void> = Promise.resolve();
   constructor(directory: string, private readonly provider: ModelProvider, private readonly budget: ModelBudget,
-    private readonly options: { cache?: boolean; maxRetries?: number; clock?: SchedulerClock; retainFailed?: boolean } = {}) {
+    private readonly options: { cache?: boolean; maxRetries?: number; clock?: SchedulerClock; retainFailed?: boolean; retryTransient?: boolean } = {}) {
     this.root = resolve(directory);
     this.clock = options.clock ?? wallClock;
     if (![budget.rpm, budget.tpm, budget.rpdHard, budget.rpdSoft].every((n) => Number.isSafeInteger(n) && n > 0)
@@ -114,7 +114,8 @@ export class QuotaScheduler {
     if (existing && (existing.request_hash !== requestHash || existing.job_id !== job.id || existing.model !== job.request.model || existing.mode !== job.mode)) {
       throw new ModelRequestError('RUN_IDENTITY_MISMATCH');
     }
-    if (existing?.status === 'failed' && this.options.retainFailed) throw new ModelRequestError(existing.error_code ?? 'RETAINED_TRIAL_FAILURE');
+    if (existing?.status === 'failed' && this.options.retainFailed
+      && !(this.options.retryTransient && isTransientModelFailure(existing.error_code ?? ''))) throw new ModelRequestError(existing.error_code ?? 'RETAINED_TRIAL_FAILURE');
     if (existing?.status === 'completed') {
       if (!options.resume) throw new ModelRequestError('COMPLETED_TRIAL_EXISTS_USE_RESUME');
       const response = responseSchema.parse(await readJson(join(dir, 'response.json')));

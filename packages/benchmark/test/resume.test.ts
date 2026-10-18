@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { runBenchmark } from '../src/runner.js';
 import { DockerSandbox } from '../src/sandbox.js';
 import config from '../../../config/sandbox.json' with { type: 'json' };
-import { QuotaScheduler } from '@contractrelay/synthesizer';
+import { QuotaScheduler, ModelRequestError } from '@contractrelay/synthesizer';
 import type { ModelRequest } from '@contractrelay/synthesizer';
 import type { JsonValue } from '@contractrelay/contracts';
 import { atomicWriteJson } from '@contractrelay/contracts/artifacts';
@@ -20,6 +20,24 @@ class ControlledSandbox extends DockerSandbox {
   }
 }
 describe('matched comparison interruption and pairing (TC-020/021/023)', () => {
+  it('pauses on provider outage before freezing a model-quality result and resumes the retained request', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'contractrelay-provider-stop-')); dirs.push(root);
+    const candidate = { version: 1, source_tool: 'search', target: { kind: 'single', tool: 'search_catalog' },
+      steps: [{ op: 'RenameTool', from: 'search', to: 'search_catalog', evidence: ['change.json'] }], response: [], rationale: 'Documented rename' };
+    const generate = vi.fn().mockRejectedValueOnce(new ModelRequestError('HTTP_503'))
+      .mockResolvedValueOnce({ text: JSON.stringify({ candidate }), inputTokens: 10, outputTokens: 20 });
+    const scheduler = new QuotaScheduler(join(root, 'scheduler'), { generate }, { model: 'controlled', rpm: 100, tpm: 1000000, rpdSoft: 10, rpdHard: 10 },
+      { retainFailed: true, retryTransient: true });
+    const settings = { suiteRoot, runRoot: join(root, 'run'), mode: 'dev' as const, model: 'controlled', trials: 1, resume: true,
+      scheduler, methods: ['b3'] as const, caseIds: ['01-tool-rename'] };
+    const stopped = await runBenchmark({ ...settings, methods: [...settings.methods] });
+    expect(stopped.summary).toMatchObject({ complete: false, provider_blocked: true, provider_error_code: 'HTTP_503' });
+    expect(stopped.results).toEqual([]); expect(generate).toHaveBeenCalledTimes(1);
+    const resumed = await runBenchmark({ ...settings, methods: [...settings.methods] });
+    expect(resumed.summary.complete).toBe(true); expect(resumed.results[0]?.hidden_passed).toBe(true);
+    expect(generate).toHaveBeenCalledTimes(2);
+    await runBenchmark({ ...settings, methods: [...settings.methods] }); expect(generate).toHaveBeenCalledTimes(2);
+  }, 15000);
   it('resumes a quota stop inside B0, reuses prior responses and pairs B2-V without generation', async () => {
     const root = await mkdtemp(join(tmpdir(), 'contractrelay-matched-')); dirs.push(root);
     let now = Date.parse('2026-10-17T18:00:00Z');

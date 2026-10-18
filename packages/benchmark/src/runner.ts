@@ -8,7 +8,7 @@ import { PromotionRegistry } from '@contractrelay/runtime';
 import type { PromotionKey } from '@contractrelay/runtime';
 import { verifyIsolated, verifyWrapperIsolated } from '@contractrelay/verifier/isolated';
 import { assertPromotableReport } from '@contractrelay/verifier';
-import { ModelRequestError } from '@contractrelay/synthesizer';
+import { ModelRequestError, isTransientModelFailure } from '@contractrelay/synthesizer';
 import type { QuotaScheduler } from '@contractrelay/synthesizer';
 import { synthesizeIsolated } from '@contractrelay/synthesizer/isolated';
 import { heuristicPlan, generateWrapper, replan, synthesisParity, wrapperSchema } from './baselines.js';
@@ -55,6 +55,8 @@ export async function runBenchmark(settings: BenchmarkSettings) {
   await writeOnceJson(join(settings.runRoot, 'run-manifest.json'), runIdentity);
   const results: TrialResult[] = [];
   let quotaBlocked = false;
+  let providerBlocked = false;
+  let providerError: string | null = null;
   let interrupted = false;
   const interrupt = () => { interrupted = true; };
   process.once('SIGINT', interrupt); process.once('SIGTERM', interrupt);
@@ -99,7 +101,7 @@ export async function runBenchmark(settings: BenchmarkSettings) {
           let report: JsonValue;
           let promoted: PromotionKey | undefined;
           const registry = new PromotionRegistry(join(directory, 'registry'));
-          const generationId = `benchmark-v2/${entry.id}/${method}/trial-${String(trial).padStart(3, '0')}`;
+          const generationId = `${settings.mode === 'final' ? 'benchmark-final-v1' : 'benchmark-v2'}/${entry.id}/${method}/trial-${String(trial).padStart(3, '0')}`;
           const invokeAdapter = async (input: JsonValue): Promise<JsonValue> => {
             if (method === 'b2' || method === 'b2v') {
               if (!b2 || b2.decision !== 'adapt') throw new Error('WRAPPER_REJECTED');
@@ -177,6 +179,9 @@ export async function runBenchmark(settings: BenchmarkSettings) {
             } else report = { plan_hash: hashJson(artifact), gate_evidence_hash: hashJson(data.gate), verdict: explicitRejection ? 'REJECTED' : 'INCONCLUSIVE', ungated: true };
           } catch (error) {
             if (error instanceof Error && (error.message === 'QUOTA_BLOCKED' || ('code' in error && error.code === 'QUOTA_BLOCKED'))) { quotaBlocked = true; fixture.close(); break outer; }
+            const failureCode = error instanceof Error && 'code' in error && typeof error.code === 'string' ? error.code : 'GENERATION_OR_GATE_FAILED';
+            if (isTransientModelFailure(failureCode)) { providerBlocked = true; providerError = failureCode; fixture.close(); break outer; }
+            if (settings.mode === 'final' && /^(?:HTTP_|DOCKER_|ISOLATED_WORKER)/.test(failureCode)) { fixture.close(); throw error; }
             generationFailed = true; accepted = false; explicitRejection = false;
             errorCode = error instanceof Error && 'code' in error && typeof error.code === 'string' && /^[A-Z][A-Z0-9_]{0,63}$/.test(error.code)
               ? error.code : 'GENERATION_OR_GATE_FAILED';
@@ -227,7 +232,8 @@ export async function runBenchmark(settings: BenchmarkSettings) {
     }
   } finally { process.removeListener('SIGINT', interrupt); process.removeListener('SIGTERM', interrupt); }
   const summary = { ...summarize(results), suite_hash: suiteHash, mode: settings.mode, model: settings.model,
-    quota_blocked: quotaBlocked, interrupted, complete: !quotaBlocked && !interrupted, trials: results.length };
+    quota_blocked: quotaBlocked, provider_blocked: providerBlocked, provider_error_code: providerError,
+    interrupted, complete: !quotaBlocked && !providerBlocked && !interrupted, trials: results.length };
   await atomicWriteJson(join(settings.runRoot, 'summary.json'), summary);
   return { results, summary };
 }

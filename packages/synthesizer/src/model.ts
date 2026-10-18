@@ -14,6 +14,10 @@ export class ModelRequestError extends Error {
   }
 }
 
+export function isTransientModelFailure(code: string): boolean {
+  return /^HTTP_(?:408|500|502|503|504)$/.test(code) || code.startsWith('NETWORK_') || code === 'PROVIDER_FAILED';
+}
+
 export function retryAfterMilliseconds(value: string | null, now: number): number {
   if (value === null) return 0;
   const seconds = Number(value);
