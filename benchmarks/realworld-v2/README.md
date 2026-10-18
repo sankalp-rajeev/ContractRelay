@@ -20,7 +20,7 @@ node --import=tsx benchmarks/realworld-v2/acquire.mjs --case fabric
 node --import=tsx benchmarks/realworld-v2/run.mjs --validate
 node --import=tsx benchmarks/realworld-v2/replay.mjs
 node --import=tsx benchmarks/realworld-v2/diagnose.mjs
-node --import=tsx benchmarks/realworld-v2/report.mjs
+node --import=tsx benchmarks/realworld-v2/report.mjs --offline
 node --import=tsx --test benchmarks/realworld-v2/test/*.test.mjs
 node apps/inspector/scripts/audit-protected.mjs
 ```
@@ -40,6 +40,9 @@ reconstruct invalid generations; use the explicit replay command above.
 The original evaluated harness and all trial identities remain unchanged. The
 additional replay path is API-free and does not replace any candidate or outcome.
 The sealed partition stays behind the existing durable-decision coordinator.
+
+`report.mjs --offline` reads the committed interactions and budget ledger, so a
+fresh checkout can regenerate the aggregates without the original ignored runs.
 
 Fresh evaluation was explicit, uncached and sequential, with three independent
 trials per migration. The unchanged v1 budget provider protects a separate v2

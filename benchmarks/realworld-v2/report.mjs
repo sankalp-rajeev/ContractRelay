@@ -2,10 +2,12 @@ import assert from 'node:assert/strict';
 import {readFile,readdir,mkdir} from 'node:fs/promises';
 import {join} from 'node:path';
 import console from 'node:console';
+import process from 'node:process';
 import {base,cases} from './cases.mjs';
 import {assertProtected,harnessFingerprint,sha} from './integrity.mjs';
 import {readJson,writeOnceJson,atomicWriteJson} from '../../packages/contracts/src/artifacts.ts';
 const sourceHash=await harnessFingerprint(),summaryCases=[],all=[];
+const offline=process.argv.includes('--offline');
 for(const entry of cases) {
   const runs=[];
   for(let trial=1;trial<=3;trial++) {
@@ -19,13 +21,24 @@ for(const entry of cases) {
       if(item.isDirectory())await copy(folder,path);
       else if(['request.json','response.json','run.json','artifact.json','error.json'].includes(item.name))await writeOnceJson(join(target,path),await readJson(join(folder,path)));
     }};
-    await copy(source);
+    if(!offline) {
+      try {await copy(source);}
+      catch(error){if(error.code!=='ENOENT')throw error;}
+    }
+    // Fresh checkouts retain every interaction in Git. They do not need the
+    // original ignored scheduler directory to regenerate measured aggregates.
+    for(const name of ['request.json','response.json','run.json'])await readJson(join(target,name));
   }
   summaryCases.push({project:entry.id,repository:entry.repository,old_commit:entry.old,new_commit:entry.new,old_tag:entry.oldTag,new_tag:entry.newTag,
     old_server_old_client:'PASS',new_server_old_client_direct:'BREAKS',trials:runs.length,successful:runs.filter(r=>r.hidden_passed).length,promoted:runs.filter(r=>r.accepted).length,
     safe_rejections:runs.filter(r=>r.safe_rejection).length,hidden_false_compatible:runs.filter(r=>r.hidden_false_compatible).length,generation_failures:runs.filter(r=>r.generation_failed).length,limitations:entry.limitations});
 }
-const budget=await readJson('runs/realworld-v2/models/external-budget.json');
+let budget;
+if(offline)budget=await readJson(join(base,'results/budget.json'));
+else {
+  try {budget=await readJson('runs/realworld-v2/models/external-budget.json');}
+  catch(error){if(error.code!=='ENOENT')throw error;budget=await readJson(join(base,'results/budget.json'));}
+}
 const charged=budget.requests.reduce((sum,r)=>sum+(r.actual_nano_usd??r.reserved_nano_usd),0);assert(charged<=1e9);
 const totals={calls:budget.requests.length,input_tokens:0,output_tokens:0,thinking_tokens:0,known_cost_usd:0,unknown_usage_requests:0,charged_or_reserved_usd:charged/1e9};
 for(const request of budget.requests) {

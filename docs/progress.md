@@ -300,3 +300,6 @@ for exact SHAs, trial results, cost ledger, hashes and replay commands.
 The public inspector's version 2 is deployed at
 https://contractrelay-inspector.fondsky12.chatgpt.site using 127 allowlisted public
 artifacts. [Hosting notes](hosting.md) retain the new source and archive receipts.
+
+Offline report generation uses the committed interactions and budget ledger;
+`report.mjs --offline` requires no ignored scheduler files or model credentials.
