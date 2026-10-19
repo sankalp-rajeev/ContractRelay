@@ -6,7 +6,6 @@ coverage/
 *.tsbuildinfo
 .env
 .env.*
-!.env.example
 *.log
 runs/
 .contractrelay/
