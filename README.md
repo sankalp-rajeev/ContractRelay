@@ -125,3 +125,5 @@ Core checks retain the original 146 tests and add 12 product CLI tests. The insp
 desktop/mobile browser checks. Both run in CI without model credentials. The
 [published final snapshot](benchmarks/results/final-v3.json) is the source for
 displayed benchmark counts; the UI does not rescore or rerun the evaluation.
+
+[![Architecture diagram of sankalp-rajeev/contractrelay](https://gitdiagram.com/sankalp-rajeev/contractrelay/diagram.png)](https://gitdiagram.com/sankalp-rajeev/contractrelay?utm_source=readme&utm_medium=picture)
